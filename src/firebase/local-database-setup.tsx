@@ -48,21 +48,48 @@ const LocalDataBaseSetup = () => {
 
   const awaitDatabaseData = async () => {
     const flashcardsDB = await get(child(databaseRef, "Flashcards/"));
+    const nounsDB = await get(child(databaseRef, "Vocab/Nouns/"));
+    const adjectivesDB = await get(child(databaseRef, "Vocab/Adjectives/"));
+    const verbsDB = await get(child(databaseRef, "Vocab/Verbs/"));
 
     const takeDatabaseSnapshot = (snapShot: any, databaseType: any) => {
       try {
         if (snapShot.exists()) {
           const val = snapShot.val();
           const loadedCards = [];
-          for (const key in val) {
-            loadedCards.push({
-              id: key,
-              answer: val[key].answer,
-              question: val[key].question,
-            });
+          // Handeling Flashcards DB
+          if (databaseType === "flashcards") {
+            for (const key in val) {
+              loadedCards.push({
+                id: key,
+                answer: val[key].answer,
+                question: val[key].question,
+              });
+            }
           }
+          // Handeling Vocab
+          if (
+            databaseType === "nouns" ||
+            databaseType === "adjective" ||
+            databaseType === "verbs"
+          ) {
+            for (const key in val) {
+              loadedCards.push({
+                id: key,
+                french: key,
+                english: val[key],
+              });
+            }
+          }
+
           if (databaseType === "flashcards") {
             dispatch(storeActions.setFlashcardsDB(loadedCards));
+          } else if (databaseType === "nouns") {
+            dispatch(storeActions.setNounsDB(loadedCards));
+          } else if (databaseType === "adjective") {
+            dispatch(storeActions.setAdjectivesDB(loadedCards));
+          } else if (databaseType === "verbs") {
+            dispatch(storeActions.setVerbsDB(loadedCards));
             dispatch(storeActions.setFirebaseDataLoaded(true));
           }
         }
@@ -72,6 +99,9 @@ const LocalDataBaseSetup = () => {
       }
     };
     takeDatabaseSnapshot(flashcardsDB, "flashcards");
+    takeDatabaseSnapshot(nounsDB, "nouns");
+    takeDatabaseSnapshot(adjectivesDB, "adjective");
+    takeDatabaseSnapshot(verbsDB, "verbs");
   };
 
   if (flashcardsDB.length === 0) {

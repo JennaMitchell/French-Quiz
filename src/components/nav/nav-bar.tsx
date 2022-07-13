@@ -15,8 +15,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { DatabaseStates, storeActions } from "../../store/store";
 const NavBar: React.FC = () => {
   const activePage = useSelector((state: DatabaseStates) => state.activePage);
-  let refreshed: string =
-    JSON.parse(localStorage.getItem("refreshed") ?? "") ?? "";
+  const acceptableHomeReturnValues = [
+    "Home",
+    "Flashcards",
+    "Practice Sheet Generator",
+    "Quiz",
+    "Grammar Test",
+  ];
+
+  let localStorageActivePage: string = localStorage.getItem("activePage") ?? "";
+  // when retruend it's a string of "thing" parthesis included to get around this we need to remove the ""'s
+
+  if (localStorageActivePage.length !== 0) {
+    localStorageActivePage = localStorageActivePage.slice(1);
+    localStorageActivePage = localStorageActivePage.slice(
+      0,
+      localStorageActivePage.length - 1
+    );
+  }
+
+  let refreshed: string = localStorage.getItem("refreshed") ?? "";
 
   type NavLinkDatabase = {
     title: string;
@@ -29,17 +47,21 @@ const NavBar: React.FC = () => {
       dispatch(storeActions.setActivePage(type));
     }
   };
+  // console.log(activePage);
+  // console.log(localStorageActivePage);
+  // console.log(acceptableHomeReturnValues.includes(localStorageActivePage));
+  // console.log("Practice Sheet Generator" === localStorageActivePage);
   useBeforeunload(() => {
     localStorage.setItem("refreshed", "true");
 
     localStorage.setItem("activePage", JSON.stringify(activePage));
   });
-  if (refreshed) {
-    dispatch(
-      storeActions.setActivePage(
-        JSON.parse(localStorage.getItem("activePage") ?? "")
-      )
-    );
+
+  if (
+    refreshed &&
+    acceptableHomeReturnValues.includes(localStorageActivePage)
+  ) {
+    dispatch(storeActions.setActivePage(localStorageActivePage));
     localStorage.removeItem("activePage");
     localStorage.setItem("refreshed", "false");
   }

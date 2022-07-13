@@ -6,13 +6,14 @@ import HomepageMain from "./pages/homepage/homepage-main";
 import FlashcardsMain from "./pages/flashcards/flashcards-main";
 import Footer from "./components/footer/footer";
 import LocalDataBaseSetup from "./firebase/local-database-setup";
+import PracticeSheetsGenerator from "./pages/pratice-sheets-generator/practice-sheets-generator";
 import { useSelector } from "react-redux";
 import { DatabaseStates } from "./store/store";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#a8DaDC",
-      light: "#457B9D",
+      main: "#457B9D",
+      light: "#a8DaDC",
       dark: "#1D3557",
     },
     secondary: {
@@ -61,6 +62,16 @@ function App() {
               <>
                 <NavBar />
                 <FlashcardsMain />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/practice-sheet-generator"
+            element={
+              <>
+                <NavBar />
+                <PracticeSheetsGenerator />
                 <Footer />
               </>
             }
