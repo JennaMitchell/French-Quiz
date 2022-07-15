@@ -85,7 +85,23 @@ const OptionContainer = styled("div", {
   gridTemplateColumns: "max-content max-content",
   color: theme.palette.secondary.light,
 }));
-
+const SelectionContainer = styled("div", {
+  name: "SelectionContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  width: "max(100%,100%)",
+  display: "grid",
+  gridTemplateRows: "max-content",
+  gridTemplateColumns: "max-content max-content",
+  justifyContent: "space-between",
+  alignItems: "center",
+  height: "max(max-content,max-content)",
+  backgroundColor: "inherit",
+  color: theme.palette.secondary.light,
+  marginTop: "2.5px",
+  marginBottom: "2.5px",
+  borderRadius: "2px",
+}));
 export {
   StyledOption,
   StyledTypography,
@@ -94,4 +110,5 @@ export {
   ActionButton,
   OptionContainer,
   DisabledActionButton,
+  SelectionContainer,
 };

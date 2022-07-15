@@ -18,44 +18,25 @@ import {
   ActionButton,
   OptionContainer,
   DisabledActionButton,
-} from "./vocab-popup-styled-components";
+  SelectionContainer,
+} from "./number-of-phrase-question-popup-styled-components";
 import {
   ClosingIconContainer,
   ClosingIcon,
 } from "../../../../components/generic-components/generic-popup-components";
 import { useEffect } from "react";
 
-const VocabPopup = () => {
-  const newPracticeSheetsPopupActive = useSelector(
-    (state: DatabaseStates) => state.newPracticeSheetsPopupActive
+const NumberOfPhraseQuestionsPopup = () => {
+  const numberOfPhraseQuestionsPopupActive = useSelector(
+    (state: DatabaseStates) => state.numberOfPhraseQuestionsPopupActive
   );
-  const practiceSheetGeneratorUserData = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorUserData
+  const practiceSheetGeneratorPhrasesQuestionSetup = useSelector(
+    (state: DatabaseStates) => state.practiceSheetGeneratorPhrasesQuestionSetup
   );
   const dispatch = useDispatch();
 
   const onCloseHandler = () => {
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
-  };
-
-  const submitButtonHandler = () => {
-    const deepCopyOfUserData = JSON.parse(
-      JSON.stringify(practiceSheetGeneratorUserData)
-    );
-    // create a copy so that it's changable
-    deepCopyOfUserData.numberOfTotalVocabQuestions = numberOfQuestions;
-    deepCopyOfUserData.numberOfVocabMultipleChoiceQuestions =
-      numberOfMultipleChoiceQuestions;
-    deepCopyOfUserData.numberOfVocabMatchingQuestions =
-      numberOfMatchingQuestions;
-    deepCopyOfUserData.numberOfVocabFillInTheBlankQuesations =
-      numberOfFillInTheBlankQuestions;
-
-    dispatch(
-      storeActions.setPracticeSheetGeneratorUserData(deepCopyOfUserData)
-    );
-    dispatch(storeActions.setVocabSelectPopupActive(true));
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
+    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
   };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [numberOfMatchingQuestions, setNumberOfMatchingQuestions] = useState(0);
@@ -64,11 +45,35 @@ const VocabPopup = () => {
   const [numberOfFillInTheBlankQuestions, setNumberOfFillInTheBlankQuestions] =
     useState(0);
 
+  const [selectedTestType, setSelectedTestType] = useState("");
+
   let matchingQuestionsArray = [];
   let multipleChoiceQuestionsArray: any[] = [];
   let fillInTheBlankQuestionsArray = [];
 
   let submitButtonEnabled = false;
+  const submitButtonHandler = () => {
+    const deepCopyOfUserData = JSON.parse(
+      JSON.stringify(practiceSheetGeneratorPhrasesQuestionSetup)
+    );
+    // create a copy so that it's changable
+    deepCopyOfUserData.numberOfTotalPhraseQuestions = numberOfQuestions;
+    deepCopyOfUserData.numberOfPhraseMultipleChoiceQuestions =
+      numberOfMultipleChoiceQuestions;
+    deepCopyOfUserData.numberOfPhraseMatchingQuestions =
+      numberOfMatchingQuestions;
+    deepCopyOfUserData.numberOfPhraseFillInTheBlankQuesations =
+      numberOfFillInTheBlankQuestions;
+
+    dispatch(
+      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup(
+        deepCopyOfUserData
+      )
+    );
+    dispatch(storeActions.setPhrasesSelectionPopupActive(true));
+    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
+    dispatch(storeActions.setUserSelectedPhrasesTestType(selectedTestType));
+  };
 
   const numberOfQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
     e
@@ -100,7 +105,6 @@ const VocabPopup = () => {
   const multipleQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
     e
   ) => {
-    console.log(+e.target.value);
     if (typeof +e.target.value === "number" && +e.target.value > 0) {
       setNumberOfMultipleChoiceQuestions(+e.target.value);
     }
@@ -161,26 +165,47 @@ const VocabPopup = () => {
     numberOfQuestionsOptions = [];
   }
 
-  if (numberOfQuestions !== 0 && numberOfAvaiableQuestions === 0) {
+  if (
+    numberOfQuestions !== 0 &&
+    numberOfAvaiableQuestions === 0 &&
+    selectedTestType.length !== 1
+  ) {
     submitButtonEnabled = true;
   }
   useEffect(() => {
-    if (newPracticeSheetsPopupActive) {
+    if (numberOfPhraseQuestionsPopupActive) {
       setNumberOfQuestions(0);
       setNumberOfMatchingQuestions(0);
       setNumberOfMultipleChoiceQuestions(0);
       setNumberOfFillInTheBlankQuestions(0);
+      setSelectedTestType("");
     }
-  }, [newPracticeSheetsPopupActive]);
+  }, [numberOfPhraseQuestionsPopupActive]);
   // this useEffect is used to rest all teh varialbes if the user closes the window then reopens it
+  const testTypeHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
+    if (
+      e.target.value === "English" ||
+      e.target.value === "French" ||
+      e.target.value === "French/English" ||
+      e.target.value.length === 1
+    ) {
+      setSelectedTestType(e.target.value);
+    }
+  };
+
+  const skipButtonHandler = () => {
+    dispatch(storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup([]));
+
+    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
+    dispatch(storeActions.setUserSelectedPhrasesTestType(""));
+  };
 
   return (
     <Dialog
-      open={newPracticeSheetsPopupActive}
+      open={numberOfPhraseQuestionsPopupActive}
       onClose={onCloseHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
-    
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
@@ -227,7 +252,7 @@ const VocabPopup = () => {
               },
             }}
           >
-            Step 1 of 6
+            Step 5 of 6
           </Typography>
 
           <Typography
@@ -239,7 +264,7 @@ const VocabPopup = () => {
               "@media(max-width:475px)": { fontSize: "18px" },
             }}
           >
-            Number of Vocab Questions
+            Number of Phrase Questions
           </Typography>
         </Grid>
       </DialogContent>
@@ -319,6 +344,30 @@ const VocabPopup = () => {
               : fillInTheBlankQuestionsArray}
           </StyledSelect>
         </OptionContainer>
+        <SelectionContainer sx={{ marginTop: "0px" }}>
+          <Typography
+            variant="h6"
+            sx={{
+              "@media(max-width:580px)": { fontSize: "18px" },
+              "@media(max-width:520px)": { fontSize: "16px" },
+              "@media(max-width:475px)": {
+                fontSize: "12px",
+                textAlign: "center",
+              },
+            }}
+          >
+            Test my:
+          </Typography>
+          <StyledSelect
+            onChange={testTypeHandler}
+            sx={{ width: "max(170px,170px)" }}
+          >
+            <StyledOption>&nbsp;</StyledOption>
+            <StyledOption>English</StyledOption>
+            <StyledOption>French</StyledOption>
+            <StyledOption>French/English</StyledOption>
+          </StyledSelect>
+        </SelectionContainer>
         <OptionContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitButtonHandler}>Submit</ActionButton>
@@ -326,10 +375,10 @@ const VocabPopup = () => {
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton>Skip</ActionButton>
+          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </OptionContainer>
       </DialogActions>
     </Dialog>
   );
 };
-export default VocabPopup;
+export default NumberOfPhraseQuestionsPopup;

@@ -25,8 +25,8 @@ const NumberOfConjugationQuestionsPopup = () => {
     dispatch(storeActions.setVocabSelectPopupActive(false));
   };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-  const conjugationPopupActive = useSelector(
-    (state: DatabaseStates) => state.conjugationPopupActive
+  const numberOfConjugationPopupActive = useSelector(
+    (state: DatabaseStates) => state.numberOfConjugationPopupActive
   );
 
   // creating the max number of selected Questions
@@ -49,22 +49,28 @@ const NumberOfConjugationQuestionsPopup = () => {
 
   // Resetting The Popup evertime it starts up
   useEffect(() => {
-    if (conjugationPopupActive) {
+    if (numberOfConjugationPopupActive) {
       setNumberOfQuestions(0);
     }
-  }, [conjugationPopupActive]);
+  }, [numberOfConjugationPopupActive]);
 
   // Handeling Submits
 
   const submitHandler = () => {
-    dispatch(storeActions.setConjugationPopupActive(false));
+    dispatch(storeActions.setNumberOfConjugationPopupActive(false));
     dispatch(storeActions.setNumberOfConjugationQuestions(numberOfQuestions));
     dispatch(storeActions.setConjugationVerbChoicePopup(true));
   };
 
+  const skipButtonHandler = () => {
+    dispatch(storeActions.setNumberOfConjugationPopupActive(false));
+    dispatch(storeActions.setNumberOfConjugationQuestions(0));
+    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
+  };
+
   return (
     <Dialog
-      open={conjugationPopupActive}
+      open={numberOfConjugationPopupActive}
       onClose={onCloseHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
@@ -148,7 +154,7 @@ const NumberOfConjugationQuestionsPopup = () => {
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
 
-          <ActionButton>Skip</ActionButton>
+          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ButtonsContainer>
       </DialogContent>
     </Dialog>

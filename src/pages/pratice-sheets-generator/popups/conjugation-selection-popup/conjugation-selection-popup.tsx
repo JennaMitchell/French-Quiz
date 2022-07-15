@@ -31,8 +31,9 @@ const ConjugationSelectionPopup = () => {
   const conjugationVerbChoicePopup = useSelector(
     (state: DatabaseStates) => state.conjugationVerbChoicePopup
   );
-  const practiceSheetGeneratorUserData = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorUserData
+
+  const numberOfConjugationQuestions = useSelector(
+    (state: DatabaseStates) => state.numberOfConjugationQuestions
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -75,11 +76,7 @@ const ConjugationSelectionPopup = () => {
 
       setSelectedItems(removedArray);
     } else {
-      if (
-        practiceSheetGeneratorUserData.numberOfTotalVocabQuestions -
-          selectedItems.length !==
-        0
-      ) {
+      if (numberOfConjugationQuestions - selectedItems.length !== 0) {
         const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
         copyOfSelectedItems.push({
           english: selectedItemData.english,
@@ -146,7 +143,8 @@ const ConjugationSelectionPopup = () => {
   const submitHandler = () => {
     dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
     dispatch(storeActions.setConjugationVerbChoicePopup(false));
-    dispatch(storeActions.setUserSelectedConjugation(selectedItems));
+    dispatch(storeActions.setUserSelectedConjugations(selectedItems));
+    dispatch(storeActions.setUserSelectedConjugationGrouping(selectedGrouping));
   };
   ///Reset on Upload
   useEffect(() => {
@@ -171,6 +169,14 @@ const ConjugationSelectionPopup = () => {
   ) {
     submitButtonEnabled = true;
   }
+  const skipButtonHandler = () => {
+    dispatch(storeActions.setConjugationVerbChoicePopup(false));
+    dispatch(storeActions.setNumberOfConjugationQuestions(0));
+    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
+
+    dispatch(storeActions.setUserSelectedConjugations([]));
+    dispatch(storeActions.setUserSelectedConjugationGrouping(""));
+  };
 
   return (
     <Dialog
@@ -181,7 +187,6 @@ const ConjugationSelectionPopup = () => {
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
-          overflowY: "scroll",
         },
         "&.PaperProps": {
           borderRadius: "20px",
@@ -235,7 +240,7 @@ const ConjugationSelectionPopup = () => {
           <Typography
             variant="h4"
             sx={{
-              fontSize: "28px",
+              fontSize: "26px",
               "@media(max-width:580px)": { fontSize: "28px" },
               "@media(max-width:520px)": { fontSize: "22px" },
               "@media(max-width:475px)": { fontSize: "18px" },
@@ -268,8 +273,7 @@ const ConjugationSelectionPopup = () => {
                 },
               }}
             >
-              {practiceSheetGeneratorUserData.numberOfTotalVocabQuestions -
-                selectedItems.length}
+              {numberOfConjugationQuestions - selectedItems.length}
             </Typography>
           </SelectionContainer>
           <DropDownButton onClick={verbsHeadingHandler}>
@@ -322,7 +326,7 @@ const ConjugationSelectionPopup = () => {
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton>Skip</ActionButton>
+          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ButtonsContainer>
       </DialogContent>
     </Dialog>

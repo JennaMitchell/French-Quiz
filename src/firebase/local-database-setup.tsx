@@ -8,7 +8,11 @@ import { storeActions, DatabaseStates } from "../store/store";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import LoadingAnimation from "../components/loading-logo/loading-logo";
-
+interface UserSelectedData {
+  french: string;
+  english: string;
+  id: string;
+}
 const LoadingScreenBackdrop = styled("div", {
   name: "LoadingScreenBackdrop ",
   slot: "Wrapper",
@@ -45,12 +49,19 @@ const LocalDataBaseSetup = () => {
   const flashcardsDB = useSelector(
     (state: DatabaseStates) => state.flashcardsDB
   );
+  const adjectivesDB = useSelector(
+    (state: DatabaseStates) => state.adjectivesDB
+  );
+  const nounsDB = useSelector((state: DatabaseStates) => state.nounsDB);
+  const verbsDB = useSelector((state: DatabaseStates) => state.verbsDB);
+  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
 
   const awaitDatabaseData = async () => {
     const flashcardsDB = await get(child(databaseRef, "Flashcards/"));
     const nounsDB = await get(child(databaseRef, "Vocab/Nouns/"));
     const adjectivesDB = await get(child(databaseRef, "Vocab/Adjectives/"));
     const verbsDB = await get(child(databaseRef, "Vocab/Verbs/"));
+    const phrasesDB = await get(child(databaseRef, "Vocab/Phrases/"));
 
     const takeDatabaseSnapshot = (snapShot: any, databaseType: any) => {
       try {
@@ -71,7 +82,8 @@ const LocalDataBaseSetup = () => {
           if (
             databaseType === "nouns" ||
             databaseType === "adjective" ||
-            databaseType === "verbs"
+            databaseType === "verbs" ||
+            databaseType === "phrases"
           ) {
             for (const key in val) {
               loadedCards.push({
@@ -90,7 +102,8 @@ const LocalDataBaseSetup = () => {
             dispatch(storeActions.setAdjectivesDB(loadedCards));
           } else if (databaseType === "verbs") {
             dispatch(storeActions.setVerbsDB(loadedCards));
-            dispatch(storeActions.setFirebaseDataLoaded(true));
+          } else if (databaseType === "phrases") {
+            dispatch(storeActions.setPhrasesDB(loadedCards));
           }
         }
       } catch (error: any) {
@@ -102,7 +115,35 @@ const LocalDataBaseSetup = () => {
     takeDatabaseSnapshot(nounsDB, "nouns");
     takeDatabaseSnapshot(adjectivesDB, "adjective");
     takeDatabaseSnapshot(verbsDB, "verbs");
+    takeDatabaseSnapshot(phrasesDB, "phrases");
   };
+
+  // Creating an overall Vocab Database
+  const tempAllVocabDB: UserSelectedData[] = [];
+
+  const pushToTempAllVocabFunction = (database: UserSelectedData[]) => {
+    for (const key in database) {
+      let tempObject: UserSelectedData = {
+        id: key,
+        english: `${database[key]}`,
+        french: key,
+      };
+      tempAllVocabDB.push(tempObject);
+    }
+  };
+
+  if (
+    adjectivesDB.length !== 0 &&
+    verbsDB.length !== 0 &&
+    nounsDB.length !== 0 &&
+    phrasesDB.length !== 0
+  ) {
+    pushToTempAllVocabFunction(adjectivesDB);
+    pushToTempAllVocabFunction(verbsDB);
+    pushToTempAllVocabFunction(nounsDB);
+    dispatch(storeActions.setOverallVocabDB(tempAllVocabDB));
+    dispatch(storeActions.setFirebaseDataLoaded(true));
+  }
 
   if (flashcardsDB.length === 0) {
     awaitDatabaseData();

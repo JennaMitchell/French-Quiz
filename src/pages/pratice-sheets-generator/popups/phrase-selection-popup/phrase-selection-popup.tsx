@@ -7,6 +7,7 @@ import {
 } from "../../../../components/generic-components/generic-popup-components";
 
 import {
+  SelectionContainer,
   ActionButton,
   DisabledActionButton,
   VocabContainer,
@@ -17,23 +18,22 @@ import {
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
-  SelectionContainer,
   ButtonsContainer,
-} from "./vocab-selction-popup-styled-components";
-import { useState, useEffect } from "react";
+  StyledSelect,
+  StyledOption,
+} from "./phrase-selection-popup-styled-components";
+import { useState, useEffect, ChangeEventHandler } from "react";
 
-const VocabSelectionPopup = () => {
+const PhraseSelectionPopup = () => {
   const dispatch = useDispatch();
-  const adjectivesDB = useSelector(
-    (state: DatabaseStates) => state.adjectivesDB
+
+  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
+  const phrasesSelectionPopupActive = useSelector(
+    (state: DatabaseStates) => state.phrasesSelectionPopupActive
   );
-  const nounsDB = useSelector((state: DatabaseStates) => state.nounsDB);
-  const verbsDB = useSelector((state: DatabaseStates) => state.verbsDB);
-  const vocabSelectPopupActive = useSelector(
-    (state: DatabaseStates) => state.vocabSelectPopupActive
-  );
-  const practiceSheetGeneratorVocabQuestionSetup = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorVocabQuestionSetup
+
+  const numberOfConjugationQuestions = useSelector(
+    (state: DatabaseStates) => state.numberOfConjugationQuestions
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -43,10 +43,9 @@ const VocabSelectionPopup = () => {
     dispatch(storeActions.setVocabSelectPopupActive(false));
   };
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
-  const [nounDropDownMenuActive, setNounDropDownMenuActive] = useState(false);
-  const [adjectiveDropDownMenuActive, setAdjectiveDropDownMenuActive] =
-    useState(false);
+
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
+  const [selectedTestType, setSelectedTestType] = useState("");
 
   let submitButtonEnabled = false;
 
@@ -54,30 +53,12 @@ const VocabSelectionPopup = () => {
   const verbsHeadingHandler = () => {
     setVerbsDropDownMenuActive(!verbsDropDownMenuActive);
   };
-  const nounHeadingHandler = () => {
-    setNounDropDownMenuActive(!nounDropDownMenuActive);
-  };
-  const adjectiveHeadingHandler = () => {
-    setAdjectiveDropDownMenuActive(!adjectiveDropDownMenuActive);
-  };
 
   // Function below handler the adding and removing of verbs
   const itemSelectionUpdater = (index: number, type: string) => {
-    let selectedItemData: SelectedItemsTypes = {};
+    const selectedItemData = phrasesDB[index];
+    /// IMPORTANT THIS INSTANCE ONLY WORKS WITH PHRASES
 
-    switch (type) {
-      case "Verbs":
-        selectedItemData = verbsDB[index];
-        break;
-      case "Nouns":
-        selectedItemData = nounsDB[index];
-        break;
-      case "Adjectives":
-        selectedItemData = adjectivesDB[index];
-        break;
-      default:
-        break;
-    }
     let indexOfTermToBeDeleted: string | number = "none";
     for (let i = 0; i < selectedItems.length; i++) {
       if (selectedItemData?.french === selectedItems[i].french) {
@@ -96,11 +77,7 @@ const VocabSelectionPopup = () => {
 
       setSelectedItems(removedArray);
     } else {
-      if (
-        practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-          selectedItems.length !==
-        0
-      ) {
+      if (numberOfConjugationQuestions - selectedItems.length !== 0) {
         const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
         copyOfSelectedItems.push({
           english: selectedItemData.english,
@@ -109,6 +86,14 @@ const VocabSelectionPopup = () => {
         setSelectedItems(copyOfSelectedItems);
       }
     }
+  };
+  // Skip Button Handler
+
+  const skipButtonHandler = () => {
+    dispatch(storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup([]));
+
+    dispatch(storeActions.setPhrasesSelectionPopupActive(false));
+    dispatch(storeActions.setUserSelectedPhrasesTestType(""));
   };
 
   /// getting the Data ready
@@ -140,15 +125,27 @@ const VocabSelectionPopup = () => {
           sx={{
             backgroundColor: `${matchFound && "secondary.light"}`,
             color: `${matchFound && "secondary.dark"}`,
+            fontSize: "16px",
           }}
         >
           <Typography
-            sx={{ fontSize: "inherit", color: "inherit", paddingLeft: "5px" }}
+            sx={{
+              fontSize: "inherit",
+              color: "inherit",
+              paddingLeft: "5px",
+              width: "max(100px,100px)",
+            }}
           >
             {object.french}
           </Typography>
           <EndSelectionBox>
-            <Typography sx={{ fontSize: "inherit", color: "inherit" }}>
+            <Typography
+              sx={{
+                fontSize: "inherit",
+                color: "inherit",
+                width: "max(100px,100px)",
+              }}
+            >
               {object.english}
             </Typography>
             {!matchFound && <AddWordIcon />}
@@ -160,53 +157,54 @@ const VocabSelectionPopup = () => {
     return renderReadyItem;
   };
 
-  const renderReadyVerbItems = dropDownDataMaker(verbsDB, "Verbs");
-  const renderReadyNounItems = dropDownDataMaker(nounsDB, "Nouns");
-  const renderReadyAdjectiveItems = dropDownDataMaker(
-    adjectivesDB,
-    "Adjectives"
-  );
-
-  if (
-    practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-      selectedItems.length ===
-    0
-  ) {
-    submitButtonEnabled = true;
-  }
+  const renderReadyVerbItems = dropDownDataMaker(phrasesDB, "Phrases");
 
   // Submit Handler
 
   const submitHandler = () => {
-    dispatch(storeActions.setNumberOfConjugationPopupActive(true));
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-    dispatch(storeActions.setUserSelectedVocab(selectedItems));
+    dispatch(storeActions.setPhrasesSelectionPopupActive(false));
+    dispatch(storeActions.setUserSelectedPhrases(selectedItems));
+    dispatch(storeActions.setUserSelectedPhrasesTestType(selectedTestType));
   };
   ///Reset on Upload
   useEffect(() => {
-    if (vocabSelectPopupActive) {
+    if (phrasesSelectionPopupActive) {
       setSelectedItems([]);
+      setSelectedTestType("");
     }
-  }, [vocabSelectPopupActive]);
+  }, [phrasesSelectionPopupActive]);
 
-  // Skip BUtton Handler
-
-  const skipButtonHandler = () => {
-    dispatch(storeActions.setPracticeSheetGeneratorVocabQuestionSetup([]));
-    dispatch(storeActions.setNumberOfConjugationPopupActive(true));
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-    dispatch(storeActions.setSelectedVocabTestType(""));
-    dispatch(storeActions.setUserSelectedVocab([]));
+  // Group by handler
+  const testTypeHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
+    if (
+      e.target.value === "English" ||
+      e.target.value === "French" ||
+      e.target.value === "French/English"
+    ) {
+      setSelectedTestType(e.target.value);
+    }
   };
+  // Submit Button Handler
+
+  // Submit Button Enabler
+  if (
+    selectedTestType === "English" ||
+    selectedTestType === "French/English" ||
+    (selectedTestType === "French" && selectedItems.length !== 0)
+  ) {
+    submitButtonEnabled = true;
+  }
+
   return (
     <Dialog
-      open={vocabSelectPopupActive}
+      open={phrasesSelectionPopupActive}
       onClose={onCloseHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
+          overflowY: "scroll",
         },
         "&.PaperProps": {
           borderRadius: "20px",
@@ -226,7 +224,6 @@ const VocabSelectionPopup = () => {
           overflowX: "hidden",
           borderRadius: "20px",
           padding: "10px 40px 20px 40px",
-          overflowY: "scroll",
           height: "max-content",
           "@media(maxWidth:475px)": {
             width: "max(325px,325px)",
@@ -255,7 +252,7 @@ const VocabSelectionPopup = () => {
               },
             }}
           >
-            Step 2 of 6
+            Step 6 of 6
           </Typography>
 
           <Typography
@@ -267,7 +264,7 @@ const VocabSelectionPopup = () => {
               "@media(max-width:475px)": { fontSize: "18px" },
             }}
           >
-            Vocab Selection
+            Phrase Selection
           </Typography>
           <SelectionContainer>
             <Typography
@@ -294,8 +291,7 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length}
+              {numberOfConjugationQuestions - selectedItems.length}
             </Typography>
           </SelectionContainer>
           <DropDownButton onClick={verbsHeadingHandler}>
@@ -310,7 +306,7 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              Verbs
+              Phrases
             </Typography>
             {!verbsDropDownMenuActive && <DropDownDownArrow />}
             {verbsDropDownMenuActive && <DropDownUpArrow />}
@@ -320,7 +316,7 @@ const VocabSelectionPopup = () => {
               {renderReadyVerbItems}
             </DropDownSelectionMenu>
           )}
-          <DropDownButton onClick={nounHeadingHandler}>
+          <SelectionContainer sx={{ marginTop: "20px" }}>
             <Typography
               variant="h5"
               sx={{
@@ -332,38 +328,15 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              Nouns
+              Test my:
             </Typography>
-            {!nounDropDownMenuActive && <DropDownDownArrow />}
-            {nounDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {nounDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyNounItems}
-            </DropDownSelectionMenu>
-          )}
-          <DropDownButton onClick={adjectiveHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Adjectives
-            </Typography>
-            {!adjectiveDropDownMenuActive && <DropDownDownArrow />}
-            {adjectiveDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {adjectiveDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyAdjectiveItems}
-            </DropDownSelectionMenu>
-          )}
+            <StyledSelect onChange={testTypeHandler}>
+              <StyledOption>&nbsp;</StyledOption>
+              <StyledOption>English</StyledOption>
+              <StyledOption>French</StyledOption>
+              <StyledOption>French/English</StyledOption>
+            </StyledSelect>
+          </SelectionContainer>
         </Grid>
         <ButtonsContainer>
           {submitButtonEnabled && (
@@ -378,4 +351,4 @@ const VocabSelectionPopup = () => {
     </Dialog>
   );
 };
-export default VocabSelectionPopup;
+export default PhraseSelectionPopup;
