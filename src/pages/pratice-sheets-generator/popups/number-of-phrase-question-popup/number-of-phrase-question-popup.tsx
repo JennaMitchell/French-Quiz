@@ -194,7 +194,14 @@ const NumberOfPhraseQuestionsPopup = () => {
   };
 
   const skipButtonHandler = () => {
-    dispatch(storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup([]));
+    dispatch(
+      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
+        numberOfTotalPhraseQuestions: 0,
+        numberOfPhraseMultipleChoiceQuestions: 0,
+        numberOfPhraseMatchingQuestions: 0,
+        numberOfPhraseFillInTheBlankQuesations: 0,
+      })
+    );
 
     dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
     dispatch(storeActions.setUserSelectedPhrasesTestType(""));
@@ -233,8 +240,8 @@ const NumberOfPhraseQuestionsPopup = () => {
           },
         }}
       >
-        <ClosingIconContainer onClick={onCloseHandler}>
-          <ClosingIcon onClick={onCloseHandler} />
+        <ClosingIconContainer onClick={skipButtonHandler}>
+          <ClosingIcon onClick={skipButtonHandler} />
         </ClosingIconContainer>
         <Grid
           container

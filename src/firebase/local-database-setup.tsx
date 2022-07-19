@@ -43,18 +43,15 @@ const LocalDataBaseSetup = () => {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [flashcardsDBTemp, setFlashcardsDBTemp] = useState<any>([]);
+  const [adjectivesDBTemp, setAdjectivesDBTemp] = useState<any>([]);
+  const [nounsDBTemp, setNounsDBTemp] = useState<any>([]);
+  const [verbsDBTemp, setVerbsDBTemp] = useState<any>([]);
+  const [phrasesDBTemp, setPhrasesDBTemp] = useState<any>([]);
   let httpError = "";
   let renderText = "";
 
-  const flashcardsDB = useSelector(
-    (state: DatabaseStates) => state.flashcardsDB
-  );
-  const adjectivesDB = useSelector(
-    (state: DatabaseStates) => state.adjectivesDB
-  );
-  const nounsDB = useSelector((state: DatabaseStates) => state.nounsDB);
-  const verbsDB = useSelector((state: DatabaseStates) => state.verbsDB);
-  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
+  // const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
 
   const awaitDatabaseData = async () => {
     const flashcardsDB = await get(child(databaseRef, "Flashcards/"));
@@ -96,14 +93,20 @@ const LocalDataBaseSetup = () => {
 
           if (databaseType === "flashcards") {
             dispatch(storeActions.setFlashcardsDB(loadedCards));
+            setFlashcardsDBTemp(loadedCards);
           } else if (databaseType === "nouns") {
             dispatch(storeActions.setNounsDB(loadedCards));
+            setNounsDBTemp(loadedCards);
           } else if (databaseType === "adjective") {
             dispatch(storeActions.setAdjectivesDB(loadedCards));
+            setAdjectivesDBTemp(loadedCards);
           } else if (databaseType === "verbs") {
             dispatch(storeActions.setVerbsDB(loadedCards));
+            setVerbsDBTemp(loadedCards);
           } else if (databaseType === "phrases") {
             dispatch(storeActions.setPhrasesDB(loadedCards));
+            dispatch(storeActions.setFirebaseDataLoaded(true));
+            setPhrasesDBTemp(loadedCards);
           }
         }
       } catch (error: any) {
@@ -124,28 +127,22 @@ const LocalDataBaseSetup = () => {
   const pushToTempAllVocabFunction = (database: UserSelectedData[]) => {
     for (const key in database) {
       let tempObject: UserSelectedData = {
-        id: key,
-        english: `${database[key]}`,
-        french: key,
+        id: `${database[key].french}`,
+        english: `${database[key].english}`,
+        french: `${database[key].french}`,
       };
+
       tempAllVocabDB.push(tempObject);
     }
   };
-
-  if (
-    adjectivesDB.length !== 0 &&
-    verbsDB.length !== 0 &&
-    nounsDB.length !== 0 &&
-    phrasesDB.length !== 0
-  ) {
-    pushToTempAllVocabFunction(adjectivesDB);
-    pushToTempAllVocabFunction(verbsDB);
-    pushToTempAllVocabFunction(nounsDB);
+  if (phrasesDBTemp.length !== 0) {
+    pushToTempAllVocabFunction(adjectivesDBTemp);
+    pushToTempAllVocabFunction(verbsDBTemp);
+    pushToTempAllVocabFunction(nounsDBTemp);
     dispatch(storeActions.setOverallVocabDB(tempAllVocabDB));
-    dispatch(storeActions.setFirebaseDataLoaded(true));
   }
 
-  if (flashcardsDB.length === 0) {
+  if (flashcardsDBTemp.length === 0) {
     awaitDatabaseData();
   }
 

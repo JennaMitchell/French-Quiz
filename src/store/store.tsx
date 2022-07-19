@@ -56,6 +56,9 @@ const initialState = {
   overAllVocabDB: [],
   practiceSheetsMultipleChoiceVocabAnswers: [],
   practiceSheetsMultipleChoicePhrasesAnswers: [],
+  practiceSheetSetupComplete: false,
+  practiceSheetsFillInTheBlankVocabAnswers: [],
+  practiceSheetsFillInTheBlankPhrasesAnswers: [],
 };
 const storeSlice = createSlice({
   name: "French Quiz Database",
@@ -139,6 +142,15 @@ const storeSlice = createSlice({
     setPracticeSheetsMultipleChoicePhrasesAnswers(state, { payload }) {
       state.practiceSheetsMultipleChoicePhrasesAnswers = payload;
     },
+    setPracticeSheetSetupComplete(state, { payload }) {
+      state.practiceSheetSetupComplete = payload;
+    },
+    setPracticeSheetsFillInTheBlankVocabAnswers(state, { payload }) {
+      state.practiceSheetsFillInTheBlankVocabAnswers = payload;
+    },
+    setPracticeSheetsFillInTheBlankPhrasesAnswers(state, { payload }) {
+      state.practiceSheetsFillInTheBlankPhrasesAnswers = payload;
+    },
   },
 });
 const store = configureStore({ reducer: storeSlice.reducer });
@@ -159,11 +171,11 @@ type PractiveSheetGeneratorPhrasesQuestionSetup = {
   numberOfPhraseFillInTheBlankQuestions: number;
 };
 interface UserSelectedData {
-  french: string;
+  [french: string]: string;
   english: string;
 }
 interface DatabaseType {
-  french: string;
+  [french: string]: string;
   english: string;
   id: string;
 }
@@ -204,6 +216,9 @@ export interface DatabaseStates {
   selectedVocabTestType: string;
   practiceSheetsMultipleChoiceVocabAnswer: AnswerKey[];
   practiceSheetsMultipleChoicePhrasesAnswers: AnswerKey[];
+  practiceSheetSetupComplete: boolean;
+  practiceSheetsFillInTheBlankVocabAnswers: string[];
+  practiceSheetsFillInTheBlankPhrasesAnswers: string[];
 }
 
 export const storeActions = storeSlice.actions;

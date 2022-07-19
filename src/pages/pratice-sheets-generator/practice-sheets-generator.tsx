@@ -3,7 +3,7 @@ import {
   AddIconButton,
   AddIconHolder,
   ResetButton,
-} from "./practice-sheetes-generator-styled-components";
+} from "./practice-sheets-generator-styled-components";
 import NumberOfVocabQuestionsPopup from "./popups/number-of-vocab-questions/number-of-vocab-questions-popup";
 import { useDispatch, useSelector } from "react-redux";
 import { storeActions, DatabaseStates } from "../../store/store";
@@ -22,6 +22,9 @@ const PracticeSheetsGenerator = () => {
   };
 
   // Handeling use Data on refresh
+  const newPracticeSheetsPopupActive = useSelector(
+    (state: DatabaseStates) => state.newPracticeSheetsPopupActive
+  );
   const vocabSelectPopupActive = useSelector(
     (state: DatabaseStates) => state.vocabSelectPopupActive
   );
@@ -64,7 +67,11 @@ const PracticeSheetsGenerator = () => {
   const userSelectedPhrasesTestType = useSelector(
     (state: DatabaseStates) => state.userSelectedPhrasesTestType
   );
-  let refreshed: string = JSON.parse(
+  const firebaseDataLoaded = useSelector(
+    (state: DatabaseStates) => state.firebaseDataLoaded
+  );
+
+  let refreshed: boolean = JSON.parse(
     localStorage.getItem("refreshed") ?? "false"
   );
   useBeforeunload(() => {
@@ -245,20 +252,26 @@ const PracticeSheetsGenerator = () => {
     localStorage.removeItem("userSelectedPhrasesTestType");
   }
 
+  // Handeling double ocmpoonent updat error
+  // "finished question set up"
+
   return (
     <TopContainer>
       <AddIconButton>
         <AddIconHolder />
       </AddIconButton>
       <ResetButton onClick={resetButtonHandler}>New / Reset</ResetButton>
-      <NumberOfVocabQuestionsPopup />
-      <VocabSelectionPopup />
-      <NumberOfConjugationQuestionsPopup />
-      <ConjugationSelectionPopup />
-      <NumberOfPhraseQuestionsPopup />
-      <PhraseSelectionPopup />
+      {newPracticeSheetsPopupActive && firebaseDataLoaded && (
+        <NumberOfVocabQuestionsPopup />
+      )}
+      {vocabSelectPopupActive && <VocabSelectionPopup />}
+      {numberOfConjugationPopupActive && <NumberOfConjugationQuestionsPopup />}
+      {conjugationVerbChoicePopup && <ConjugationSelectionPopup />}
+      {numberOfPhraseQuestionsPopupActive && <NumberOfPhraseQuestionsPopup />}
+      {phrasesSelectionPopupActive && <PhraseSelectionPopup />}
       <SheetGenerator />
     </TopContainer>
   );
 };
 export default PracticeSheetsGenerator;
+//added the popup active requiremetn so taht when the popup is et to false insid e of it / it wil lsimply clsoe and not rerender while updating the main page

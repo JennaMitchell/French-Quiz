@@ -3,65 +3,70 @@ import { styled } from "@mui/material/styles";
 const QuestionContainer = styled("div", {
   name: "QuestionContainer",
   slot: "Wrapper",
-})(() => ({
-  width: "max(400px,400px)",
-  minHeight: "200px",
+})(({ theme }) => ({
+  width: "max(320px,320px)",
+  minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
   backgroundColor: "inherit",
-  color: "inherit",
+  color: theme.palette.secondary.dark,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
+  marginTop: "20px",
 }));
 
 const QuestionTitle = styled("div", {
   name: "QuestionTitle",
   slot: "Wrapper",
-})(() => ({
-  width: "max(200px,200px)",
+})(({ theme }) => ({
+  width: "max(100%,100%)",
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
   backgroundColor: "inherit",
-  color: "inherit",
+  color: theme.palette.secondary.dark,
   textAlign: "center",
   fontSize: "26px",
+  marginBottom: "10px",
+  paddingRight: "40px",
 }));
 const QuestionAnswerBlock = styled("div", {
   name: "QuestionAnswerBlock",
   slot: "Wrapper",
 })(() => ({
-  width: "max(90%,90%)",
-  minHeight: "200px",
+  width: "max(100%,100%)",
+  minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
   backgroundColor: "inherit",
   color: "inherit",
   display: "grid",
-  gridTemplateRows: "max-content max-content",
-  gridTemplateColumns: "max-content max-content",
+  gridTemplateRows: "repeat(2,1fr)",
+  gridTemplateColumns: "repeat(2,1fr)",
   alignItems: "center",
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
   gap: "20px",
 }));
 
 const QuestionAnswer = styled("div", {
   name: "QuestionAnswer",
   slot: "Wrapper",
-})(() => ({
-  width: "max(100px,100px)",
+})(({ theme }) => ({
+  width: "max(100%,100%)",
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
   backgroundColor: "inherit",
-  color: "inherit",
+  color: theme.palette.secondary.dark,
   display: "grid",
   gridTemplateRows: "max-content max-content",
   gridTemplateColumns: "100%",
   alignItems: "center",
   justifyContent: "space-between",
+  fontSize: "20px",
+  textAlign: "left",
 }));
 export {
   QuestionContainer,

@@ -90,8 +90,7 @@ const PhraseSelectionPopup = () => {
   // Skip Button Handler
 
   const skipButtonHandler = () => {
-    dispatch(storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup([]));
-
+    dispatch(storeActions.setUserSelectedPhrases([]));
     dispatch(storeActions.setPhrasesSelectionPopupActive(false));
     dispatch(storeActions.setUserSelectedPhrasesTestType(""));
   };
@@ -232,9 +231,9 @@ const PhraseSelectionPopup = () => {
       >
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
-          onClick={onCloseHandler}
+          onClick={skipButtonHandler}
         >
-          <ClosingIcon onClick={onCloseHandler} />
+          <ClosingIcon onClick={skipButtonHandler} />
         </ClosingIconContainer>
         <Grid
           container

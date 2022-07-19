@@ -8,19 +8,26 @@ import {
 type Props = {
   mixedQuestions: string[];
   title: string;
+  questionNumber: number;
 };
-const MultipleChoiceQuestion = ({ mixedQuestions, title }: Props) => {
+const MultipleChoiceQuestion = ({
+  mixedQuestions,
+  title,
+  questionNumber,
+}: Props) => {
   /// Mixing the wrong Answers with the Correct Answers
   // via random numbers
 
   return (
     <QuestionContainer>
-      <QuestionTitle>{title}</QuestionTitle>
+      <QuestionTitle>
+        {questionNumber + 1}. {title}
+      </QuestionTitle>
       <QuestionAnswerBlock>
-        <QuestionAnswer>{mixedQuestions[0]}</QuestionAnswer>
-        <QuestionAnswer>{mixedQuestions[1]}</QuestionAnswer>
-        <QuestionAnswer>{mixedQuestions[2]}</QuestionAnswer>
-        <QuestionAnswer>{mixedQuestions[3]}</QuestionAnswer>
+        <QuestionAnswer>A. {mixedQuestions[0]}</QuestionAnswer>
+        <QuestionAnswer>B. {mixedQuestions[1]}</QuestionAnswer>
+        <QuestionAnswer>C. {mixedQuestions[2]}</QuestionAnswer>
+        <QuestionAnswer>D. {mixedQuestions[3]}</QuestionAnswer>
       </QuestionAnswerBlock>
     </QuestionContainer>
   );

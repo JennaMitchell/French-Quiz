@@ -214,9 +214,9 @@ const ConjugationSelectionPopup = () => {
       >
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
-          onClick={onCloseHandler}
+          onClick={skipButtonHandler}
         >
-          <ClosingIcon onClick={onCloseHandler} />
+          <ClosingIcon onClick={skipButtonHandler} />
         </ClosingIconContainer>
         <Grid
           container

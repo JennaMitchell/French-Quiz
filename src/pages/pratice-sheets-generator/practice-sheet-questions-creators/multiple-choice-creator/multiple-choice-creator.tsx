@@ -1,20 +1,21 @@
 import MultipleChoiceQuestion from "./child-components/multiple-choice-question";
 import { useDispatch, useSelector } from "react-redux";
 import { DatabaseStates, storeActions } from "../../../../store/store";
-import { TopContainer } from "./multiple-choice-creator-styled-components";
+
+import { useEffect, useState } from "react";
 interface UserSelectedData {
-  french: string;
+  [french: string]: string;
   english: string;
 }
 type Props = {
   inputArray: UserSelectedData[];
-  numberOfQuestions: number;
+
   databaseType: string;
   testOn: string;
 };
 const MultipleChoiceCreator = ({
   inputArray,
-  numberOfQuestions,
+
   databaseType,
   testOn,
 }: Props) => {
@@ -29,10 +30,13 @@ const MultipleChoiceCreator = ({
     (state: DatabaseStates) => state.overAllVocabDB
   );
   const dispatch = useDispatch();
+  const [multipleChoiceQuestionAnswerKey, setMultipleChoiceQuestionAnswerKey] =
+    useState<AnswerKey[] | []>([]);
 
   switch (databaseType) {
     case "Vocab":
       overallDatabase = overAllVocabDB;
+
       break;
     case "Phrases":
       overallDatabase = phrasesDB;
@@ -71,31 +75,36 @@ const MultipleChoiceCreator = ({
   // Step 1. Creating the other Three Options
   const creatingThreeOptions = (
     word: UserSelectedData,
-    database: UserSelectedData[],
-    testType: string
+    database: UserSelectedData[]
   ) => {
     const databaseLength = database.length;
-    const databaseKeys = Object.keys(database);
-    const indexOfUserSelectedItem = databaseKeys.indexOf(word.french);
+    // retreiving the french term from each term to find the index of the word selected
+    const databaseFrenchTerms: string[] = [];
+    for (const num in database) {
+      databaseFrenchTerms.push(database[num].french);
+    }
+
+    const indexOfUserSelectedItem = databaseFrenchTerms.indexOf(word.french);
+
     // we are getting the index of the correct answer so that the answer doesn't appear twice
     // Getting a Random Number
     const randomNumberOne = randomNumberGenerator(
       0,
-      databaseLength,
+      databaseLength - 1,
       indexOfUserSelectedItem
     );
 
     const randomNumberTwo = randomNumberGenerator(
       0,
-      databaseLength,
+      databaseLength - 1,
       indexOfUserSelectedItem
     );
     const randomNumberThree = randomNumberGenerator(
       0,
-      databaseLength,
+      databaseLength - 1,
       indexOfUserSelectedItem
     );
-    /// Step 2. Returning The Data
+
     return [
       database[randomNumberOne],
       database[randomNumberTwo],
@@ -103,11 +112,10 @@ const MultipleChoiceCreator = ({
     ];
   };
   const answerKey: AnswerKey[] = [];
-  const renderReadyMultipleChoiceQuestions = overallDatabase.map(
+  const renderReadyMultipleChoiceQuestions = inputArray.map(
     (word: UserSelectedData, index: number) => {
       //Handeling Test Types
-
-      let testTypeLowerCase = "";
+      let testTypeLowerCase = testOn.toLowerCase();
       switch (testOn) {
         case "French":
           testTypeLowerCase = "french";
@@ -116,8 +124,9 @@ const MultipleChoiceCreator = ({
           testTypeLowerCase = "english";
           break;
         default:
-          // The otehr option is to test on either english or french randomly
+          // The other option is to test on either english or french randomly
           // to handles this we grab a random number from 0
+
           const coinFlip = randomNumberGenerator(0, 1, 2);
           if (coinFlip === 0) {
             testTypeLowerCase = "french";
@@ -126,25 +135,21 @@ const MultipleChoiceCreator = ({
           }
           break;
       }
-      const otherOptionsData = creatingThreeOptions(
-        word,
-        overallDatabase,
-        testTypeLowerCase
-      );
+      const otherOptionsData = creatingThreeOptions(word, overallDatabase);
 
       const correctAnswerPosition =
-        randomNumberGeneratorWithNumberArrayRestriction(1, 4, [5]);
+        randomNumberGeneratorWithNumberArrayRestriction(0, 3, [5]);
       const wrongAnswerPositionOne =
-        randomNumberGeneratorWithNumberArrayRestriction(1, 4, [
+        randomNumberGeneratorWithNumberArrayRestriction(0, 3, [
           correctAnswerPosition,
         ]);
       const wrongAnswerPositionTwo =
-        randomNumberGeneratorWithNumberArrayRestriction(1, 4, [
+        randomNumberGeneratorWithNumberArrayRestriction(0, 3, [
           correctAnswerPosition,
           wrongAnswerPositionOne,
         ]);
       const wrongAnswerPositionThree =
-        randomNumberGeneratorWithNumberArrayRestriction(1, 4, [
+        randomNumberGeneratorWithNumberArrayRestriction(0, 3, [
           correctAnswerPosition,
           wrongAnswerPositionTwo,
           wrongAnswerPositionOne,
@@ -152,13 +157,16 @@ const MultipleChoiceCreator = ({
       let mixedQuestions = ["", "", "", ""];
       type ObjectKey = keyof typeof word;
 
-      const testTypeKey = testOn as ObjectKey;
-      mixedQuestions[correctAnswerPosition] = word[testTypeKey];
-      mixedQuestions[wrongAnswerPositionOne] = otherOptionsData[0][testTypeKey];
-      mixedQuestions[wrongAnswerPositionTwo] = otherOptionsData[1][testTypeKey];
+      mixedQuestions[correctAnswerPosition] = word[testTypeLowerCase];
+
+      mixedQuestions[wrongAnswerPositionOne] =
+        otherOptionsData[0][testTypeLowerCase];
+      mixedQuestions[wrongAnswerPositionTwo] =
+        otherOptionsData[1][testTypeLowerCase];
       mixedQuestions[wrongAnswerPositionThree] =
-        otherOptionsData[2][testTypeKey];
+        otherOptionsData[2][testTypeLowerCase];
       let questionTitleType = "" as ObjectKey;
+
       if (testTypeLowerCase === "french") {
         questionTitleType = "english";
       } else {
@@ -185,29 +193,46 @@ const MultipleChoiceCreator = ({
 
       return (
         <MultipleChoiceQuestion
+          key={index}
           mixedQuestions={mixedQuestions}
           title={questionTitle}
+          questionNumber={index}
         />
       );
     }
   );
 
-  if (renderReadyMultipleChoiceQuestions.length !== 0) {
-    switch (databaseType) {
-      case "Vocab":
-        dispatch(
-          storeActions.setPracticeSheetsMultipleChoiceVocabAnswers(answerKey)
-        );
-        break;
-      case "Phrases":
-        dispatch(
-          storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers(answerKey)
-        );
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (multipleChoiceQuestionAnswerKey.length !== 0) {
+      switch (databaseType) {
+        case "Vocab":
+          dispatch(
+            storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers(
+              multipleChoiceQuestionAnswerKey
+            )
+          );
+
+          break;
+        case "Phrases":
+          dispatch(
+            storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers(
+              multipleChoiceQuestionAnswerKey
+            )
+          );
+          break;
+        default:
+          break;
+      }
     }
+  }, [multipleChoiceQuestionAnswerKey, databaseType, dispatch]);
+
+  if (
+    renderReadyMultipleChoiceQuestions.length !== 0 &&
+    multipleChoiceQuestionAnswerKey.length === 0
+  ) {
+    setMultipleChoiceQuestionAnswerKey(answerKey);
   }
-  return <TopContainer>{renderReadyMultipleChoiceQuestions}</TopContainer>;
+
+  return <>{renderReadyMultipleChoiceQuestions}</>;
 };
 export default MultipleChoiceCreator;

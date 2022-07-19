@@ -44,5 +44,27 @@ const MainContentContainer = styled("div", {
   padding: "10px",
 }));
 
-export { TopContainer, MainContentContainer };
+const TestContainer = styled("div", {
+  name: "TestContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  color: "inherit",
+  transition: "all 0.5s",
+  width: "max(100%,100%)",
+
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+
+  display: "grid",
+  alignItems: "flex-start",
+  justifyContent: "space-evenly",
+  gridTemplateColumns: "repeat(3,max-content)",
+  backgroundColor: theme.palette.secondary.light,
+  position: "relative",
+  borderRadius: "5px",
+  padding: "10px",
+}));
+
+export { TopContainer, MainContentContainer, TestContainer };
 // Page height 1680px x 1175px

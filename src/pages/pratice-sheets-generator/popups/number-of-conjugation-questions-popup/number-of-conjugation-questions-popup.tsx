@@ -103,8 +103,8 @@ const NumberOfConjugationQuestionsPopup = () => {
           },
         }}
       >
-        <ClosingIconContainer onClick={onCloseHandler}>
-          <ClosingIcon onClick={onCloseHandler} />
+        <ClosingIconContainer onClick={skipButtonHandler}>
+          <ClosingIcon onClick={skipButtonHandler} />
         </ClosingIconContainer>
         <Grid
           container

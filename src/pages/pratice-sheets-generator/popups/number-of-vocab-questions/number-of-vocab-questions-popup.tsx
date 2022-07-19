@@ -24,7 +24,6 @@ import {
   ClosingIconContainer,
   ClosingIcon,
 } from "../../../../components/generic-components/generic-popup-components";
-import { useEffect } from "react";
 
 const NumberOfVocabQuestionsPopup = () => {
   const newPracticeSheetsPopupActive = useSelector(
@@ -58,9 +57,9 @@ const NumberOfVocabQuestionsPopup = () => {
         deepCopyOfUserData
       )
     );
+    dispatch(storeActions.setSelectedVocabTestType(selectedTestType));
     dispatch(storeActions.setVocabSelectPopupActive(true));
     dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
-    dispatch(storeActions.setSelectedVocabTestType(selectedTestType));
   };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [numberOfMatchingQuestions, setNumberOfMatchingQuestions] = useState(0);
@@ -165,7 +164,7 @@ const NumberOfVocabQuestionsPopup = () => {
   if (numberOfQuestions === 0) {
     numberOfQuestionsOptions = [];
   }
-  console.log(selectedTestType.length);
+
   if (
     numberOfQuestions !== 0 &&
     numberOfAvaiableQuestions === 0 &&
@@ -173,15 +172,18 @@ const NumberOfVocabQuestionsPopup = () => {
   ) {
     submitButtonEnabled = true;
   }
-  useEffect(() => {
-    if (newPracticeSheetsPopupActive) {
-      setNumberOfQuestions(0);
-      setNumberOfMatchingQuestions(0);
-      setNumberOfMultipleChoiceQuestions(0);
-      setNumberOfFillInTheBlankQuestions(0);
-      setSelectedTestType("");
-    }
-  }, [newPracticeSheetsPopupActive]);
+  // useEffect(() => {
+  //   if (newPracticeSheetsPopupActive && initialSetup) {
+  //     setNumberOfQuestions(0);
+  //     setNumberOfMatchingQuestions(0);
+  //     setNumberOfMultipleChoiceQuestions(0);
+  //     setNumberOfFillInTheBlankQuestions(0);
+  //     setSelectedTestType("");
+  //     dispatch(storeActions.setPracticeSheetSetupComplete(false));
+  //   } else {
+  //     setInitialSetup(true);
+  //   }
+  // }, [newPracticeSheetsPopupActive, dispatch]);
   // this useEffect is used to rest all teh varialbes if the user closes the window then reopens it
   // Group by handler
   const testTypeHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
@@ -197,7 +199,14 @@ const NumberOfVocabQuestionsPopup = () => {
   // Skip Button Handler
 
   const skipButtonHandler = () => {
-    dispatch(storeActions.setPracticeSheetGeneratorVocabQuestionSetup([]));
+    dispatch(
+      storeActions.setPracticeSheetGeneratorVocabQuestionSetup({
+        numberOfTotalVocabQuestions: 0,
+        numberOfVocabMultipleChoiceQuestions: 0,
+        numberOfVocabMatchingQuestions: 0,
+        numberOfVocabFillInTheBlankQuestions: 0,
+      })
+    );
     dispatch(storeActions.setNumberOfConjugationPopupActive(true));
     dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
     dispatch(storeActions.setSelectedVocabTestType(""));
@@ -236,8 +245,8 @@ const NumberOfVocabQuestionsPopup = () => {
           },
         }}
       >
-        <ClosingIconContainer onClick={onCloseHandler}>
-          <ClosingIcon onClick={onCloseHandler} />
+        <ClosingIconContainer onClick={skipButtonHandler}>
+          <ClosingIcon onClick={skipButtonHandler} />
         </ClosingIconContainer>
         <Grid
           container
@@ -261,7 +270,7 @@ const NumberOfVocabQuestionsPopup = () => {
           <Typography
             variant="h4"
             sx={{
-              fontSize: "28px",
+              fontSize: "26px",
               "@media(max-width:580px)": { fontSize: "28px" },
               "@media(max-width:520px)": { fontSize: "22px" },
               "@media(max-width:475px)": { fontSize: "18px" },
