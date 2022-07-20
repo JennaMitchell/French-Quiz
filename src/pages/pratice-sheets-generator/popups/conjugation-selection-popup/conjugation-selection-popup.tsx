@@ -39,9 +39,7 @@ const ConjugationSelectionPopup = () => {
     french?: string;
     english?: string;
   }
-  const onCloseHandler = () => {
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-  };
+
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
 
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
@@ -181,7 +179,7 @@ const ConjugationSelectionPopup = () => {
   return (
     <Dialog
       open={conjugationVerbChoicePopup}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {

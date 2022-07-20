@@ -19,11 +19,9 @@ import {
   RemoveWordIcon,
   EndSelectionBox,
   ButtonsContainer,
-  StyledSelect,
-  StyledOption,
 } from "./phrase-selection-popup-styled-components";
-import { useState, useEffect, ChangeEventHandler } from "react";
-
+import { useState, useEffect } from "react";
+import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
 const PhraseSelectionPopup = () => {
   const dispatch = useDispatch();
 
@@ -32,20 +30,17 @@ const PhraseSelectionPopup = () => {
     (state: DatabaseStates) => state.phrasesSelectionPopupActive
   );
 
-  const numberOfConjugationQuestions = useSelector(
-    (state: DatabaseStates) => state.numberOfConjugationQuestions
+  const practiceSheetGeneratorPhrasesQuestionSetup = useSelector(
+    (state: DatabaseStates) => state.practiceSheetGeneratorPhrasesQuestionSetup
   );
   interface SelectedItemsTypes {
     french?: string;
     english?: string;
   }
-  const onCloseHandler = () => {
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-  };
+
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
 
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
-  const [selectedTestType, setSelectedTestType] = useState("");
 
   let submitButtonEnabled = false;
 
@@ -77,14 +72,12 @@ const PhraseSelectionPopup = () => {
 
       setSelectedItems(removedArray);
     } else {
-      if (numberOfConjugationQuestions - selectedItems.length !== 0) {
-        const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
-        copyOfSelectedItems.push({
-          english: selectedItemData.english,
-          french: selectedItemData.french,
-        });
-        setSelectedItems(copyOfSelectedItems);
-      }
+      const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
+      copyOfSelectedItems.push({
+        english: selectedItemData.english,
+        french: selectedItemData.french,
+      });
+      setSelectedItems(copyOfSelectedItems);
     }
   };
   // Skip Button Handler
@@ -93,6 +86,21 @@ const PhraseSelectionPopup = () => {
     dispatch(storeActions.setUserSelectedPhrases([]));
     dispatch(storeActions.setPhrasesSelectionPopupActive(false));
     dispatch(storeActions.setUserSelectedPhrasesTestType(""));
+    dispatch(
+      storeActions.setPracticeSheetGeneratorPhraseQuestions({
+        phraseMultipleChoiceQuestions: [],
+        phraseMatchingQuestions: [],
+        phraseFillInTheBlankQuestions: [],
+      })
+    );
+    dispatch(
+      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
+        numberOfTotalPhraseQuestions: 0,
+        numberOfPhraseMultipleChoiceQuestions: 0,
+        numberOfPhraseMatchingQuestions: 0,
+        numberOfPhraseFillInTheBlankQuestions: 0,
+      })
+    );
   };
 
   /// getting the Data ready
@@ -161,35 +169,34 @@ const PhraseSelectionPopup = () => {
   // Submit Handler
 
   const submitHandler = () => {
+    const [multipleChoiceAnswers, matchingAnswers, fillInBlankAnswers] =
+      questionAnswerCreator(
+        practiceSheetGeneratorPhrasesQuestionSetup.numberOfPhraseMultipleChoiceQuestions,
+        practiceSheetGeneratorPhrasesQuestionSetup.numberOfPhraseMatchingQuestions,
+        practiceSheetGeneratorPhrasesQuestionSetup.numberOfPhraseFillInTheBlankQuestions,
+        selectedItems
+      );
+    dispatch(
+      storeActions.setPracticeSheetGeneratorPhraseQuestions({
+        phraseMultipleChoiceQuestions: multipleChoiceAnswers,
+        phraseMatchingQuestions: matchingAnswers,
+        phraseFillInTheBlankQuestions: fillInBlankAnswers,
+      })
+    );
     dispatch(storeActions.setPhrasesSelectionPopupActive(false));
     dispatch(storeActions.setUserSelectedPhrases(selectedItems));
-    dispatch(storeActions.setUserSelectedPhrasesTestType(selectedTestType));
   };
   ///Reset on Upload
   useEffect(() => {
     if (phrasesSelectionPopupActive) {
       setSelectedItems([]);
-      setSelectedTestType("");
     }
   }, [phrasesSelectionPopupActive]);
 
-  // Group by handler
-  const testTypeHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
-    if (
-      e.target.value === "English" ||
-      e.target.value === "French" ||
-      e.target.value === "French/English"
-    ) {
-      setSelectedTestType(e.target.value);
-    }
-  };
-  // Submit Button Handler
-
   // Submit Button Enabler
   if (
-    selectedTestType === "English" ||
-    selectedTestType === "French/English" ||
-    (selectedTestType === "French" && selectedItems.length !== 0)
+    selectedItems.length >=
+    practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions
   ) {
     submitButtonEnabled = true;
   }
@@ -197,7 +204,7 @@ const PhraseSelectionPopup = () => {
   return (
     <Dialog
       open={phrasesSelectionPopupActive}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -277,7 +284,7 @@ const PhraseSelectionPopup = () => {
                 },
               }}
             >
-              Selection Remaining :
+              Minimum Selection Remaining: &nbsp;
             </Typography>
             <Typography
               variant="h6"
@@ -290,9 +297,31 @@ const PhraseSelectionPopup = () => {
                 },
               }}
             >
-              {numberOfConjugationQuestions - selectedItems.length}
+              {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+                selectedItems.length >
+                0 &&
+                practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+                  selectedItems.length}
+              {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+                selectedItems.length <
+                0 && 0}
             </Typography>
           </SelectionContainer>
+          {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+            selectedItems.length <=
+            0 && (
+            <Typography
+              sx={{
+                color: "red",
+                fontSize: "16px",
+                width: "max(300px,300px)",
+                textAlign: "center",
+              }}
+            >
+              Warning: Picking more than the selected number of questions will
+              randomize the selection
+            </Typography>
+          )}
           <DropDownButton onClick={verbsHeadingHandler}>
             <Typography
               variant="h5"
@@ -315,28 +344,8 @@ const PhraseSelectionPopup = () => {
               {renderReadyVerbItems}
             </DropDownSelectionMenu>
           )}
-          <SelectionContainer sx={{ marginTop: "20px" }}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Test my:
-            </Typography>
-            <StyledSelect onChange={testTypeHandler}>
-              <StyledOption>&nbsp;</StyledOption>
-              <StyledOption>English</StyledOption>
-              <StyledOption>French</StyledOption>
-              <StyledOption>French/English</StyledOption>
-            </StyledSelect>
-          </SelectionContainer>
         </Grid>
+
         <ButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>

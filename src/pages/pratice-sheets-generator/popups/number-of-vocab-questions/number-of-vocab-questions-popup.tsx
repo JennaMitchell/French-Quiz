@@ -35,10 +35,6 @@ const NumberOfVocabQuestionsPopup = () => {
 
   const dispatch = useDispatch();
 
-  const onCloseHandler = () => {
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
-  };
-
   const submitButtonHandler = () => {
     const deepCopyOfUserData = JSON.parse(
       JSON.stringify(practiceSheetGeneratorVocabQuestionSetup)
@@ -215,7 +211,7 @@ const NumberOfVocabQuestionsPopup = () => {
   return (
     <Dialog
       open={newPracticeSheetsPopupActive}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {

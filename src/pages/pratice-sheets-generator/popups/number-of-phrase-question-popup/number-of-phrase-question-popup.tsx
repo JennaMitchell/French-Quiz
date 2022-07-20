@@ -35,9 +35,6 @@ const NumberOfPhraseQuestionsPopup = () => {
   );
   const dispatch = useDispatch();
 
-  const onCloseHandler = () => {
-    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
-  };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [numberOfMatchingQuestions, setNumberOfMatchingQuestions] = useState(0);
   const [numberOfMultipleChoiceQuestions, setNumberOfMultipleChoiceQuestions] =
@@ -45,7 +42,7 @@ const NumberOfPhraseQuestionsPopup = () => {
   const [numberOfFillInTheBlankQuestions, setNumberOfFillInTheBlankQuestions] =
     useState(0);
 
-  const [selectedTestType, setSelectedTestType] = useState("");
+  const [selectedTestType, setSelectedTestType] = useState("x");
 
   let matchingQuestionsArray = [];
   let multipleChoiceQuestionsArray: any[] = [];
@@ -62,7 +59,7 @@ const NumberOfPhraseQuestionsPopup = () => {
       numberOfMultipleChoiceQuestions;
     deepCopyOfUserData.numberOfPhraseMatchingQuestions =
       numberOfMatchingQuestions;
-    deepCopyOfUserData.numberOfPhraseFillInTheBlankQuesations =
+    deepCopyOfUserData.numberOfPhraseFillInTheBlankQuestions =
       numberOfFillInTheBlankQuestions;
 
     dispatch(
@@ -178,7 +175,7 @@ const NumberOfPhraseQuestionsPopup = () => {
       setNumberOfMatchingQuestions(0);
       setNumberOfMultipleChoiceQuestions(0);
       setNumberOfFillInTheBlankQuestions(0);
-      setSelectedTestType("");
+      setSelectedTestType(" ");
     }
   }, [numberOfPhraseQuestionsPopupActive]);
   // this useEffect is used to rest all teh varialbes if the user closes the window then reopens it
@@ -199,7 +196,7 @@ const NumberOfPhraseQuestionsPopup = () => {
         numberOfTotalPhraseQuestions: 0,
         numberOfPhraseMultipleChoiceQuestions: 0,
         numberOfPhraseMatchingQuestions: 0,
-        numberOfPhraseFillInTheBlankQuesations: 0,
+        numberOfPhraseFillInTheBlankQuestions: 0,
       })
     );
 
@@ -210,7 +207,7 @@ const NumberOfPhraseQuestionsPopup = () => {
   return (
     <Dialog
       open={numberOfPhraseQuestionsPopupActive}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {

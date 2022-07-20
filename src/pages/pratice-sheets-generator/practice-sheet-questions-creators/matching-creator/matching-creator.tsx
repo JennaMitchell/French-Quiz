@@ -3,7 +3,11 @@ import { storeActions } from "../../../../store/store";
 
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import {
+  randomNumberGenerator,
+  randomNumberGeneratorWithNumberArrayRestriction,
+} from "../../../../components/functions/generic-functions";
+import { useState, useEffect } from "react";
 const StyledTypography = styled(Typography, {
   name: "StyledTypography",
   slot: "Wrapper",
@@ -41,33 +45,8 @@ type Props = {
 
 const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const dispatch = useDispatch();
+  const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
 
-  const randomNumberGenerator = (
-    min: number,
-    max: number,
-    notThisNumber: number
-  ) => {
-    let randomNumberGenerated = Math.floor(
-      Math.random() * (max - min + 1) + min
-    );
-    while (randomNumberGenerated === notThisNumber) {
-      randomNumberGenerated = Math.floor(Math.random() * (max - min + 1) + min);
-    }
-    return randomNumberGenerated;
-  };
-  const randomNumberGeneratorWithNumberArrayRestriction = (
-    min: number,
-    max: number,
-    notTheseNumber: number[]
-  ) => {
-    let randomNumberGenerated = Math.floor(
-      Math.random() * (max - min + 1) + min
-    );
-    while (notTheseNumber.includes(randomNumberGenerated)) {
-      randomNumberGenerated = Math.floor(Math.random() * (max - min + 1) + min);
-    }
-    return randomNumberGenerated;
-  };
   // Mixing the Selected Questions
   const tempMixedArray: number[] = [];
   // creating a random array of numebrs excluisively to each other
@@ -202,17 +181,24 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
     );
   }
   // DIspathcing answer key
-  if (renderReadyData.length !== 0) {
-    if (databaseType === "Vocab") {
-      dispatch(
-        storeActions.setPracticeSheetsFillInTheBlankVocabAnswers(answerKey)
-      );
+  useEffect(() => {
+    if (pushedAnswerKey.length !== 0) {
+      if (databaseType === "Vocab") {
+        dispatch(
+          storeActions.setPracticeSheetsMatchingVocabAnswers(pushedAnswerKey)
+        );
+      }
+      if (databaseType === "Phrases") {
+        dispatch(
+          storeActions.setPracticeSheetsMatchingPhrasesAnswers(pushedAnswerKey)
+        );
+      }
     }
-    if (databaseType === "Phrases") {
-      dispatch(
-        storeActions.setPracticeSheetsFillInTheBlankPhrasesAnswers(answerKey)
-      );
-    }
+  }, [pushedAnswerKey, dispatch, databaseType]);
+  // useffect is here to allow the answerkey to pushed after the componet is rendered
+  // if you ttry to do it durng the intial renderyou will cause an error that says yo uare updating somehintg while in the process of updating
+  if (pushedAnswerKey.length === 0 && answerKey.length !== 0) {
+    setPushedAnswerKey(answerKey);
   }
 
   return <>{renderReadyData}</>;

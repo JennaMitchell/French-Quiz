@@ -21,9 +21,6 @@ import { ChangeEventHandler } from "react";
 const NumberOfConjugationQuestionsPopup = () => {
   const dispatch = useDispatch();
 
-  const onCloseHandler = () => {
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-  };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const numberOfConjugationPopupActive = useSelector(
     (state: DatabaseStates) => state.numberOfConjugationPopupActive
@@ -71,7 +68,7 @@ const NumberOfConjugationQuestionsPopup = () => {
   return (
     <Dialog
       open={numberOfConjugationPopupActive}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {

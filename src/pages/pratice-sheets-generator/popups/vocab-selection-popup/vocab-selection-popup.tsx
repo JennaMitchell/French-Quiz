@@ -19,8 +19,9 @@ import {
   EndSelectionBox,
   SelectionContainer,
   ButtonsContainer,
-} from "./vocab-selction-popup-styled-components";
+} from "./vocab-selection-popup-styled-components";
 import { useState, useEffect } from "react";
+import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
 
 const VocabSelectionPopup = () => {
   const dispatch = useDispatch();
@@ -39,9 +40,7 @@ const VocabSelectionPopup = () => {
     french?: string;
     english?: string;
   }
-  const onCloseHandler = () => {
-    dispatch(storeActions.setVocabSelectPopupActive(false));
-  };
+
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
   const [nounDropDownMenuActive, setNounDropDownMenuActive] = useState(false);
   const [adjectiveDropDownMenuActive, setAdjectiveDropDownMenuActive] =
@@ -96,18 +95,12 @@ const VocabSelectionPopup = () => {
 
       setSelectedItems(removedArray);
     } else {
-      if (
-        practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-          selectedItems.length !==
-        0
-      ) {
-        const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
-        copyOfSelectedItems.push({
-          english: selectedItemData.english,
-          french: selectedItemData.french,
-        });
-        setSelectedItems(copyOfSelectedItems);
-      }
+      const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
+      copyOfSelectedItems.push({
+        english: selectedItemData.english,
+        french: selectedItemData.french,
+      });
+      setSelectedItems(copyOfSelectedItems);
     }
   };
 
@@ -168,9 +161,8 @@ const VocabSelectionPopup = () => {
   );
 
   if (
-    practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-      selectedItems.length ===
-    0
+    practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions <=
+    selectedItems.length
   ) {
     submitButtonEnabled = true;
   }
@@ -181,6 +173,20 @@ const VocabSelectionPopup = () => {
     dispatch(storeActions.setNumberOfConjugationPopupActive(true));
     dispatch(storeActions.setVocabSelectPopupActive(false));
     dispatch(storeActions.setUserSelectedVocab(selectedItems));
+    const [multipleChoiceAnswers, matchingAnswers, fillInBlankAnswers] =
+      questionAnswerCreator(
+        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMultipleChoiceQuestions,
+        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMatchingQuestions,
+        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabFillInTheBlankQuestions,
+        selectedItems
+      );
+    dispatch(
+      storeActions.setPracticeSheetGeneratorVocabQuestions({
+        vocabMultipleChoiceQuestions: multipleChoiceAnswers,
+        vocabMatchingQuestions: matchingAnswers,
+        vocabFillInTheBlankQuestions: fillInBlankAnswers,
+      })
+    );
   };
   ///Reset on Upload
   useEffect(() => {
@@ -192,16 +198,30 @@ const VocabSelectionPopup = () => {
   // Skip BUtton Handler
 
   const skipButtonHandler = () => {
-    dispatch(storeActions.setPracticeSheetGeneratorVocabQuestionSetup([]));
+    dispatch(
+      storeActions.setPracticeSheetGeneratorVocabQuestionSetup({
+        numberOfTotalVocabQuestions: 0,
+        numberOfVocabMultipleChoiceQuestions: 0,
+        numberOfVocabMatchingQuestions: 0,
+        numberOfVocabFillInTheBlankQuestions: 0,
+      })
+    );
     dispatch(storeActions.setNumberOfConjugationPopupActive(true));
     dispatch(storeActions.setVocabSelectPopupActive(false));
     dispatch(storeActions.setSelectedVocabTestType(""));
     dispatch(storeActions.setUserSelectedVocab([]));
+    dispatch(
+      storeActions.setPracticeSheetGeneratorVocabQuestions({
+        vocabMultipleChoiceQuestions: [],
+        vocabMatchingQuestions: [],
+        vocabFillInTheBlankQuestions: [],
+      })
+    );
   };
   return (
     <Dialog
       open={vocabSelectPopupActive}
-      onClose={onCloseHandler}
+      onClose={skipButtonHandler}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -281,7 +301,7 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              Selection Remaining :
+              Minimum Selection Remaining: &nbsp;
             </Typography>
             <Typography
               variant="h6"
@@ -295,9 +315,30 @@ const VocabSelectionPopup = () => {
               }}
             >
               {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length}
+                selectedItems.length >
+                0 &&
+                practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+                  selectedItems.length}
+              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+                selectedItems.length <=
+                0 && 0}
             </Typography>
           </SelectionContainer>
+          {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+            selectedItems.length <=
+            0 && (
+            <Typography
+              sx={{
+                color: "red",
+                fontSize: "16px",
+                width: "max(300px,300px)",
+                textAlign: "center",
+              }}
+            >
+              Warning: Picking more than the selected number of questions will
+              randomize the selection
+            </Typography>
+          )}
           <DropDownButton onClick={verbsHeadingHandler}>
             <Typography
               variant="h5"
@@ -365,6 +406,7 @@ const VocabSelectionPopup = () => {
             </DropDownSelectionMenu>
           )}
         </Grid>
+
         <ButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>

@@ -36,6 +36,11 @@ const initialState = {
     numberOfVocabMatchingQuestions: 0,
     numberOfVocabFillInTheBlankQuestions: 0,
   },
+  practiceSheetGeneratorVocabQuestions: {
+    vocabMultipleChoiceQuestions: [],
+    vocabMatchingQuestions: [],
+    vocabFillInTheBlankQuestions: [],
+  },
   userSelectedVocab: [],
   numberOfConjugationPopupActive: false,
   numberOfConjugationQuestions: 0,
@@ -47,7 +52,12 @@ const initialState = {
     numberOfTotalPhraseQuestions: 0,
     numberOfPhraseMultipleChoiceQuestions: 0,
     numberOfPhraseMatchingQuestions: 0,
-    numberOfPhraseFillInTheBlankQuesations: 0,
+    numberOfPhraseFillInTheBlankQuestions: 0,
+  },
+  practiceSheetGeneratorPhraseQuestions: {
+    phraseMultipleChoiceQuestions: [],
+    phraseMatchingQuestions: [],
+    phraseFillInTheBlankQuestions: [],
   },
   phrasesSelectionPopupActive: false,
   userSelectedPhrases: [],
@@ -59,6 +69,8 @@ const initialState = {
   practiceSheetSetupComplete: false,
   practiceSheetsFillInTheBlankVocabAnswers: [],
   practiceSheetsFillInTheBlankPhrasesAnswers: [],
+  practiceSheetsMatchingVocabAnswers: [],
+  practiceSheetsMatchingPhrasesAnswers: [],
 };
 const storeSlice = createSlice({
   name: "French Quiz Database",
@@ -151,6 +163,18 @@ const storeSlice = createSlice({
     setPracticeSheetsFillInTheBlankPhrasesAnswers(state, { payload }) {
       state.practiceSheetsFillInTheBlankPhrasesAnswers = payload;
     },
+    setPracticeSheetsMatchingVocabAnswers(state, { payload }) {
+      state.practiceSheetsMatchingVocabAnswers = payload;
+    },
+    setPracticeSheetsMatchingPhrasesAnswers(state, { payload }) {
+      state.practiceSheetsMatchingPhrasesAnswers = payload;
+    },
+    setPracticeSheetGeneratorVocabQuestions(state, { payload }) {
+      state.practiceSheetGeneratorVocabQuestions = payload;
+    },
+    setPracticeSheetGeneratorPhraseQuestions(state, { payload }) {
+      state.practiceSheetGeneratorPhraseQuestions = payload;
+    },
   },
 });
 const store = configureStore({ reducer: storeSlice.reducer });
@@ -158,17 +182,27 @@ type FlashcardDatabaseTypes = {
   answer: string;
   question: string;
 };
-type PractiveSheetGeneratorVocabQuestionSetup = {
+type PracticeSheetGeneratorVocabQuestionSetup = {
   numberOfTotalVocabQuestions: number;
   numberOfVocabMultipleChoiceQuestions: number;
   numberOfVocabMatchingQuestions: number;
   numberOfVocabFillInTheBlankQuestions: number;
 };
-type PractiveSheetGeneratorPhrasesQuestionSetup = {
+type PracticeSheetGeneratorPhrasesQuestionSetup = {
   numberOfTotalPhraseQuestions: number;
   numberOfPhraseMultipleChoiceQuestions: number;
   numberOfPhraseMatchingQuestions: number;
   numberOfPhraseFillInTheBlankQuestions: number;
+};
+type PracticeSheetGeneratorVocabQuestions = {
+  vocabMultipleChoiceQuestions: [];
+  vocabMatchingQuestions: [];
+  vocabFillInTheBlankQuestions: [];
+};
+type PracticeSheetGeneratorPhraseQuestions = {
+  phraseMultipleChoiceQuestions: [];
+  phraseMatchingQuestions: [];
+  phraseFillInTheBlankQuestions: [];
 };
 interface UserSelectedData {
   [french: string]: string;
@@ -201,7 +235,7 @@ export interface DatabaseStates {
   firebaseDataLoaded: boolean;
   newPracticeSheetsPopupActive: boolean;
   vocabSelectPopupActive: boolean;
-  practiceSheetGeneratorVocabQuestionSetup: PractiveSheetGeneratorVocabQuestionSetup;
+  practiceSheetGeneratorVocabQuestionSetup: PracticeSheetGeneratorVocabQuestionSetup;
   userSelectedVocab: UserSelectedData[];
   numberOfConjugationPopupActive: boolean;
   numberOfConjugationQuestions: number;
@@ -209,7 +243,7 @@ export interface DatabaseStates {
   userSelectedConjugations: UserSelectedData[];
   userSelectedConjugationGrouping: string;
   numberOfPhraseQuestionsPopupActive: boolean;
-  practiceSheetGeneratorPhrasesQuestionSetup: PractiveSheetGeneratorPhrasesQuestionSetup;
+  practiceSheetGeneratorPhrasesQuestionSetup: PracticeSheetGeneratorPhrasesQuestionSetup;
   phrasesSelectionPopupActive: boolean;
   userSelectedPhrases: UserSelectedData[];
   userSelectedPhrasesTestType: string;
@@ -219,6 +253,10 @@ export interface DatabaseStates {
   practiceSheetSetupComplete: boolean;
   practiceSheetsFillInTheBlankVocabAnswers: string[];
   practiceSheetsFillInTheBlankPhrasesAnswers: string[];
+  practiceSheetsMatchingVocabAnswers: string[];
+  practiceSheetsMatchingPhrasesAnswers: string[];
+  practiceSheetGeneratorVocabQuestions: PracticeSheetGeneratorVocabQuestions;
+  practiceSheetGeneratorPhraseQuestions: PracticeSheetGeneratorPhraseQuestions;
 }
 
 export const storeActions = storeSlice.actions;
