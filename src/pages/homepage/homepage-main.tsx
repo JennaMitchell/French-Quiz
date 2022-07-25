@@ -6,7 +6,18 @@ import {
 import { SectionContainer } from "../../components/generic-components/generic-components";
 import voyageImage from "../../images/homepage-images/voyage.jpg";
 import FeatureOverviewSection from "./feature-overview-section/feature-overview-section";
-const HomepageMain: React.FC = () => {
+import { useSelector, useDispatch } from "react-redux";
+import { DatabaseStates, storeActions } from "../../store/store";
+import { useEffect } from "react";
+const HomepageMain = () => {
+  const dispatch = useDispatch();
+  const activePage = useSelector((state: DatabaseStates) => state.activePage);
+  // useEffect
+  useEffect(() => {
+    if (activePage !== "Home") {
+      dispatch(storeActions.setActivePage("Home"));
+    }
+  });
   return (
     <>
       <SectionContainer

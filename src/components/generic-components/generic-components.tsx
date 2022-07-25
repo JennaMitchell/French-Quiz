@@ -57,4 +57,46 @@ const NavLinkButton = styled(NavLink, {
   },
 }));
 
-export { StyledButton, ThemeButton, SectionContainer, NavLinkButton };
+const SingleItemRowContainer = styled("div", {
+  name: "SingleItemRowContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(100%,100%)",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  display: "grid",
+  gridTemplateRows: "max-content",
+  gridTemplateColumns: "max-content",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "relative",
+  gridColumn: "1/span 3",
+  gap: "20px",
+}));
+const TwoItemRowContainer = styled("div", {
+  name: "TwoItemRowContainer ",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(100%,100%)",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  display: "grid",
+  gridTemplateRows: "max-content",
+  gridTemplateColumns: "max-content max-content",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "relative",
+  gridColumn: "1/span 3",
+  gap: "20px",
+}));
+
+export {
+  StyledButton,
+  ThemeButton,
+  SectionContainer,
+  NavLinkButton,
+  SingleItemRowContainer,
+  TwoItemRowContainer,
+};

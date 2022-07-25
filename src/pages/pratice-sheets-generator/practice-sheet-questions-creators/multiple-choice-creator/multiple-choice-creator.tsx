@@ -1,7 +1,10 @@
 import MultipleChoiceQuestion from "./child-components/multiple-choice-question";
 import { useDispatch, useSelector } from "react-redux";
 import { DatabaseStates, storeActions } from "../../../../store/store";
-
+import {
+  SingleItemRowContainer,
+  TwoItemRowContainer,
+} from "../../../../components/generic-components/generic-components";
 import { useEffect, useState } from "react";
 interface UserSelectedData {
   [french: string]: string;
@@ -9,30 +12,21 @@ interface UserSelectedData {
 }
 type Props = {
   inputArray: UserSelectedData[];
-
   databaseType: string;
   testOn: string;
 };
-const MultipleChoiceCreator = ({
-  inputArray,
-
-  databaseType,
-  testOn,
-}: Props) => {
-  interface AnswerKey {
-    questionNumber: number;
-    answer: string;
-  }
+const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   let overallDatabase: UserSelectedData[] = [];
 
   const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
   const overAllVocabDB = useSelector(
     (state: DatabaseStates) => state.overAllVocabDB
   );
+
   const dispatch = useDispatch();
   const [multipleChoiceQuestionAnswerKey, setMultipleChoiceQuestionAnswerKey] =
-    useState<AnswerKey[] | []>([]);
-
+    useState<string[] | []>([]);
+  const [answerKeyUpdated, setAnswerKeyUpdated] = useState(false);
   switch (databaseType) {
     case "Vocab":
       overallDatabase = overAllVocabDB;
@@ -111,8 +105,8 @@ const MultipleChoiceCreator = ({
       database[randomNumberThree],
     ];
   };
-  const answerKey: AnswerKey[] = [];
-  const renderReadyMultipleChoiceQuestions = inputArray.map(
+  const answerKey: string[] = [];
+  let renderReadyMultipleChoiceQuestions = inputArray.map(
     (word: UserSelectedData, index: number) => {
       //Handeling Test Types
       let testTypeLowerCase = testOn.toLowerCase();
@@ -176,16 +170,16 @@ const MultipleChoiceCreator = ({
       /// Pushing the Correct Answer to the answser key
       switch (correctAnswerPosition) {
         case 0:
-          answerKey.push({ questionNumber: index, answer: "A" });
+          answerKey.push("A");
           break;
         case 1:
-          answerKey.push({ questionNumber: index, answer: "B" });
+          answerKey.push("B");
           break;
         case 2:
-          answerKey.push({ questionNumber: index, answer: "C" });
+          answerKey.push("C");
           break;
         case 3:
-          answerKey.push({ questionNumber: index, answer: "D" });
+          answerKey.push("D");
           break;
         default:
           break;
@@ -197,40 +191,71 @@ const MultipleChoiceCreator = ({
           mixedQuestions={mixedQuestions}
           title={questionTitle}
           questionNumber={index}
+          databaseType={databaseType}
         />
       );
     }
   );
-
-  useEffect(() => {
-    if (multipleChoiceQuestionAnswerKey.length !== 0) {
-      switch (databaseType) {
-        case "Vocab":
-          dispatch(
-            storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers(
-              multipleChoiceQuestionAnswerKey
-            )
-          );
-
-          break;
-        case "Phrases":
-          dispatch(
-            storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers(
-              multipleChoiceQuestionAnswerKey
-            )
-          );
-          break;
-        default:
-          break;
-      }
-    }
-  }, [multipleChoiceQuestionAnswerKey, databaseType, dispatch]);
 
   if (
     renderReadyMultipleChoiceQuestions.length !== 0 &&
     multipleChoiceQuestionAnswerKey.length === 0
   ) {
     setMultipleChoiceQuestionAnswerKey(answerKey);
+  }
+  useEffect(() => {
+    if (!answerKeyUpdated) {
+      if (multipleChoiceQuestionAnswerKey.length !== 0) {
+        if (databaseType === "Vocab") {
+          dispatch(
+            storeActions.setVocabMultipleChoiceAnswerKey(
+              multipleChoiceQuestionAnswerKey
+            )
+          );
+        } else if (databaseType === "Phrases") {
+          dispatch(
+            storeActions.setPhrasesMultipleChoiceAnswerKey(
+              multipleChoiceQuestionAnswerKey
+            )
+          );
+        }
+      }
+      setAnswerKeyUpdated(true);
+    }
+  }, [
+    databaseType,
+    dispatch,
+    multipleChoiceQuestionAnswerKey.length,
+    answerKeyUpdated,
+    multipleChoiceQuestionAnswerKey,
+  ]);
+
+  if (renderReadyMultipleChoiceQuestions.length % 3 === 1) {
+    const lastEntry =
+      renderReadyMultipleChoiceQuestions[
+        renderReadyMultipleChoiceQuestions.length - 1
+      ];
+
+    renderReadyMultipleChoiceQuestions[
+      renderReadyMultipleChoiceQuestions.length - 1
+    ] = (
+      <SingleItemRowContainer sx={{ paddingLeft: "80px" }} key="one row">
+        {lastEntry}
+      </SingleItemRowContainer>
+    );
+  }
+
+  if (renderReadyMultipleChoiceQuestions.length % 3 === 2) {
+    const lastEntrys = renderReadyMultipleChoiceQuestions.splice(
+      renderReadyMultipleChoiceQuestions.length - 2,
+      2
+    );
+
+    renderReadyMultipleChoiceQuestions.push(
+      <TwoItemRowContainer key="two row">
+        {lastEntrys[0]} {lastEntrys[1]}
+      </TwoItemRowContainer>
+    );
   }
 
   return <>{renderReadyMultipleChoiceQuestions}</>;

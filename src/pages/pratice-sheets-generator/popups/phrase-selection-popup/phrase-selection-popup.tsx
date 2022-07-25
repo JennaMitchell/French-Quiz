@@ -21,7 +21,10 @@ import {
   ButtonsContainer,
 } from "./phrase-selection-popup-styled-components";
 import { useState, useEffect } from "react";
-import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
+import {
+  questionAnswerCreator,
+  practiceSheetReset,
+} from "../../../../components/functions/generic-functions";
 const PhraseSelectionPopup = () => {
   const dispatch = useDispatch();
 
@@ -43,6 +46,10 @@ const PhraseSelectionPopup = () => {
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
 
   let submitButtonEnabled = false;
+  // onClose
+  const onCloseFunction = () => {
+    practiceSheetReset(false, dispatch);
+  };
 
   // Handeling Section Button Clicks
   const verbsHeadingHandler = () => {
@@ -204,7 +211,7 @@ const PhraseSelectionPopup = () => {
   return (
     <Dialog
       open={phrasesSelectionPopupActive}
-      onClose={skipButtonHandler}
+      onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -238,9 +245,9 @@ const PhraseSelectionPopup = () => {
       >
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
-          onClick={skipButtonHandler}
+          onClick={onCloseFunction}
         >
-          <ClosingIcon onClick={skipButtonHandler} />
+          <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
         <Grid
           container

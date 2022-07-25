@@ -48,7 +48,7 @@ const LogoContainer = styled("div", {
   backgroundImage: `url(${logo})`,
   backgroundPosition: "center",
   backgroundSize: "cover",
-  zIndex: 12,
+  zIndex: 10000,
 });
 
 const LoadingAnimation = () => {

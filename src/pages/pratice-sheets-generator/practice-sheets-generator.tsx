@@ -1,7 +1,5 @@
 import {
   TopContainer,
-  AddIconButton,
-  AddIconHolder,
   ResetButton,
 } from "./practice-sheets-generator-styled-components";
 import NumberOfVocabQuestionsPopup from "./popups/number-of-vocab-questions/number-of-vocab-questions-popup";
@@ -14,12 +12,22 @@ import NumberOfPhraseQuestionsPopup from "./popups/number-of-phrase-question-pop
 import PhraseSelectionPopup from "./popups/phrase-selection-popup/phrase-selection-popup";
 import SheetGenerator from "./sheet-generator/sheet-generator";
 import { useBeforeunload } from "react-beforeunload";
+import { useEffect, useState } from "react";
+import { practiceSheetReset } from "../../components/functions/generic-functions";
 
 const PracticeSheetsGenerator = () => {
   const dispatch = useDispatch();
   const resetButtonHandler = () => {
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(true));
+    practiceSheetReset(true, dispatch);
   };
+  const activePage = useSelector((state: DatabaseStates) => state.activePage);
+  // useEffect
+  useEffect(() => {
+    if (activePage !== "Practice Sheet Generator") {
+      dispatch(storeActions.setActivePage("Practice Sheet Generator"));
+    }
+  });
+  const [initialPopupActive, setInitialPopupActive] = useState(false);
 
   // Handeling use Data on refresh
   const newPracticeSheetsPopupActive = useSelector(
@@ -254,16 +262,19 @@ const PracticeSheetsGenerator = () => {
 
   // Handeling double ocmpoonent updat error
   // "finished question set up"
+  useEffect(() => {
+    if (firebaseDataLoaded && newPracticeSheetsPopupActive) {
+      setInitialPopupActive(true);
+    }
+  }, [firebaseDataLoaded, newPracticeSheetsPopupActive]);
 
   return (
     <TopContainer>
-      <AddIconButton>
+      {/* <AddIconButton>
         <AddIconHolder />
-      </AddIconButton>
+      </AddIconButton> */}
       <ResetButton onClick={resetButtonHandler}>New / Reset</ResetButton>
-      {newPracticeSheetsPopupActive && firebaseDataLoaded && (
-        <NumberOfVocabQuestionsPopup />
-      )}
+      {initialPopupActive && <NumberOfVocabQuestionsPopup />}
       {vocabSelectPopupActive && <VocabSelectionPopup />}
       {numberOfConjugationPopupActive && <NumberOfConjugationQuestionsPopup />}
       {conjugationVerbChoicePopup && <ConjugationSelectionPopup />}

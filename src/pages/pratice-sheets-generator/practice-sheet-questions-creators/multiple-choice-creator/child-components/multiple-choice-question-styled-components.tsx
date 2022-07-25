@@ -30,7 +30,8 @@ const QuestionTitle = styled("div", {
   textAlign: "center",
   fontSize: "26px",
   marginBottom: "10px",
-  paddingRight: "40px",
+  paddingRight: "80px",
+  textTransform: "capitalize",
 }));
 const QuestionAnswerBlock = styled("div", {
   name: "QuestionAnswerBlock",
@@ -62,15 +63,35 @@ const QuestionAnswer = styled("div", {
   color: theme.palette.secondary.dark,
   display: "grid",
   gridTemplateRows: "max-content max-content",
-  gridTemplateColumns: "100%",
+  gridTemplateColumns: "max-content",
   alignItems: "center",
   justifyContent: "space-between",
   fontSize: "20px",
   textAlign: "left",
+  textTransform: "lowercase",
 }));
+
+const PhraseQuestionContainer = styled("div", {
+  name: "PhraseQuestionContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  width: "max(540px,540px)",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  backgroundColor: "inherit",
+  color: theme.palette.secondary.dark,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: "20px",
+}));
+
 export {
   QuestionContainer,
   QuestionTitle,
   QuestionAnswerBlock,
   QuestionAnswer,
+  PhraseQuestionContainer,
 };

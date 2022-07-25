@@ -3,7 +3,11 @@ import { storeActions } from "../../../../store/store";
 
 import { styled } from "@mui/material/styles";
 import { randomNumberGenerator } from "../../../../components/functions/generic-functions";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  SingleItemRowContainer,
+  TwoItemRowContainer,
+} from "../../../../components/generic-components/generic-components";
 const StyledTypography = styled("p", {
   name: "StyledTypography",
   slot: "Wrapper",
@@ -28,8 +32,40 @@ const RowContainer = styled("div", {
   alignItems: "flex-start",
   overflow: "hidden",
   fontFamily: "Montserrat, sans-serif",
+  marginBottom: "10px",
 }));
-
+const UnderlineContainer = styled("div", {
+  name: "UnderlineContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(100px,100px)",
+  height: "max(100%,100%)",
+  borderBottom: "2px solid black",
+}));
+const PhrasesRowContainer = styled("div", {
+  name: "PhrasesRowContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(480px,480px)",
+  height: "max-content",
+  display: "grid",
+  gridTemplateColumns: "300px 150px",
+  gridTemplateRows: "max-content",
+  gap: "20px",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  overflow: "hidden",
+  fontFamily: "Montserrat, sans-serif",
+  marginBottom: "10px",
+}));
+const PhraseUnderlineContainer = styled("div", {
+  name: "PhraseUnderlineContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(150px,150px)",
+  height: "max(100%,100%)",
+  borderBottom: "2px solid black",
+}));
 interface UserSelectedData {
   [french: string]: string;
   english: string;
@@ -45,59 +81,91 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const answerSide = [];
   const answerKey: string[] = [];
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
+  const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
 
   const dispatch = useDispatch();
 
   for (let i = 0; i < inputArray.length; i++) {
     if (testOn === "French") {
       answerSide.push(inputArray[i].english);
-      answerKey.push(`${i + 1}. ${inputArray[i].french}`);
+      answerKey.push(` ${inputArray[i].french}`);
     } else if (testOn === "English") {
       answerSide.push(inputArray[i].french);
-      answerKey.push(`${i + 1}. ${inputArray[i].english}`);
+      answerKey.push(` ${inputArray[i].english}`);
     } else {
       const coinFlip = randomNumberGenerator(0, 1, 2);
       if (coinFlip === 0) {
         answerSide.push(inputArray[i].english);
-        answerKey.push(`${i + 1}. ${inputArray[i].french}`);
+        answerKey.push(` ${inputArray[i].french}`);
       } else {
         answerSide.push(inputArray[i].french);
-        answerKey.push(`${i + 1}. ${inputArray[i].english}`);
+        answerKey.push(`${inputArray[i].english}`);
       }
     }
   }
 
   const renderReadyData = answerSide.map((item, index) => {
-    return (
-      <RowContainer key={index}>
-        <StyledTypography>{item}</StyledTypography>
-        <StyledTypography sx={{ textDecoration: "underline" }}>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </StyledTypography>
-      </RowContainer>
-    );
-  });
-
-  useEffect(() => {
-    if (pushedAnswerKey.length !== 0) {
-      if (databaseType === "Vocab") {
-        dispatch(
-          storeActions.setPracticeSheetsFillInTheBlankVocabAnswers(
-            pushedAnswerKey
-          )
-        );
-      } else if (databaseType === "Phrases") {
-        dispatch(
-          storeActions.setPracticeSheetsFillInTheBlankVocabAnswers(
-            pushedAnswerKey
-          )
-        );
-      }
+    if (databaseType !== "Phrases") {
+      return (
+        <RowContainer key={index}>
+          <StyledTypography>{item}</StyledTypography>
+          <UnderlineContainer />
+        </RowContainer>
+      );
+    } else {
+      return (
+        <PhrasesRowContainer key={index}>
+          <StyledTypography sx={{ width: "max(100%,100%)" }}>
+            {item}
+          </StyledTypography>
+          <PhraseUnderlineContainer />
+        </PhrasesRowContainer>
+      );
     }
-  }, [pushedAnswerKey, databaseType, dispatch]);
+  });
 
   if (pushedAnswerKey.length === 0 && renderReadyData.length !== 0) {
     setPushedAnswerKey(answerKey);
+  }
+  useEffect(() => {
+    if (!answerKeyDispatched) {
+      if (pushedAnswerKey.length !== 0) {
+        if (databaseType === "Phrases") {
+          // Creating a deep copy of the Vocab List
+
+          dispatch(
+            storeActions.setPhrasesFillInTheBlankAnswerKey(pushedAnswerKey)
+          );
+        } else if (databaseType === "Vocab") {
+          // Creating a deep copy of the Vocab List
+
+          dispatch(
+            storeActions.setVocabFillInTheBlankAnswerKey(pushedAnswerKey)
+          );
+        }
+      }
+      setAnswerKeyDispatched(true);
+    }
+  }, [pushedAnswerKey, databaseType, dispatch, answerKeyDispatched]);
+
+  if (renderReadyData.length % 3 === 1) {
+    const lastEntry = renderReadyData[renderReadyData.length - 1];
+
+    renderReadyData[renderReadyData.length - 1] = (
+      <SingleItemRowContainer key="last entry">
+        {lastEntry}
+      </SingleItemRowContainer>
+    );
+  }
+
+  if (renderReadyData.length % 3 === 2) {
+    const lastEntrys = renderReadyData.splice(renderReadyData.length - 2, 2);
+
+    renderReadyData.push(
+      <TwoItemRowContainer key="last entry">
+        {lastEntrys[0]} {lastEntrys[1]}
+      </TwoItemRowContainer>
+    );
   }
 
   return <>{renderReadyData}</>;

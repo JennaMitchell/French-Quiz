@@ -23,6 +23,7 @@ import {
   StyledOption,
 } from "./conjugation-selection-popup-styled-components";
 import { useState, useEffect, ChangeEventHandler } from "react";
+import { practiceSheetReset } from "../../../../components/functions/generic-functions";
 
 const ConjugationSelectionPopup = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,11 @@ const ConjugationSelectionPopup = () => {
   const [selectedGrouping, setSelectedGrouping] = useState("");
 
   let submitButtonEnabled = false;
+
+  // onClose Effect
+  const onCloseFunction = () => {
+    practiceSheetReset(false, dispatch);
+  };
 
   // Handeling Section Button Clicks
   const verbsHeadingHandler = () => {
@@ -179,7 +185,7 @@ const ConjugationSelectionPopup = () => {
   return (
     <Dialog
       open={conjugationVerbChoicePopup}
-      onClose={skipButtonHandler}
+      onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -212,9 +218,9 @@ const ConjugationSelectionPopup = () => {
       >
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
-          onClick={skipButtonHandler}
+          onClick={onCloseFunction}
         >
-          <ClosingIcon onClick={skipButtonHandler} />
+          <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
         <Grid
           container

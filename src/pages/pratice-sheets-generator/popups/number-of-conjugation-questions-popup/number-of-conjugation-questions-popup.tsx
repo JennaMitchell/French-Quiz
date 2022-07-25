@@ -17,6 +17,7 @@ import {
 } from "./number-of-conjugation-questions-popup-styled-components";
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
+import { practiceSheetReset } from "../../../../components/functions/generic-functions";
 
 const NumberOfConjugationQuestionsPopup = () => {
   const dispatch = useDispatch();
@@ -25,14 +26,20 @@ const NumberOfConjugationQuestionsPopup = () => {
   const numberOfConjugationPopupActive = useSelector(
     (state: DatabaseStates) => state.numberOfConjugationPopupActive
   );
+  const verbsDB = useSelector((state: DatabaseStates) => state.verbsDB);
 
   // creating the max number of selected Questions
-  const maxNumberOfQuestions = 30;
+  const maxNumberOfQuestions = verbsDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
     let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
     overallQuestionNumbersArray.push(renderQuestionOption);
   }
+
+  // Closing Rest Function
+  const onCloseFunction = () => {
+    practiceSheetReset(false, dispatch);
+  };
 
   // Handeling the Selector
 
@@ -57,18 +64,20 @@ const NumberOfConjugationQuestionsPopup = () => {
     dispatch(storeActions.setNumberOfConjugationPopupActive(false));
     dispatch(storeActions.setNumberOfConjugationQuestions(numberOfQuestions));
     dispatch(storeActions.setConjugationVerbChoicePopup(true));
+    dispatch(storeActions.setPracticeSheetSetupComplete(true));
   };
 
   const skipButtonHandler = () => {
     dispatch(storeActions.setNumberOfConjugationPopupActive(false));
     dispatch(storeActions.setNumberOfConjugationQuestions(0));
     dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
+    dispatch(storeActions.setPracticeSheetSetupComplete(true));
   };
 
   return (
     <Dialog
       open={numberOfConjugationPopupActive}
-      onClose={skipButtonHandler}
+      onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -100,8 +109,8 @@ const NumberOfConjugationQuestionsPopup = () => {
           },
         }}
       >
-        <ClosingIconContainer onClick={skipButtonHandler}>
-          <ClosingIcon onClick={skipButtonHandler} />
+        <ClosingIconContainer onClick={onCloseFunction}>
+          <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
         <Grid
           container

@@ -24,6 +24,8 @@ import {
   ClosingIconContainer,
   ClosingIcon,
 } from "../../../../components/generic-components/generic-popup-components";
+import { practiceSheetReset } from "../../../../components/functions/generic-functions";
+import { useEffect } from "react";
 
 const NumberOfVocabQuestionsPopup = () => {
   const newPracticeSheetsPopupActive = useSelector(
@@ -32,8 +34,13 @@ const NumberOfVocabQuestionsPopup = () => {
   const practiceSheetGeneratorVocabQuestionSetup = useSelector(
     (state: DatabaseStates) => state.practiceSheetGeneratorVocabQuestionSetup
   );
-
+  const overAllVocabDB = useSelector(
+    (state: DatabaseStates) => state.overAllVocabDB
+  );
   const dispatch = useDispatch();
+  const onCloseFunction = () => {
+    practiceSheetReset(false, dispatch);
+  };
 
   const submitButtonHandler = () => {
     const deepCopyOfUserData = JSON.parse(
@@ -65,6 +72,17 @@ const NumberOfVocabQuestionsPopup = () => {
     useState(0);
   const [selectedTestType, setSelectedTestType] = useState(" ");
 
+  // Reseting useEffect
+  useEffect(() => {
+    if (newPracticeSheetsPopupActive) {
+      setNumberOfQuestions(0);
+      setNumberOfMatchingQuestions(0);
+      setNumberOfMultipleChoiceQuestions(0);
+      setNumberOfFillInTheBlankQuestions(0);
+      setSelectedTestType(" ");
+    }
+  }, [newPracticeSheetsPopupActive]);
+
   let matchingQuestionsArray = [];
   let multipleChoiceQuestionsArray: any[] = [];
   let fillInTheBlankQuestionsArray = [];
@@ -82,7 +100,7 @@ const NumberOfVocabQuestionsPopup = () => {
     }
   };
   // creating the max number of selected Questions
-  const maxNumberOfQuestions = 30;
+  const maxNumberOfQuestions = overAllVocabDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
     let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
@@ -93,7 +111,7 @@ const NumberOfVocabQuestionsPopup = () => {
   const matchingQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
     e
   ) => {
-    if (typeof +e.target.value === "number" && +e.target.value > 0) {
+    if (typeof +e.target.value === "number" && +e.target.value >= 0) {
       setNumberOfMatchingQuestions(+e.target.value);
     }
   };
@@ -101,14 +119,14 @@ const NumberOfVocabQuestionsPopup = () => {
   const multipleQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
     e
   ) => {
-    if (typeof +e.target.value === "number" && +e.target.value > 0) {
+    if (typeof +e.target.value === "number" && +e.target.value >= 0) {
       setNumberOfMultipleChoiceQuestions(+e.target.value);
     }
   };
   const fillInBlankQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
     e
   ) => {
-    if (typeof +e.target.value === "number" && +e.target.value > 0) {
+    if (typeof +e.target.value === "number" && +e.target.value >= 0) {
       setNumberOfFillInTheBlankQuestions(+e.target.value);
     }
   };
@@ -126,33 +144,65 @@ const NumberOfVocabQuestionsPopup = () => {
     numberOfQuestionsOptions.push(renderQuestionOptions);
   }
 
-  // handeling the changing of drop down menus
-
-  if (numberOfAvaiableQuestions < numberOfMultipleChoiceQuestions) {
-    for (let y = 0; y < numberOfMultipleChoiceQuestions + 1; y++) {
+  // Handeling the changing of drop down menus
+  if (
+    numberOfMultipleChoiceQuestions === 0 &&
+    numberOfAvaiableQuestions !== 0
+  ) {
+    multipleChoiceQuestionsArray = numberOfQuestionsOptions;
+  } else if (
+    numberOfAvaiableQuestions === 0 &&
+    numberOfMultipleChoiceQuestions === 0
+  ) {
+    multipleChoiceQuestionsArray = numberOfQuestionsOptions;
+  } else {
+    for (
+      let y = 0;
+      y < numberOfMultipleChoiceQuestions + numberOfAvaiableQuestions + 1;
+      y++
+    ) {
       let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
       multipleChoiceQuestionsArray.push(renderQuestionOptions);
     }
-  } else {
-    multipleChoiceQuestionsArray = numberOfQuestionsOptions;
   }
 
-  if (numberOfAvaiableQuestions < numberOfMatchingQuestions) {
-    for (let y = 0; y < numberOfMatchingQuestions + 1; y++) {
+  if (numberOfMatchingQuestions === 0 && numberOfAvaiableQuestions !== 0) {
+    matchingQuestionsArray = numberOfQuestionsOptions;
+  } else if (
+    numberOfAvaiableQuestions === 0 &&
+    numberOfMatchingQuestions === 0
+  ) {
+    matchingQuestionsArray = numberOfQuestionsOptions;
+  } else {
+    for (
+      let y = 0;
+      y < numberOfMatchingQuestions + numberOfAvaiableQuestions + 1;
+      y++
+    ) {
       let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
       matchingQuestionsArray.push(renderQuestionOptions);
     }
-  } else {
-    matchingQuestionsArray = numberOfQuestionsOptions;
   }
 
-  if (numberOfAvaiableQuestions < numberOfFillInTheBlankQuestions) {
-    for (let y = 0; y < numberOfFillInTheBlankQuestions + 1; y++) {
+  if (
+    numberOfFillInTheBlankQuestions === 0 &&
+    numberOfAvaiableQuestions !== 0
+  ) {
+    fillInTheBlankQuestionsArray = numberOfQuestionsOptions;
+  } else if (
+    numberOfAvaiableQuestions === 0 &&
+    numberOfFillInTheBlankQuestions === 0
+  ) {
+    fillInTheBlankQuestionsArray = numberOfQuestionsOptions;
+  } else {
+    for (
+      let y = 0;
+      y < numberOfFillInTheBlankQuestions + numberOfAvaiableQuestions + 1;
+      y++
+    ) {
       let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
       fillInTheBlankQuestionsArray.push(renderQuestionOptions);
     }
-  } else {
-    fillInTheBlankQuestionsArray = numberOfQuestionsOptions;
   }
 
   /// Enabling and Disabling the Submit Button
@@ -168,20 +218,7 @@ const NumberOfVocabQuestionsPopup = () => {
   ) {
     submitButtonEnabled = true;
   }
-  // useEffect(() => {
-  //   if (newPracticeSheetsPopupActive && initialSetup) {
-  //     setNumberOfQuestions(0);
-  //     setNumberOfMatchingQuestions(0);
-  //     setNumberOfMultipleChoiceQuestions(0);
-  //     setNumberOfFillInTheBlankQuestions(0);
-  //     setSelectedTestType("");
-  //     dispatch(storeActions.setPracticeSheetSetupComplete(false));
-  //   } else {
-  //     setInitialSetup(true);
-  //   }
-  // }, [newPracticeSheetsPopupActive, dispatch]);
-  // this useEffect is used to rest all teh varialbes if the user closes the window then reopens it
-  // Group by handler
+
   const testTypeHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
     if (
       e.target.value === "English" ||
@@ -211,7 +248,7 @@ const NumberOfVocabQuestionsPopup = () => {
   return (
     <Dialog
       open={newPracticeSheetsPopupActive}
-      onClose={skipButtonHandler}
+      onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -241,8 +278,8 @@ const NumberOfVocabQuestionsPopup = () => {
           },
         }}
       >
-        <ClosingIconContainer onClick={skipButtonHandler}>
-          <ClosingIcon onClick={skipButtonHandler} />
+        <ClosingIconContainer onClick={onCloseFunction}>
+          <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
         <Grid
           container

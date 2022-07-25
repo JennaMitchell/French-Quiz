@@ -71,6 +71,14 @@ const initialState = {
   practiceSheetsFillInTheBlankPhrasesAnswers: [],
   practiceSheetsMatchingVocabAnswers: [],
   practiceSheetsMatchingPhrasesAnswers: [],
+  conjugationTableDB: [],
+  conjugationAnswerKey: [],
+  phrasesMultipleChoiceAnswerKey: [],
+  vocabMultipleChoiceAnswerKey: [],
+  phrasesMatchingAnswerKey: [],
+  vocabMatchingAnswerKey: [],
+  phrasesFillInTheBlankAnswerKey: [],
+  vocabFillInTheBlankAnswerKey: [],
 };
 const storeSlice = createSlice({
   name: "French Quiz Database",
@@ -145,7 +153,7 @@ const storeSlice = createSlice({
     setSelectedVocabTestType(state, { payload }) {
       state.selectedVocabTestType = payload;
     },
-    setOverallVocabDB(state, { payload }) {
+    setOverAllVocabDB(state, { payload }) {
       state.overAllVocabDB = payload;
     },
     setPracticeSheetsMultipleChoiceVocabAnswers(state, { payload }) {
@@ -174,6 +182,30 @@ const storeSlice = createSlice({
     },
     setPracticeSheetGeneratorPhraseQuestions(state, { payload }) {
       state.practiceSheetGeneratorPhraseQuestions = payload;
+    },
+    setConjugationTableDB(state, { payload }) {
+      state.conjugationTableDB = payload;
+    },
+    setConjugationAnswerKey(state, { payload }) {
+      state.conjugationAnswerKey = payload;
+    },
+    setPhrasesMultipleChoiceAnswerKey(state, { payload }) {
+      state.phrasesMultipleChoiceAnswerKey = payload;
+    },
+    setVocabMultipleChoiceAnswerKey(state, { payload }) {
+      state.vocabMultipleChoiceAnswerKey = payload;
+    },
+    setPhrasesMatchingAnswerKey(state, { payload }) {
+      state.phrasesMatchingAnswerKey = payload;
+    },
+    setVocabMatchingAnswerKey(state, { payload }) {
+      state.vocabMatchingAnswerKey = payload;
+    },
+    setPhrasesFillInTheBlankAnswerKey(state, { payload }) {
+      state.phrasesFillInTheBlankAnswerKey = payload;
+    },
+    setVocabFillInTheBlankAnswerKey(state, { payload }) {
+      state.vocabFillInTheBlankAnswerKey = payload;
     },
   },
 });
@@ -218,6 +250,12 @@ interface AnswerKey {
   answer: string;
 }
 
+// interface ConjugationTable {
+//   [key: string]: {
+//     [key: string]: string;
+//   };
+// }
+
 /// pSG = Practice Sheet Generator
 
 export interface DatabaseStates {
@@ -257,6 +295,14 @@ export interface DatabaseStates {
   practiceSheetsMatchingPhrasesAnswers: string[];
   practiceSheetGeneratorVocabQuestions: PracticeSheetGeneratorVocabQuestions;
   practiceSheetGeneratorPhraseQuestions: PracticeSheetGeneratorPhraseQuestions;
+  conjugationTableDB: any;
+  conjugationAnswerKey: string[] | { [key: string]: string[] };
+  phrasesMultipleChoiceAnswerKey: string[];
+  vocabMultipleChoiceAnswerKey: string[];
+  phrasesMatchingAnswerKey: string[];
+  vocabMatchingAnswerKey: string[];
+  phrasesFillInTheBlankAnswerKey: string[];
+  vocabFillInTheBlankAnswerKey: string[];
 }
 
 export const storeActions = storeSlice.actions;

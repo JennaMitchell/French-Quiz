@@ -8,6 +8,7 @@ import { storeActions, DatabaseStates } from "../store/store";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import LoadingAnimation from "../components/loading-logo/loading-logo";
+import { useEffect } from "react";
 interface UserSelectedData {
   french: string;
   english: string;
@@ -48,6 +49,7 @@ const LocalDataBaseSetup = () => {
   const [nounsDBTemp, setNounsDBTemp] = useState<any>([]);
   const [verbsDBTemp, setVerbsDBTemp] = useState<any>([]);
   const [phrasesDBTemp, setPhrasesDBTemp] = useState<any>([]);
+
   let httpError = "";
   let renderText = "";
 
@@ -59,6 +61,9 @@ const LocalDataBaseSetup = () => {
     const adjectivesDB = await get(child(databaseRef, "Vocab/Adjectives/"));
     const verbsDB = await get(child(databaseRef, "Vocab/Verbs/"));
     const phrasesDB = await get(child(databaseRef, "Vocab/Phrases/"));
+    const conjugationTable = await get(
+      child(databaseRef, "Vocab/ConjugationTable/")
+    );
 
     const takeDatabaseSnapshot = (snapShot: any, databaseType: any) => {
       try {
@@ -105,8 +110,9 @@ const LocalDataBaseSetup = () => {
             setVerbsDBTemp(loadedCards);
           } else if (databaseType === "phrases") {
             dispatch(storeActions.setPhrasesDB(loadedCards));
-            dispatch(storeActions.setFirebaseDataLoaded(true));
             setPhrasesDBTemp(loadedCards);
+          } else if (databaseType === "conjugation") {
+            dispatch(storeActions.setConjugationTableDB(val));
           }
         }
       } catch (error: any) {
@@ -118,29 +124,34 @@ const LocalDataBaseSetup = () => {
     takeDatabaseSnapshot(nounsDB, "nouns");
     takeDatabaseSnapshot(adjectivesDB, "adjective");
     takeDatabaseSnapshot(verbsDB, "verbs");
+    takeDatabaseSnapshot(conjugationTable, "conjugation");
     takeDatabaseSnapshot(phrasesDB, "phrases");
   };
 
   // Creating an overall Vocab Database
-  const tempAllVocabDB: UserSelectedData[] = [];
 
-  const pushToTempAllVocabFunction = (database: UserSelectedData[]) => {
-    for (const key in database) {
-      let tempObject: UserSelectedData = {
-        id: `${database[key].french}`,
-        english: `${database[key].english}`,
-        french: `${database[key].french}`,
-      };
+  useEffect(() => {
+    const tempAllVocabDB: UserSelectedData[] = [];
+    const pushToTempAllVocabFunction = (database: UserSelectedData[]) => {
+      for (const key in database) {
+        let tempObject: UserSelectedData = {
+          id: `${database[key].french}`,
+          english: `${database[key].english}`,
+          french: `${database[key].french}`,
+        };
 
-      tempAllVocabDB.push(tempObject);
+        tempAllVocabDB.push(tempObject);
+      }
+    };
+
+    if (phrasesDBTemp.length !== 0) {
+      pushToTempAllVocabFunction(adjectivesDBTemp);
+      pushToTempAllVocabFunction(verbsDBTemp);
+      pushToTempAllVocabFunction(nounsDBTemp);
+      dispatch(storeActions.setOverAllVocabDB(tempAllVocabDB));
+      dispatch(storeActions.setFirebaseDataLoaded(true));
     }
-  };
-  if (phrasesDBTemp.length !== 0) {
-    pushToTempAllVocabFunction(adjectivesDBTemp);
-    pushToTempAllVocabFunction(verbsDBTemp);
-    pushToTempAllVocabFunction(nounsDBTemp);
-    dispatch(storeActions.setOverallVocabDB(tempAllVocabDB));
-  }
+  }, [phrasesDBTemp, adjectivesDBTemp, dispatch, nounsDBTemp, verbsDBTemp]);
 
   if (flashcardsDBTemp.length === 0) {
     awaitDatabaseData();

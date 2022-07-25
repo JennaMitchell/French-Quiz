@@ -21,7 +21,10 @@ import {
   ButtonsContainer,
 } from "./vocab-selection-popup-styled-components";
 import { useState, useEffect } from "react";
-import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
+import {
+  questionAnswerCreator,
+  practiceSheetReset,
+} from "../../../../components/functions/generic-functions";
 
 const VocabSelectionPopup = () => {
   const dispatch = useDispatch();
@@ -58,6 +61,9 @@ const VocabSelectionPopup = () => {
   };
   const adjectiveHeadingHandler = () => {
     setAdjectiveDropDownMenuActive(!adjectiveDropDownMenuActive);
+  };
+  const onCloseFunction = () => {
+    practiceSheetReset(false, dispatch);
   };
 
   // Function below handler the adding and removing of verbs
@@ -221,7 +227,7 @@ const VocabSelectionPopup = () => {
   return (
     <Dialog
       open={vocabSelectPopupActive}
-      onClose={skipButtonHandler}
+      onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
         "& .MuiPaper-root": {
@@ -255,9 +261,9 @@ const VocabSelectionPopup = () => {
       >
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
-          onClick={skipButtonHandler}
+          onClick={onCloseFunction}
         >
-          <ClosingIcon onClick={skipButtonHandler} />
+          <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
         <Grid
           container

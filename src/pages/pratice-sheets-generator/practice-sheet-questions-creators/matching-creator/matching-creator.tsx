@@ -7,7 +7,12 @@ import {
   randomNumberGenerator,
   randomNumberGeneratorWithNumberArrayRestriction,
 } from "../../../../components/functions/generic-functions";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  SingleItemRowContainer,
+  TwoItemRowContainer,
+} from "../../../../components/generic-components/generic-components";
+
 const StyledTypography = styled(Typography, {
   name: "StyledTypography",
   slot: "Wrapper",
@@ -31,7 +36,14 @@ const RowContainer = styled("div", {
   alignItems: "center",
   gridColumn: "1/span 3",
 }));
-
+const UnderlineContainer = styled("div", {
+  name: "UnderlineContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(60px,60px)",
+  height: "max(60px,60px)",
+  borderBottom: "2px solid black",
+}));
 interface UserSelectedData {
   [french: string]: string;
   english: string;
@@ -46,6 +58,7 @@ type Props = {
 const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const dispatch = useDispatch();
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
+  const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
 
   // Mixing the Selected Questions
   const tempMixedArray: number[] = [];
@@ -170,35 +183,52 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   for (let z = 0; z < inputArray.length; z++) {
     renderReadyData.push(
       <RowContainer key={z}>
-        <StyledTypography>{testOnSideArray[z]}</StyledTypography>
-        <StyledTypography sx={{ textDecoration: "underline" }}>
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-        </StyledTypography>
+        <StyledTypography>{answerSide[z]}</StyledTypography>
+        <UnderlineContainer />
+
         <StyledTypography sx={{ textAlign: "right" }}>
-          {answerSide[z]}
+          {testOnSideArray[z]}
         </StyledTypography>
       </RowContainer>
     );
   }
-  // DIspathcing answer key
+
   useEffect(() => {
-    if (pushedAnswerKey.length !== 0) {
-      if (databaseType === "Vocab") {
-        dispatch(
-          storeActions.setPracticeSheetsMatchingVocabAnswers(pushedAnswerKey)
-        );
+    if (!answerKeyDispatched) {
+      if (pushedAnswerKey.length !== 0) {
+        if (databaseType === "Vocab") {
+          dispatch(storeActions.setVocabMatchingAnswerKey(pushedAnswerKey));
+        } else if (databaseType === "Phrases") {
+          dispatch(storeActions.setPhrasesMatchingAnswerKey(pushedAnswerKey));
+        }
       }
-      if (databaseType === "Phrases") {
-        dispatch(
-          storeActions.setPracticeSheetsMatchingPhrasesAnswers(pushedAnswerKey)
-        );
-      }
+      setAnswerKeyDispatched(true);
     }
-  }, [pushedAnswerKey, dispatch, databaseType]);
+  }, [pushedAnswerKey, databaseType, dispatch, answerKeyDispatched]);
+
   // useffect is here to allow the answerkey to pushed after the componet is rendered
   // if you ttry to do it durng the intial renderyou will cause an error that says yo uare updating somehintg while in the process of updating
   if (pushedAnswerKey.length === 0 && answerKey.length !== 0) {
     setPushedAnswerKey(answerKey);
+  }
+  if (renderReadyData.length % 3 === 1) {
+    const lastEntry = renderReadyData[renderReadyData.length - 1];
+
+    renderReadyData[renderReadyData.length - 1] = (
+      <SingleItemRowContainer key="last entry">
+        {lastEntry}
+      </SingleItemRowContainer>
+    );
+  }
+
+  if (renderReadyData.length % 3 === 2) {
+    const lastEntrys = renderReadyData.splice(renderReadyData.length - 2, 2);
+
+    renderReadyData.push(
+      <TwoItemRowContainer key="last entry">
+        {lastEntrys[0]} {lastEntrys[1]}
+      </TwoItemRowContainer>
+    );
   }
 
   return <>{renderReadyData}</>;

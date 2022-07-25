@@ -1,3 +1,5 @@
+import { storeActions } from "../../store/store";
+
 export const randomNumberGenerator = (
   min: number,
   max: number,
@@ -76,4 +78,74 @@ export const questionAnswerCreator = (
   }
 
   return [arrayOfDataOne, arrayOfDataTwo, arrayOfDataThree];
+};
+
+export const practiceSheetReset = (
+  newButtonClicked: boolean,
+  dispatch: any
+) => {
+  if (newButtonClicked) {
+    dispatch(storeActions.setNewPracticeSheetsPopupActive(true));
+  } else {
+    dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
+  }
+  dispatch(storeActions.setVocabSelectPopupActive(false));
+  dispatch(
+    storeActions.setPracticeSheetGeneratorVocabQuestionSetup({
+      numberOfTotalVocabQuestions: 0,
+      numberOfVocabMultipleChoiceQuestions: 0,
+      numberOfVocabMatchingQuestions: 0,
+      numberOfVocabFillInTheBlankQuestions: 0,
+    })
+  );
+
+  dispatch(
+    storeActions.setPracticeSheetGeneratorVocabQuestions({
+      vocabMultipleChoiceQuestions: [],
+      vocabMatchingQuestions: [],
+      vocabFillInTheBlankQuestions: [],
+    })
+  );
+  dispatch(storeActions.setUserSelectedVocab([]));
+  dispatch(storeActions.setNumberOfConjugationPopupActive(false));
+  dispatch(storeActions.setNumberOfConjugationQuestions(0));
+  dispatch(storeActions.setConjugationVerbChoicePopup(false));
+  dispatch(storeActions.setUserSelectedConjugations([]));
+  dispatch(storeActions.setUserSelectedConjugationGrouping(""));
+  dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
+  dispatch(
+    storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
+      numberOfTotalPhraseQuestions: 0,
+      numberOfPhraseMultipleChoiceQuestions: 0,
+      numberOfPhraseMatchingQuestions: 0,
+      numberOfPhraseFillInTheBlankQuestions: 0,
+    })
+  );
+  dispatch(
+    storeActions.setPracticeSheetGeneratorPhraseQuestions({
+      phraseMultipleChoiceQuestions: [],
+      phraseMatchingQuestions: [],
+      phraseFillInTheBlankQuestions: [],
+    })
+  );
+
+  dispatch(storeActions.setPhrasesSelectionPopupActive(false));
+  dispatch(storeActions.setUserSelectedPhrases([]));
+  dispatch(storeActions.setUserSelectedPhrasesTestType(""));
+  dispatch(storeActions.setSelectedVocabTestType(""));
+  dispatch(storeActions.setPracticeSheetsMultipleChoiceVocabAnswers([]));
+  dispatch(storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers([]));
+  dispatch(storeActions.setPracticeSheetSetupComplete(false));
+
+  dispatch(storeActions.setPracticeSheetsFillInTheBlankVocabAnswers([]));
+  dispatch(storeActions.setPracticeSheetsFillInTheBlankPhrasesAnswers([]));
+  dispatch(storeActions.setPracticeSheetsMatchingVocabAnswers([]));
+  dispatch(storeActions.setPracticeSheetsMatchingPhrasesAnswers([]));
+  dispatch(storeActions.setConjugationAnswerKey([]));
+  dispatch(storeActions.setPhrasesMultipleChoiceAnswerKey([]));
+  dispatch(storeActions.setVocabMultipleChoiceAnswerKey([]));
+  dispatch(storeActions.setPhrasesMatchingAnswerKey([]));
+  dispatch(storeActions.setVocabMatchingAnswerKey([]));
+  dispatch(storeActions.setPhrasesFillInTheBlankAnswerKey([]));
+  dispatch(storeActions.setVocabFillInTheBlankAnswerKey([]));
 };
