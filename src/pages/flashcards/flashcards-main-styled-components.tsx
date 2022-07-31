@@ -23,7 +23,7 @@ const FrontFlashCardContainer = styled("div", {
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(800px,800px)",
-  height: "max(600px,600px)",
+  height: "max(80%,500px)",
   backgroundColor: theme.palette.primary.dark,
   border: "none",
   display: "grid",

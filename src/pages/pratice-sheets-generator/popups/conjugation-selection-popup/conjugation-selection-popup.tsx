@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
-import { DatabaseStates, storeActions } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
@@ -23,18 +23,18 @@ import {
   StyledOption,
 } from "./conjugation-selection-popup-styled-components";
 import { useState, useEffect, ChangeEventHandler } from "react";
-import { practiceSheetReset } from "../../../../components/functions/generic-functions";
+import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 
 const ConjugationSelectionPopup = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const verbsDB = useSelector((state: DatabaseStates) => state.verbsDB);
-  const conjugationVerbChoicePopup = useSelector(
-    (state: DatabaseStates) => state.conjugationVerbChoicePopup
+  const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
+  const conjugationVerbChoicePopup = useAppSelector(
+    (state) => state.sheetGenerator.conjugationVerbChoicePopup
   );
 
-  const numberOfConjugationQuestions = useSelector(
-    (state: DatabaseStates) => state.numberOfConjugationQuestions
+  const numberOfConjugationQuestions = useAppSelector(
+    (state) => state.sheetGenerator.numberOfConjugationQuestions
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -60,7 +60,7 @@ const ConjugationSelectionPopup = () => {
 
   // Function below handler the adding and removing of verbs
   const itemSelectionUpdater = (index: number, type: string) => {
-    const selectedItemData = verbsDB[index];
+    const selectedItemData: SelectedItemsTypes = verbsDB[index];
 
     let indexOfTermToBeDeleted: string | number = "none";
     for (let i = 0; i < selectedItems.length; i++) {
@@ -145,10 +145,22 @@ const ConjugationSelectionPopup = () => {
   // Submit Handler
 
   const submitHandler = () => {
-    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
-    dispatch(storeActions.setConjugationVerbChoicePopup(false));
-    dispatch(storeActions.setUserSelectedConjugations(selectedItems));
-    dispatch(storeActions.setUserSelectedConjugationGrouping(selectedGrouping));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setNumberOfPhraseQuestionsPopupActive(
+        true
+      )
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setConjugationVerbChoicePopup(false)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedConjugations(selectedItems)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedConjugationGrouping(
+        selectedGrouping
+      )
+    );
   };
   ///Reset on Upload
   useEffect(() => {
@@ -174,12 +186,22 @@ const ConjugationSelectionPopup = () => {
     submitButtonEnabled = true;
   }
   const skipButtonHandler = () => {
-    dispatch(storeActions.setConjugationVerbChoicePopup(false));
-    dispatch(storeActions.setNumberOfConjugationQuestions(0));
-    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(true));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setConjugationVerbChoicePopup(false)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setNumberOfConjugationQuestions(0)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setNumberOfPhraseQuestionsPopupActive(
+        true
+      )
+    );
 
-    dispatch(storeActions.setUserSelectedConjugations([]));
-    dispatch(storeActions.setUserSelectedConjugationGrouping(""));
+    dispatch(sheetGeneratorStoreSliceActions.setUserSelectedConjugations([]));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedConjugationGrouping("")
+    );
   };
 
   return (
@@ -238,7 +260,7 @@ const ConjugationSelectionPopup = () => {
               },
             }}
           >
-            Step 4 of 6
+            Step 4 of 4
           </Typography>
 
           <Typography

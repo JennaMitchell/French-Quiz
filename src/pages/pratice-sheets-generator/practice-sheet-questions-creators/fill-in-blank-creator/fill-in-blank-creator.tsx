@@ -1,6 +1,5 @@
-import { useDispatch } from "react-redux";
-import { storeActions } from "../../../../store/store";
-
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppDispatch } from "../../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { randomNumberGenerator } from "../../../../components/functions/generic-functions";
 import { useEffect, useState } from "react";
@@ -83,7 +82,7 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
   const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   for (let i = 0; i < inputArray.length; i++) {
     if (testOn === "French") {
@@ -134,13 +133,17 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
           // Creating a deep copy of the Vocab List
 
           dispatch(
-            storeActions.setPhrasesFillInTheBlankAnswerKey(pushedAnswerKey)
+            sheetGeneratorStoreSliceActions.setPhrasesFillInTheBlankAnswerKey(
+              pushedAnswerKey
+            )
           );
         } else if (databaseType === "Vocab") {
           // Creating a deep copy of the Vocab List
 
           dispatch(
-            storeActions.setVocabFillInTheBlankAnswerKey(pushedAnswerKey)
+            sheetGeneratorStoreSliceActions.setVocabFillInTheBlankAnswerKey(
+              pushedAnswerKey
+            )
           );
         }
       }

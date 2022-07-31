@@ -1,11 +1,12 @@
-import { useDispatch } from "react-redux";
-import { storeActions } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppDispatch } from "../../../../store/hooks";
 
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   randomNumberGenerator,
   randomNumberGeneratorWithNumberArrayRestriction,
+  letterAnswerKeyCreator,
 } from "../../../../components/functions/generic-functions";
 import { useEffect, useState } from "react";
 import {
@@ -56,7 +57,7 @@ type Props = {
 };
 
 const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
   const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
 
@@ -80,53 +81,8 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   }
 
   // Step 2. creating the answer Key
-
-  const alphbetArray = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  const alphbetArray = letterAnswerKeyCreator(inputArray.length);
   let answerArray = alphbetArray;
-  if (inputArray.length > alphbetArray.length) {
-    const numberOfIterations = Math.ceil(
-      inputArray.length / alphbetArray.length
-    );
-    for (let z = 0; z < numberOfIterations; z++) {
-      let numberOfElementsToAdd = 0;
-      if (numberOfIterations > 1 && z !== numberOfIterations - 1) {
-        numberOfElementsToAdd = alphbetArray.length;
-      } else {
-        numberOfElementsToAdd = inputArray.length - alphbetArray.length * z;
-      }
-      for (let q = 0; q < numberOfElementsToAdd; q++) {
-        answerArray.push(`${alphbetArray[z]}${alphbetArray[q]}`);
-      }
-    }
-  }
-
   const answerKey = [];
   const testOnSideArray = [];
   const answerSide = [];
@@ -197,9 +153,17 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
     if (!answerKeyDispatched) {
       if (pushedAnswerKey.length !== 0) {
         if (databaseType === "Vocab") {
-          dispatch(storeActions.setVocabMatchingAnswerKey(pushedAnswerKey));
+          dispatch(
+            sheetGeneratorStoreSliceActions.setVocabMatchingAnswerKey(
+              pushedAnswerKey
+            )
+          );
         } else if (databaseType === "Phrases") {
-          dispatch(storeActions.setPhrasesMatchingAnswerKey(pushedAnswerKey));
+          dispatch(
+            sheetGeneratorStoreSliceActions.setPhrasesMatchingAnswerKey(
+              pushedAnswerKey
+            )
+          );
         }
       }
       setAnswerKeyDispatched(true);

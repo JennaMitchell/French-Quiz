@@ -11,10 +11,11 @@ import {
 import { useBeforeunload } from "react-beforeunload";
 
 import logo from "../../images/logo.png";
-import { useDispatch, useSelector } from "react-redux";
-import { DatabaseStates, storeActions } from "../../store/store";
+
+import { mainStoreSliceActions } from "../../store/store";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 const NavBar: React.FC = () => {
-  const activePage = useSelector((state: DatabaseStates) => state.activePage);
+  const activePage = useAppSelector((state) => state.mainStore.activePage);
   const acceptableHomeReturnValues = [
     "Home",
     "Flashcards",
@@ -41,10 +42,10 @@ const NavBar: React.FC = () => {
     link: string;
     function: any;
   };
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navButtonHandler = (type: string) => {
     if (activePage !== type) {
-      dispatch(storeActions.setActivePage(type));
+      dispatch(mainStoreSliceActions.setActivePage(type));
     }
   };
   // console.log(activePage);
@@ -61,7 +62,7 @@ const NavBar: React.FC = () => {
     refreshed &&
     acceptableHomeReturnValues.includes(localStorageActivePage)
   ) {
-    dispatch(storeActions.setActivePage(localStorageActivePage));
+    dispatch(mainStoreSliceActions.setActivePage(localStorageActivePage));
     localStorage.removeItem("activePage");
     localStorage.setItem("refreshed", "false");
   }

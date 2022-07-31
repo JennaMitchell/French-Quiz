@@ -2,8 +2,7 @@ import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import notebookImage from "../../../images/homepage-images/notebook.jpg";
 import { ThemeButton } from "../../../components/generic-components/generic-components";
-import { useSelector } from "react-redux";
-import { DatabaseStates } from "../../../store/store";
+import { useAppSelector } from "../../../store/hooks";
 const TopContainer = styled("div", {
   name: "TopContainer",
   slot: "Wrapper",
@@ -64,23 +63,25 @@ const LinkButton = styled(ThemeButton, {
 }));
 
 const FeatureOverviewNavContent: React.FC = () => {
-  const homepageFeatureDatabase = useSelector(
-    (state: DatabaseStates) => state.homepageFeatureDatabase
+  const homepageFeatureDatabase = useAppSelector(
+    (state) => state.mainStore.homepageFeatureDatabase
   );
-  const homepageSelectedSection = useSelector(
-    (state: DatabaseStates) => state.homepageSelectedSection
+  const homepageSelectedSection = useAppSelector(
+    (state) => state.mainStore.homepageSelectedSection
   );
   return (
     <TopContainer>
       <InfoContainer>
         <Typography variant="h2" sx={{ textAlign: "center" }}>
+          {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].title}
         </Typography>
         <Typography variant="h6" sx={{ textAlign: "center" }}>
+          {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].description}
         </Typography>
         <LinkButton>
-          {" "}
+          {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].title}
         </LinkButton>
       </InfoContainer>

@@ -5,8 +5,8 @@ import paperIcon from "../../../images/homepage-images/paper.png";
 import pencilIcon from "../../../images/homepage-images/pencil.png";
 import quizIcon from "../../../images/homepage-images/quiz.png";
 import hightlightImage from "../../../images/homepage-images/blue-hightlight.png";
-import { useSelector, useDispatch } from "react-redux";
-import { storeActions, DatabaseStates } from "../../../store/store";
+import { mainStoreSliceActions } from "../../../store/store";
+import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 
 const TopContainer = styled("div", {
   name: "TopContainer",
@@ -68,14 +68,14 @@ const HightlightImage = styled("img", {
 }));
 
 const FeatureOverviewNavMenu: React.FC = () => {
-  const homepageSelectedSection = useSelector(
-    (state: DatabaseStates) => state.homepageSelectedSection
+  const homepageSelectedSection = useAppSelector(
+    (state) => state.mainStore.homepageSelectedSection
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const buttonHandler = (type: string) => {
     if (type !== homepageSelectedSection) {
-      dispatch(storeActions.setHomepageSelectedSection(type));
+      dispatch(mainStoreSliceActions.setHomepageSelectedSection(type));
     }
   };
 

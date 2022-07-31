@@ -1,14 +1,15 @@
 import { ref, child, get } from "firebase/database";
 import exportObject from "./firebase-initialization";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
 
-import { useSelector } from "react-redux";
-import { storeActions, DatabaseStates } from "../store/store";
+import { useState } from "react";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+
+import { mainStoreSliceActions } from "../store/store";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import LoadingAnimation from "../components/loading-logo/loading-logo";
 import { useEffect } from "react";
+
 interface UserSelectedData {
   french: string;
   english: string;
@@ -37,11 +38,11 @@ const LoadingScreenBackdrop = styled("div", {
 });
 
 const LocalDataBaseSetup = () => {
-  const firebaseDataLoaded = useSelector(
-    (state: DatabaseStates) => state.firebaseDataLoaded
+  const firebaseDataLoaded = useAppSelector(
+    (state) => state.mainStore.firebaseDataLoaded
   );
   const databaseRef = ref(exportObject[0]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
   const [flashcardsDBTemp, setFlashcardsDBTemp] = useState<any>([]);
@@ -97,22 +98,22 @@ const LocalDataBaseSetup = () => {
           }
 
           if (databaseType === "flashcards") {
-            dispatch(storeActions.setFlashcardsDB(loadedCards));
+            dispatch(mainStoreSliceActions.setFlashcardsDB(loadedCards));
             setFlashcardsDBTemp(loadedCards);
           } else if (databaseType === "nouns") {
-            dispatch(storeActions.setNounsDB(loadedCards));
+            dispatch(mainStoreSliceActions.setNounsDB(loadedCards));
             setNounsDBTemp(loadedCards);
           } else if (databaseType === "adjective") {
-            dispatch(storeActions.setAdjectivesDB(loadedCards));
+            dispatch(mainStoreSliceActions.setAdjectivesDB(loadedCards));
             setAdjectivesDBTemp(loadedCards);
           } else if (databaseType === "verbs") {
-            dispatch(storeActions.setVerbsDB(loadedCards));
+            dispatch(mainStoreSliceActions.setVerbsDB(loadedCards));
             setVerbsDBTemp(loadedCards);
           } else if (databaseType === "phrases") {
-            dispatch(storeActions.setPhrasesDB(loadedCards));
+            dispatch(mainStoreSliceActions.setPhrasesDB(loadedCards));
             setPhrasesDBTemp(loadedCards);
           } else if (databaseType === "conjugation") {
-            dispatch(storeActions.setConjugationTableDB(val));
+            dispatch(mainStoreSliceActions.setConjugationTableDB(val));
           }
         }
       } catch (error: any) {
@@ -148,8 +149,8 @@ const LocalDataBaseSetup = () => {
       pushToTempAllVocabFunction(adjectivesDBTemp);
       pushToTempAllVocabFunction(verbsDBTemp);
       pushToTempAllVocabFunction(nounsDBTemp);
-      dispatch(storeActions.setOverAllVocabDB(tempAllVocabDB));
-      dispatch(storeActions.setFirebaseDataLoaded(true));
+      dispatch(mainStoreSliceActions.setOverAllVocabDB(tempAllVocabDB));
+      dispatch(mainStoreSliceActions.setFirebaseDataLoaded(true));
     }
   }, [phrasesDBTemp, adjectivesDBTemp, dispatch, nounsDBTemp, verbsDBTemp]);
 

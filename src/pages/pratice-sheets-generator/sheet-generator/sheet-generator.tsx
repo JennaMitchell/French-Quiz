@@ -3,8 +3,8 @@ import {
   MainContentContainer,
   TestContainer,
 } from "./sheet-generator-styled-components";
-import { useSelector } from "react-redux";
-import { DatabaseStates } from "../../../store/store";
+
+import { useAppSelector } from "../../../store/hooks";
 import MultipleChoiceCreator from "../practice-sheet-questions-creators/multiple-choice-creator/multiple-choice-creator";
 import { Typography } from "@mui/material";
 import { useRef } from "react";
@@ -16,43 +16,43 @@ import AnswerKey from "../practice-sheet-questions-creators/answer-key/answer-ke
 
 const SheetGenerator = () => {
   // Handeling use Data on refresh
-  // const vocabSelectPopupActive = useSelector(
+  // const vocabSelectPopupActive = useAppSelector(
   //   (state: DatabaseStates) => state.vocabSelectPopupActive
   // );
-  const practiceSheetGeneratorVocabQuestionSetup = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorVocabQuestionSetup
+  const practiceSheetGeneratorVocabQuestionSetup = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorVocabQuestionSetup
   );
 
-  const selectedVocabTestType = useSelector(
-    (state: DatabaseStates) => state.selectedVocabTestType
+  const selectedVocabTestType = useAppSelector(
+    (state) => state.sheetGenerator.selectedVocabTestType
   );
-  const practiceSheetGeneratorPhraseQuestions = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorPhraseQuestions
+  const practiceSheetGeneratorPhraseQuestions = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorPhraseQuestions
   );
-  const practiceSheetGeneratorVocabQuestions = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorVocabQuestions
-  );
-
-  const numberOfConjugationQuestions = useSelector(
-    (state: DatabaseStates) => state.numberOfConjugationQuestions
+  const practiceSheetGeneratorVocabQuestions = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorVocabQuestions
   );
 
-  const userSelectedConjugations = useSelector(
-    (state: DatabaseStates) => state.userSelectedConjugations
-  );
-  const userSelectedConjugationGrouping = useSelector(
-    (state: DatabaseStates) => state.userSelectedConjugationGrouping
+  const numberOfConjugationQuestions = useAppSelector(
+    (state) => state.sheetGenerator.numberOfConjugationQuestions
   );
 
-  const practiceSheetGeneratorPhrasesQuestionSetup = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorPhrasesQuestionSetup
+  const userSelectedConjugations = useAppSelector(
+    (state) => state.sheetGenerator.userSelectedConjugations
+  );
+  const userSelectedConjugationGrouping = useAppSelector(
+    (state) => state.sheetGenerator.userSelectedConjugationGrouping
   );
 
-  const userSelectedPhrasesTestType = useSelector(
-    (state: DatabaseStates) => state.userSelectedPhrasesTestType
+  const practiceSheetGeneratorPhrasesQuestionSetup = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorPhrasesQuestionSetup
   );
-  const practiceSheetSetupComplete = useSelector(
-    (state: DatabaseStates) => state.practiceSheetSetupComplete
+
+  const userSelectedPhrasesTestType = useAppSelector(
+    (state) => state.sheetGenerator.userSelectedPhrasesTestType
+  );
+  const practiceSheetSetupComplete = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetSetupComplete
   );
   const testContainerRef = useRef(null);
   //  console.log(testContainerRef.current.clientHeight);
@@ -350,7 +350,7 @@ const SheetGenerator = () => {
             >
               <Typography
                 variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 2" }}
+                sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
               >
                 Fill in the Blank Phrase Questions
               </Typography>
@@ -359,7 +359,7 @@ const SheetGenerator = () => {
                 sx={{
                   marginTop: "10px",
                   marginBottom: "10px",
-                  gridColumn: "1 /span 2",
+                  gridColumn: "1 /span 3",
                 }}
               >
                 Translate the terms into{" "}

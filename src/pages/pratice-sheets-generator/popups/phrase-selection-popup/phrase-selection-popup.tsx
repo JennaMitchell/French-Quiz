@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
-import { DatabaseStates, storeActions } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
@@ -21,20 +21,18 @@ import {
   ButtonsContainer,
 } from "./phrase-selection-popup-styled-components";
 import { useState, useEffect } from "react";
-import {
-  questionAnswerCreator,
-  practiceSheetReset,
-} from "../../../../components/functions/generic-functions";
+import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
+import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 const PhraseSelectionPopup = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
-  const phrasesSelectionPopupActive = useSelector(
-    (state: DatabaseStates) => state.phrasesSelectionPopupActive
+  const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
+  const phrasesSelectionPopupActive = useAppSelector(
+    (state) => state.sheetGenerator.phrasesSelectionPopupActive
   );
 
-  const practiceSheetGeneratorPhrasesQuestionSetup = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorPhrasesQuestionSetup
+  const practiceSheetGeneratorPhrasesQuestionSetup = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorPhrasesQuestionSetup
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -58,7 +56,7 @@ const PhraseSelectionPopup = () => {
 
   // Function below handler the adding and removing of verbs
   const itemSelectionUpdater = (index: number, type: string) => {
-    const selectedItemData = phrasesDB[index];
+    const selectedItemData: SelectedItemsTypes = phrasesDB[index];
     /// IMPORTANT THIS INSTANCE ONLY WORKS WITH PHRASES
 
     let indexOfTermToBeDeleted: string | number = "none";
@@ -90,23 +88,32 @@ const PhraseSelectionPopup = () => {
   // Skip Button Handler
 
   const skipButtonHandler = () => {
-    dispatch(storeActions.setUserSelectedPhrases([]));
-    dispatch(storeActions.setPhrasesSelectionPopupActive(false));
-    dispatch(storeActions.setUserSelectedPhrasesTestType(""));
+    dispatch(sheetGeneratorStoreSliceActions.setUserSelectedPhrases([]));
     dispatch(
-      storeActions.setPracticeSheetGeneratorPhraseQuestions({
+      sheetGeneratorStoreSliceActions.setPhrasesSelectionPopupActive(false)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedPhrasesTestType("")
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorPhraseQuestions({
         phraseMultipleChoiceQuestions: [],
         phraseMatchingQuestions: [],
         phraseFillInTheBlankQuestions: [],
       })
     );
     dispatch(
-      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
-        numberOfTotalPhraseQuestions: 0,
-        numberOfPhraseMultipleChoiceQuestions: 0,
-        numberOfPhraseMatchingQuestions: 0,
-        numberOfPhraseFillInTheBlankQuestions: 0,
-      })
+      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorPhrasesQuestionSetup(
+        {
+          numberOfTotalPhraseQuestions: 0,
+          numberOfPhraseMultipleChoiceQuestions: 0,
+          numberOfPhraseMatchingQuestions: 0,
+          numberOfPhraseFillInTheBlankQuestions: 0,
+        }
+      )
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPracticeSheetSetupComplete(true)
     );
   };
 
@@ -184,14 +191,21 @@ const PhraseSelectionPopup = () => {
         selectedItems
       );
     dispatch(
-      storeActions.setPracticeSheetGeneratorPhraseQuestions({
+      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorPhraseQuestions({
         phraseMultipleChoiceQuestions: multipleChoiceAnswers,
         phraseMatchingQuestions: matchingAnswers,
         phraseFillInTheBlankQuestions: fillInBlankAnswers,
       })
     );
-    dispatch(storeActions.setPhrasesSelectionPopupActive(false));
-    dispatch(storeActions.setUserSelectedPhrases(selectedItems));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPhrasesSelectionPopupActive(false)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedPhrases(selectedItems)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPracticeSheetSetupComplete(true)
+    );
   };
   ///Reset on Upload
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../../components/generic-components/generic-popup-components";
 
 import {
+  SelectionContainer,
   ActionButton,
   DisabledActionButton,
   VocabContainer,
@@ -17,22 +18,23 @@ import {
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
-  SelectionContainer,
   ButtonsContainer,
-} from "./vocab-selection-popup-styled-components";
-import { useState, useEffect } from "react";
-import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
-import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
-const VocabSelectionPopup = () => {
+  StyledSelect,
+  StyledOption,
+} from "./quiz-conjugation-selection-popup-styled-components";
+import { useState, useEffect, ChangeEventHandler } from "react";
+import { quizReset } from "../../../../components/functions/quiz-reset-function";
+
+const QuizConjugationSelectionPopup = () => {
   const dispatch = useAppDispatch();
-  const adjectivesDB = useAppSelector((state) => state.mainStore.adjectivesDB);
-  const nounsDB = useAppSelector((state) => state.mainStore.nounsDB);
+
   const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
-  const vocabSelectPopupActive = useAppSelector(
-    (state) => state.sheetGenerator.vocabSelectPopupActive
+  const quizConjugationVerbSelectionPopupActive = useAppSelector(
+    (state) => state.quizStore.quizConjugationVerbSelectionPopupActive
   );
-  const practiceSheetGeneratorVocabQuestionSetup = useAppSelector(
-    (state) => state.sheetGenerator.practiceSheetGeneratorVocabQuestionSetup
+
+  const numberOfQuizConjugationQuestions = useAppSelector(
+    (state) => state.quizStore.numberOfQuizConjugationQuestions
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -40,44 +42,26 @@ const VocabSelectionPopup = () => {
   }
 
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
-  const [nounDropDownMenuActive, setNounDropDownMenuActive] = useState(false);
-  const [adjectiveDropDownMenuActive, setAdjectiveDropDownMenuActive] =
-    useState(false);
+
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
+  const [selectedGrouping, setSelectedGrouping] = useState("");
 
   let submitButtonEnabled = false;
+
+  // onClose Effect
+  const onCloseFunction = () => {
+    quizReset(false, dispatch);
+  };
 
   // Handeling Section Button Clicks
   const verbsHeadingHandler = () => {
     setVerbsDropDownMenuActive(!verbsDropDownMenuActive);
   };
-  const nounHeadingHandler = () => {
-    setNounDropDownMenuActive(!nounDropDownMenuActive);
-  };
-  const adjectiveHeadingHandler = () => {
-    setAdjectiveDropDownMenuActive(!adjectiveDropDownMenuActive);
-  };
-  const onCloseFunction = () => {
-    practiceSheetReset(false, dispatch);
-  };
 
   // Function below handler the adding and removing of verbs
   const itemSelectionUpdater = (index: number, type: string) => {
-    let selectedItemData: SelectedItemsTypes = {};
+    const selectedItemData: SelectedItemsTypes = verbsDB[index];
 
-    switch (type) {
-      case "Verbs":
-        selectedItemData = verbsDB[index];
-        break;
-      case "Nouns":
-        selectedItemData = nounsDB[index];
-        break;
-      case "Adjectives":
-        selectedItemData = adjectivesDB[index];
-        break;
-      default:
-        break;
-    }
     let indexOfTermToBeDeleted: string | number = "none";
     for (let i = 0; i < selectedItems.length; i++) {
       if (selectedItemData?.french === selectedItems[i].french) {
@@ -96,12 +80,14 @@ const VocabSelectionPopup = () => {
 
       setSelectedItems(removedArray);
     } else {
-      const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
-      copyOfSelectedItems.push({
-        english: selectedItemData.english,
-        french: selectedItemData.french,
-      });
-      setSelectedItems(copyOfSelectedItems);
+      if (numberOfQuizConjugationQuestions - selectedItems.length !== 0) {
+        const copyOfSelectedItems = JSON.parse(JSON.stringify(selectedItems));
+        copyOfSelectedItems.push({
+          english: selectedItemData.english,
+          french: selectedItemData.french,
+        });
+        setSelectedItems(copyOfSelectedItems);
+      }
     }
   };
 
@@ -155,81 +141,60 @@ const VocabSelectionPopup = () => {
   };
 
   const renderReadyVerbItems = dropDownDataMaker(verbsDB, "Verbs");
-  const renderReadyNounItems = dropDownDataMaker(nounsDB, "Nouns");
-  const renderReadyAdjectiveItems = dropDownDataMaker(
-    adjectivesDB,
-    "Adjectives"
-  );
-
-  if (
-    practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions <=
-    selectedItems.length
-  ) {
-    submitButtonEnabled = true;
-  }
 
   // Submit Handler
 
   const submitHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(true)
+      quizStoreSliceActions.setQuizConjugationVerbSelectionPopupActive(false)
     );
-    dispatch(sheetGeneratorStoreSliceActions.setVocabSelectPopupActive(false));
     dispatch(
-      sheetGeneratorStoreSliceActions.setUserSelectedVocab(selectedItems)
+      quizStoreSliceActions.setUserSelectedQuizConjugations(selectedItems)
     );
-    const [multipleChoiceAnswers, matchingAnswers, fillInBlankAnswers] =
-      questionAnswerCreator(
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMultipleChoiceQuestions,
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMatchingQuestions,
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabFillInTheBlankQuestions,
-        selectedItems
-      );
     dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestions({
-        vocabMultipleChoiceQuestions: multipleChoiceAnswers,
-        vocabMatchingQuestions: matchingAnswers,
-        vocabFillInTheBlankQuestions: fillInBlankAnswers,
-      })
+      quizStoreSliceActions.setUserSelectedQuizConjugationGrouping(
+        selectedGrouping
+      )
     );
+    dispatch(quizStoreSliceActions.setQuizSetupComplete(true));
   };
   ///Reset on Upload
   useEffect(() => {
-    if (vocabSelectPopupActive) {
+    if (quizConjugationVerbSelectionPopupActive) {
       setSelectedItems([]);
+      setSelectedGrouping("");
     }
-  }, [vocabSelectPopupActive]);
+  }, [quizConjugationVerbSelectionPopupActive]);
 
-  // Skip BUtton Handler
+  // Group by handler
+  const groupByHandler: ChangeEventHandler<HTMLSelectElement> = (e): void => {
+    if (e.target.value === "Random" || e.target.value === "By Verb") {
+      setSelectedGrouping(e.target.value);
+    }
+  };
+  // Submit Button Handler
 
+  // Submit Button Enabler
+  if (
+    selectedGrouping === "Random" ||
+    (selectedGrouping === "By Verb" && selectedItems.length !== 0)
+  ) {
+    submitButtonEnabled = true;
+  }
   const skipButtonHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestionSetup(
-        {
-          numberOfTotalVocabQuestions: 0,
-          numberOfVocabMultipleChoiceQuestions: 0,
-          numberOfVocabMatchingQuestions: 0,
-          numberOfVocabFillInTheBlankQuestions: 0,
-        }
-      )
+      quizStoreSliceActions.setQuizConjugationVerbSelectionPopupActive(false)
     );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(true)
-    );
-    dispatch(sheetGeneratorStoreSliceActions.setVocabSelectPopupActive(false));
-    dispatch(sheetGeneratorStoreSliceActions.setSelectedVocabTestType(""));
-    dispatch(sheetGeneratorStoreSliceActions.setUserSelectedVocab([]));
-    dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestions({
-        vocabMultipleChoiceQuestions: [],
-        vocabMatchingQuestions: [],
-        vocabFillInTheBlankQuestions: [],
-      })
-    );
+    dispatch(quizStoreSliceActions.setNumberOfQuizConjugationQuestions(0));
+
+    dispatch(quizStoreSliceActions.setUserSelectedQuizConjugations([]));
+    dispatch(quizStoreSliceActions.setUserSelectedQuizConjugationGrouping(""));
+    dispatch(quizStoreSliceActions.setQuizSetupComplete(true));
   };
+
   return (
     <Dialog
-      open={vocabSelectPopupActive}
+      open={quizConjugationVerbSelectionPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
@@ -255,7 +220,6 @@ const VocabSelectionPopup = () => {
           overflowX: "hidden",
           borderRadius: "20px",
           padding: "10px 40px 20px 40px",
-          overflowY: "scroll",
           height: "max-content",
           "@media(maxWidth:475px)": {
             width: "max(325px,325px)",
@@ -284,19 +248,19 @@ const VocabSelectionPopup = () => {
               },
             }}
           >
-            Step 2 of 6
+            Step 4 of 4
           </Typography>
 
           <Typography
             variant="h4"
             sx={{
-              fontSize: "28px",
+              fontSize: "26px",
               "@media(max-width:580px)": { fontSize: "28px" },
               "@media(max-width:520px)": { fontSize: "22px" },
               "@media(max-width:475px)": { fontSize: "18px" },
             }}
           >
-            Vocab Selection
+            Vocab Conjugation Selection
           </Typography>
           <SelectionContainer>
             <Typography
@@ -310,7 +274,7 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              Minimum Selection Remaining: &nbsp;
+              Selection Remaining :
             </Typography>
             <Typography
               variant="h6"
@@ -323,31 +287,9 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length >
-                0 &&
-                practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                  selectedItems.length}
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length <=
-                0 && 0}
+              {numberOfQuizConjugationQuestions - selectedItems.length}
             </Typography>
           </SelectionContainer>
-          {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-            selectedItems.length <=
-            0 && (
-            <Typography
-              sx={{
-                color: "red",
-                fontSize: "16px",
-                width: "max(300px,300px)",
-                textAlign: "center",
-              }}
-            >
-              Warning: Picking more than the selected number of questions will
-              randomize the selection
-            </Typography>
-          )}
           <DropDownButton onClick={verbsHeadingHandler}>
             <Typography
               variant="h5"
@@ -370,7 +312,7 @@ const VocabSelectionPopup = () => {
               {renderReadyVerbItems}
             </DropDownSelectionMenu>
           )}
-          <DropDownButton onClick={nounHeadingHandler}>
+          <SelectionContainer sx={{ marginTop: "20px" }}>
             <Typography
               variant="h5"
               sx={{
@@ -382,40 +324,15 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              Nouns
+              Grouping:
             </Typography>
-            {!nounDropDownMenuActive && <DropDownDownArrow />}
-            {nounDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {nounDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyNounItems}
-            </DropDownSelectionMenu>
-          )}
-          <DropDownButton onClick={adjectiveHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Adjectives
-            </Typography>
-            {!adjectiveDropDownMenuActive && <DropDownDownArrow />}
-            {adjectiveDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {adjectiveDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyAdjectiveItems}
-            </DropDownSelectionMenu>
-          )}
+            <StyledSelect onChange={groupByHandler}>
+              <StyledOption>&nbsp;</StyledOption>
+              <StyledOption>By Verb</StyledOption>
+              <StyledOption>Random</StyledOption>
+            </StyledSelect>
+          </SelectionContainer>
         </Grid>
-
         <ButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
@@ -429,4 +346,4 @@ const VocabSelectionPopup = () => {
     </Dialog>
   );
 };
-export default VocabSelectionPopup;
+export default QuizConjugationSelectionPopup;

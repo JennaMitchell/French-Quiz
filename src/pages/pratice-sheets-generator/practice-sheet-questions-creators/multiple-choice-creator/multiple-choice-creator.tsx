@@ -1,6 +1,6 @@
 import MultipleChoiceQuestion from "./child-components/multiple-choice-question";
-import { useDispatch, useSelector } from "react-redux";
-import { DatabaseStates, storeActions } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import {
   SingleItemRowContainer,
   TwoItemRowContainer,
@@ -18,12 +18,12 @@ type Props = {
 const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   let overallDatabase: UserSelectedData[] = [];
 
-  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
-  const overAllVocabDB = useSelector(
-    (state: DatabaseStates) => state.overAllVocabDB
+  const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
+  const overAllVocabDB = useAppSelector(
+    (state) => state.mainStore.overAllVocabDB
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [multipleChoiceQuestionAnswerKey, setMultipleChoiceQuestionAnswerKey] =
     useState<string[] | []>([]);
   const [answerKeyUpdated, setAnswerKeyUpdated] = useState(false);
@@ -208,13 +208,13 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
       if (multipleChoiceQuestionAnswerKey.length !== 0) {
         if (databaseType === "Vocab") {
           dispatch(
-            storeActions.setVocabMultipleChoiceAnswerKey(
+            sheetGeneratorStoreSliceActions.setVocabMultipleChoiceAnswerKey(
               multipleChoiceQuestionAnswerKey
             )
           );
         } else if (databaseType === "Phrases") {
           dispatch(
-            storeActions.setPhrasesMultipleChoiceAnswerKey(
+            sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
               multipleChoiceQuestionAnswerKey
             )
           );
@@ -245,7 +245,10 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
     );
   }
 
-  if (renderReadyMultipleChoiceQuestions.length % 3 === 2) {
+  if (
+    renderReadyMultipleChoiceQuestions.length % 3 === 2 &&
+    databaseType !== "Phrases"
+  ) {
     const lastEntrys = renderReadyMultipleChoiceQuestions.splice(
       renderReadyMultipleChoiceQuestions.length - 2,
       2
@@ -253,6 +256,25 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
 
     renderReadyMultipleChoiceQuestions.push(
       <TwoItemRowContainer key="two row">
+        {lastEntrys[0]} {lastEntrys[1]}
+      </TwoItemRowContainer>
+    );
+  }
+
+  if (
+    renderReadyMultipleChoiceQuestions.length % 3 === 2 &&
+    databaseType === "Phrases"
+  ) {
+    const lastEntrys = renderReadyMultipleChoiceQuestions.splice(
+      renderReadyMultipleChoiceQuestions.length - 2,
+      2
+    );
+
+    renderReadyMultipleChoiceQuestions.push(
+      <TwoItemRowContainer
+        key="two row"
+        sx={{ marginLeft: "0px", columnGap: "60px" }}
+      >
         {lastEntrys[0]} {lastEntrys[1]}
       </TwoItemRowContainer>
     );

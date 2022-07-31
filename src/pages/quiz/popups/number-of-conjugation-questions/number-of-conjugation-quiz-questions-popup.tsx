@@ -1,4 +1,4 @@
-import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
@@ -14,17 +14,17 @@ import {
   StyledOption,
   OptionContainer,
   StyledTitleTypography,
-} from "./number-of-conjugation-questions-popup-styled-components";
+} from "./number-of-conjugation-quiz-questions-popup-styled-components";
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
-import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 
-const NumberOfConjugationQuestionsPopup = () => {
+import { quizReset } from "../../../../components/functions/quiz-reset-function";
+const NumberOfConjugationQuizQuestionsPopup = () => {
   const dispatch = useAppDispatch();
 
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-  const numberOfConjugationPopupActive = useAppSelector(
-    (state) => state.sheetGenerator.numberOfConjugationPopupActive
+  const quizConjugationNumberOfQuestionsPopup = useAppSelector(
+    (state) => state.quizStore.quizConjugationNumberOfQuestionsPopup
   );
   const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
 
@@ -38,7 +38,7 @@ const NumberOfConjugationQuestionsPopup = () => {
 
   // Closing Rest Function
   const onCloseFunction = () => {
-    practiceSheetReset(false, dispatch);
+    quizReset(false, dispatch);
   };
 
   // Handeling the Selector
@@ -53,44 +53,39 @@ const NumberOfConjugationQuestionsPopup = () => {
 
   // Resetting The Popup evertime it starts up
   useEffect(() => {
-    if (numberOfConjugationPopupActive) {
+    if (quizConjugationNumberOfQuestionsPopup) {
       setNumberOfQuestions(0);
     }
-  }, [numberOfConjugationPopupActive]);
+  }, [quizConjugationNumberOfQuestionsPopup]);
 
   // Handeling Submits
 
   const submitHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(false)
+      quizStoreSliceActions.setQuizConjugationNumberOfQuestionsPopup(false)
     );
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationQuestions(
+      quizStoreSliceActions.setNumberOfQuizConjugationQuestions(
         numberOfQuestions
       )
     );
     dispatch(
-      sheetGeneratorStoreSliceActions.setConjugationVerbChoicePopup(true)
+      quizStoreSliceActions.setQuizConjugationVerbSelectionPopupActive(true)
     );
   };
 
   const skipButtonHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(false)
+      quizStoreSliceActions.setQuizConjugationNumberOfQuestionsPopup(false)
     );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationQuestions(0)
-    );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfPhraseQuestionsPopupActive(
-        true
-      )
-    );
+    dispatch(quizStoreSliceActions.setNumberOfQuizConjugationQuestions(0));
+
+    dispatch(quizStoreSliceActions.setQuizSetupComplete(true));
   };
 
   return (
     <Dialog
-      open={numberOfConjugationPopupActive}
+      open={quizConjugationNumberOfQuestionsPopup}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
@@ -142,7 +137,7 @@ const NumberOfConjugationQuestionsPopup = () => {
               },
             }}
           >
-            Step 3 of 6
+            Step 3 of 4
           </Typography>
 
           <Typography
@@ -180,4 +175,4 @@ const NumberOfConjugationQuestionsPopup = () => {
     </Dialog>
   );
 };
-export default NumberOfConjugationQuestionsPopup;
+export default NumberOfConjugationQuizQuestionsPopup;

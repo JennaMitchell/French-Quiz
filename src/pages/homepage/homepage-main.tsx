@@ -6,16 +6,17 @@ import {
 import { SectionContainer } from "../../components/generic-components/generic-components";
 import voyageImage from "../../images/homepage-images/voyage.jpg";
 import FeatureOverviewSection from "./feature-overview-section/feature-overview-section";
-import { useSelector, useDispatch } from "react-redux";
-import { DatabaseStates, storeActions } from "../../store/store";
+
+import { mainStoreSliceActions } from "../../store/store";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { useEffect } from "react";
 const HomepageMain = () => {
-  const dispatch = useDispatch();
-  const activePage = useSelector((state: DatabaseStates) => state.activePage);
+  const dispatch = useAppDispatch();
+  const activePage = useAppSelector((state) => state.mainStore.activePage);
   // useEffect
   useEffect(() => {
     if (activePage !== "Home") {
-      dispatch(storeActions.setActivePage("Home"));
+      dispatch(mainStoreSliceActions.setActivePage("Home"));
     }
   });
   return (

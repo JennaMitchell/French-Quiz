@@ -6,14 +6,18 @@ import {
   NextIconButton,
   PreviousIconButton,
 } from "./flashcards-main-styled-components";
-import { useSelector } from "react-redux";
-import { DatabaseStates } from "../../store/store";
+
+import { useAppSelector } from "../../store/hooks";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 
 const FlashcardsMain: React.FC = () => {
-  const flashcardsDB = useSelector(
-    (state: DatabaseStates) => state.flashcardsDB
+  type FlashcardDatabaseTypes = {
+    answer: string;
+    question: string;
+  };
+  const flashcardsDB: FlashcardDatabaseTypes[] = useAppSelector(
+    (state) => state.mainStore.flashcardsDB
   );
 
   const [flashcardHover, setFlashcardHover] = useState(false);

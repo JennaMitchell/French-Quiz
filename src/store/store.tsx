@@ -1,4 +1,7 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
+// PayloadAction
+import { quizStoreSlice } from "./quiz-store-slice";
+import { sheetGeneratorStoreSlice } from "./sheet-generator-slice";
 const initialState = {
   activePage: "Home",
 
@@ -24,63 +27,19 @@ const initialState = {
   homepageSelectedSection: "Flashcards",
   flashcardsDB: [],
   firebaseDataLoaded: false,
-  newPracticeSheetsPopupActive: true,
   adjectivesDB: [],
   nounsDB: [],
   verbsDB: [],
   phrasesDB: [],
-  vocabSelectPopupActive: false,
-  practiceSheetGeneratorVocabQuestionSetup: {
-    numberOfTotalVocabQuestions: 0,
-    numberOfVocabMultipleChoiceQuestions: 0,
-    numberOfVocabMatchingQuestions: 0,
-    numberOfVocabFillInTheBlankQuestions: 0,
-  },
-  practiceSheetGeneratorVocabQuestions: {
-    vocabMultipleChoiceQuestions: [],
-    vocabMatchingQuestions: [],
-    vocabFillInTheBlankQuestions: [],
-  },
-  userSelectedVocab: [],
-  numberOfConjugationPopupActive: false,
-  numberOfConjugationQuestions: 0,
-  conjugationVerbChoicePopup: false,
-  userSelectedConjugations: [],
-  userSelectedConjugationGrouping: "",
-  numberOfPhraseQuestionsPopupActive: false,
-  practiceSheetGeneratorPhrasesQuestionSetup: {
-    numberOfTotalPhraseQuestions: 0,
-    numberOfPhraseMultipleChoiceQuestions: 0,
-    numberOfPhraseMatchingQuestions: 0,
-    numberOfPhraseFillInTheBlankQuestions: 0,
-  },
-  practiceSheetGeneratorPhraseQuestions: {
-    phraseMultipleChoiceQuestions: [],
-    phraseMatchingQuestions: [],
-    phraseFillInTheBlankQuestions: [],
-  },
-  phrasesSelectionPopupActive: false,
-  userSelectedPhrases: [],
-  userSelectedPhrasesTestType: "",
-  selectedVocabTestType: " ",
   overAllVocabDB: [],
-  practiceSheetsMultipleChoiceVocabAnswers: [],
-  practiceSheetsMultipleChoicePhrasesAnswers: [],
-  practiceSheetSetupComplete: false,
-  practiceSheetsFillInTheBlankVocabAnswers: [],
-  practiceSheetsFillInTheBlankPhrasesAnswers: [],
-  practiceSheetsMatchingVocabAnswers: [],
-  practiceSheetsMatchingPhrasesAnswers: [],
   conjugationTableDB: [],
-  conjugationAnswerKey: [],
-  phrasesMultipleChoiceAnswerKey: [],
-  vocabMultipleChoiceAnswerKey: [],
-  phrasesMatchingAnswerKey: [],
-  vocabMatchingAnswerKey: [],
-  phrasesFillInTheBlankAnswerKey: [],
-  vocabFillInTheBlankAnswerKey: [],
 };
-const storeSlice = createSlice({
+
+// setHomepageSelectedSection(state, action: PayloadAction<string>) {
+//     state.homepageSelectedSection = action.payload;
+//   },
+
+const mainStoreSlice = createSlice({
   name: "French Quiz Database",
   initialState: initialState,
   reducers: {
@@ -96,9 +55,7 @@ const storeSlice = createSlice({
     setFirebaseDataLoaded(state, { payload }) {
       state.firebaseDataLoaded = payload;
     },
-    setNewPracticeSheetsPopupActive(state, { payload }) {
-      state.newPracticeSheetsPopupActive = payload;
-    },
+
     setAdjectivesDB(state, { payload }) {
       state.adjectivesDB = payload;
     },
@@ -111,154 +68,34 @@ const storeSlice = createSlice({
     setPhrasesDB(state, { payload }) {
       state.phrasesDB = payload;
     },
-    setVocabSelectPopupActive(state, { payload }) {
-      state.vocabSelectPopupActive = payload;
-    },
-    setPracticeSheetGeneratorVocabQuestionSetup(state, { payload }) {
-      state.practiceSheetGeneratorVocabQuestionSetup = payload;
-    },
-    setUserSelectedVocab(state, { payload }) {
-      state.userSelectedVocab = payload;
-    },
-    setNumberOfConjugationPopupActive(state, { payload }) {
-      state.numberOfConjugationPopupActive = payload;
-    },
-    setNumberOfConjugationQuestions(state, { payload }) {
-      state.numberOfConjugationQuestions = payload;
-    },
-    setConjugationVerbChoicePopup(state, { payload }) {
-      state.conjugationVerbChoicePopup = payload;
-    },
-    setUserSelectedConjugations(state, { payload }) {
-      state.userSelectedConjugations = payload;
-    },
-    setNumberOfPhraseQuestionsPopupActive(state, { payload }) {
-      state.numberOfPhraseQuestionsPopupActive = payload;
-    },
-    setUserSelectedConjugationGrouping(state, { payload }) {
-      state.userSelectedConjugationGrouping = payload;
-    },
-    setPhrasesSelectionPopupActive(state, { payload }) {
-      state.phrasesSelectionPopupActive = payload;
-    },
-    setPracticeSheetGeneratorPhrasesQuestionSetup(state, { payload }) {
-      state.practiceSheetGeneratorPhrasesQuestionSetup = payload;
-    },
-    setUserSelectedPhrases(state, { payload }) {
-      state.userSelectedPhrases = payload;
-    },
-    setUserSelectedPhrasesTestType(state, { payload }) {
-      state.userSelectedPhrasesTestType = payload;
-    },
-    setSelectedVocabTestType(state, { payload }) {
-      state.selectedVocabTestType = payload;
-    },
+
     setOverAllVocabDB(state, { payload }) {
       state.overAllVocabDB = payload;
-    },
-    setPracticeSheetsMultipleChoiceVocabAnswers(state, { payload }) {
-      state.practiceSheetsMultipleChoiceVocabAnswers = payload;
-    },
-    setPracticeSheetsMultipleChoicePhrasesAnswers(state, { payload }) {
-      state.practiceSheetsMultipleChoicePhrasesAnswers = payload;
-    },
-    setPracticeSheetSetupComplete(state, { payload }) {
-      state.practiceSheetSetupComplete = payload;
-    },
-    setPracticeSheetsFillInTheBlankVocabAnswers(state, { payload }) {
-      state.practiceSheetsFillInTheBlankVocabAnswers = payload;
-    },
-    setPracticeSheetsFillInTheBlankPhrasesAnswers(state, { payload }) {
-      state.practiceSheetsFillInTheBlankPhrasesAnswers = payload;
-    },
-    setPracticeSheetsMatchingVocabAnswers(state, { payload }) {
-      state.practiceSheetsMatchingVocabAnswers = payload;
-    },
-    setPracticeSheetsMatchingPhrasesAnswers(state, { payload }) {
-      state.practiceSheetsMatchingPhrasesAnswers = payload;
-    },
-    setPracticeSheetGeneratorVocabQuestions(state, { payload }) {
-      state.practiceSheetGeneratorVocabQuestions = payload;
-    },
-    setPracticeSheetGeneratorPhraseQuestions(state, { payload }) {
-      state.practiceSheetGeneratorPhraseQuestions = payload;
     },
     setConjugationTableDB(state, { payload }) {
       state.conjugationTableDB = payload;
     },
-    setConjugationAnswerKey(state, { payload }) {
-      state.conjugationAnswerKey = payload;
-    },
-    setPhrasesMultipleChoiceAnswerKey(state, { payload }) {
-      state.phrasesMultipleChoiceAnswerKey = payload;
-    },
-    setVocabMultipleChoiceAnswerKey(state, { payload }) {
-      state.vocabMultipleChoiceAnswerKey = payload;
-    },
-    setPhrasesMatchingAnswerKey(state, { payload }) {
-      state.phrasesMatchingAnswerKey = payload;
-    },
-    setVocabMatchingAnswerKey(state, { payload }) {
-      state.vocabMatchingAnswerKey = payload;
-    },
-    setPhrasesFillInTheBlankAnswerKey(state, { payload }) {
-      state.phrasesFillInTheBlankAnswerKey = payload;
-    },
-    setVocabFillInTheBlankAnswerKey(state, { payload }) {
-      state.vocabFillInTheBlankAnswerKey = payload;
-    },
   },
 });
-const store = configureStore({ reducer: storeSlice.reducer });
+const store = configureStore({
+  reducer: {
+    mainStore: mainStoreSlice.reducer,
+    quizStore: quizStoreSlice.reducer,
+    sheetGenerator: sheetGeneratorStoreSlice.reducer,
+  },
+});
 type FlashcardDatabaseTypes = {
   answer: string;
   question: string;
 };
-type PracticeSheetGeneratorVocabQuestionSetup = {
-  numberOfTotalVocabQuestions: number;
-  numberOfVocabMultipleChoiceQuestions: number;
-  numberOfVocabMatchingQuestions: number;
-  numberOfVocabFillInTheBlankQuestions: number;
-};
-type PracticeSheetGeneratorPhrasesQuestionSetup = {
-  numberOfTotalPhraseQuestions: number;
-  numberOfPhraseMultipleChoiceQuestions: number;
-  numberOfPhraseMatchingQuestions: number;
-  numberOfPhraseFillInTheBlankQuestions: number;
-};
-type PracticeSheetGeneratorVocabQuestions = {
-  vocabMultipleChoiceQuestions: [];
-  vocabMatchingQuestions: [];
-  vocabFillInTheBlankQuestions: [];
-};
-type PracticeSheetGeneratorPhraseQuestions = {
-  phraseMultipleChoiceQuestions: [];
-  phraseMatchingQuestions: [];
-  phraseFillInTheBlankQuestions: [];
-};
-interface UserSelectedData {
-  [french: string]: string;
-  english: string;
-}
+
 interface DatabaseType {
   [french: string]: string;
   english: string;
   id: string;
 }
-interface AnswerKey {
-  questionNumber: number;
-  answer: string;
-}
 
-// interface ConjugationTable {
-//   [key: string]: {
-//     [key: string]: string;
-//   };
-// }
-
-/// pSG = Practice Sheet Generator
-
-export interface DatabaseStates {
+export interface MainStoreDatabaseStates {
   homepageFeatureDatabase: {
     [key: string]: { title: string; description: string };
   };
@@ -271,40 +108,13 @@ export interface DatabaseStates {
   activePage: string;
   flashcardsDB: FlashcardDatabaseTypes[];
   firebaseDataLoaded: boolean;
-  newPracticeSheetsPopupActive: boolean;
-  vocabSelectPopupActive: boolean;
-  practiceSheetGeneratorVocabQuestionSetup: PracticeSheetGeneratorVocabQuestionSetup;
-  userSelectedVocab: UserSelectedData[];
-  numberOfConjugationPopupActive: boolean;
-  numberOfConjugationQuestions: number;
-  conjugationVerbChoicePopup: boolean;
-  userSelectedConjugations: UserSelectedData[];
-  userSelectedConjugationGrouping: string;
-  numberOfPhraseQuestionsPopupActive: boolean;
-  practiceSheetGeneratorPhrasesQuestionSetup: PracticeSheetGeneratorPhrasesQuestionSetup;
-  phrasesSelectionPopupActive: boolean;
-  userSelectedPhrases: UserSelectedData[];
-  userSelectedPhrasesTestType: string;
-  selectedVocabTestType: string;
-  practiceSheetsMultipleChoiceVocabAnswer: AnswerKey[];
-  practiceSheetsMultipleChoicePhrasesAnswers: AnswerKey[];
-  practiceSheetSetupComplete: boolean;
-  practiceSheetsFillInTheBlankVocabAnswers: string[];
-  practiceSheetsFillInTheBlankPhrasesAnswers: string[];
-  practiceSheetsMatchingVocabAnswers: string[];
-  practiceSheetsMatchingPhrasesAnswers: string[];
-  practiceSheetGeneratorVocabQuestions: PracticeSheetGeneratorVocabQuestions;
-  practiceSheetGeneratorPhraseQuestions: PracticeSheetGeneratorPhraseQuestions;
   conjugationTableDB: any;
-  conjugationAnswerKey: string[] | { [key: string]: string[] };
-  phrasesMultipleChoiceAnswerKey: string[];
-  vocabMultipleChoiceAnswerKey: string[];
-  phrasesMatchingAnswerKey: string[];
-  vocabMatchingAnswerKey: string[];
-  phrasesFillInTheBlankAnswerKey: string[];
-  vocabFillInTheBlankAnswerKey: string[];
 }
+export type RootState = ReturnType<typeof store.getState>;
+// used to set it so our usestate perfectly match what is in the store
+export type AppDispatch = typeof store.dispatch;
+// dispatch is sued to type or dispatch actions
 
-export const storeActions = storeSlice.actions;
+export const mainStoreSliceActions = mainStoreSlice.actions;
 
 export default store;

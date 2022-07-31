@@ -6,8 +6,7 @@
 // phrasesFillInTheBlankAnswerKey: string[];
 // vocabFillInTheBlankAnswerKey: string[];
 
-import { useSelector } from "react-redux";
-import { DatabaseStates } from "../../../../store/store";
+import { useAppSelector } from "../../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { SingleItemRowContainer } from "../../../../components/generic-components/generic-components";
@@ -24,7 +23,7 @@ const AnswerOverAllContainer = styled("div", {
   gridTemplateRows: "max-content",
   gap: "20px",
   gridColumn: "1 / span 3",
-  alignItems: "center",
+  alignItems: "flex-start",
   justifyContent: "space-evenly",
   marginTop: "20px",
   marginBottom: "20px",
@@ -84,33 +83,33 @@ const StyledTitleTypography = styled(Typography, {
   fontWeight: "400",
 }));
 const AnswerKey = () => {
-  const vocabMultipleChoiceAnswerKey = useSelector(
-    (state: DatabaseStates) => state.vocabMultipleChoiceAnswerKey
+  const vocabMultipleChoiceAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.vocabMultipleChoiceAnswerKey
   );
-  const vocabMatchingAnswerKey = useSelector(
-    (state: DatabaseStates) => state.vocabMatchingAnswerKey
+  const vocabMatchingAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.vocabMatchingAnswerKey
   );
-  const vocabFillInTheBlankAnswerKey = useSelector(
-    (state: DatabaseStates) => state.vocabFillInTheBlankAnswerKey
+  const vocabFillInTheBlankAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.vocabFillInTheBlankAnswerKey
   );
   /// These three first
 
   /// Conjugation
-  const conjugationAnswerKey = useSelector(
-    (state: DatabaseStates) => state.conjugationAnswerKey
+  const conjugationAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.conjugationAnswerKey
   );
-  const userSelectedConjugationGrouping = useSelector(
-    (state: DatabaseStates) => state.userSelectedConjugationGrouping
+  const userSelectedConjugationGrouping = useAppSelector(
+    (state) => state.sheetGenerator.userSelectedConjugationGrouping
   );
   // Phrases
-  const phrasesMultipleChoiceAnswerKey = useSelector(
-    (state: DatabaseStates) => state.phrasesMultipleChoiceAnswerKey
+  const phrasesMultipleChoiceAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.phrasesMultipleChoiceAnswerKey
   );
-  const phrasesMatchingAnswerKey = useSelector(
-    (state: DatabaseStates) => state.phrasesMatchingAnswerKey
+  const phrasesMatchingAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.phrasesMatchingAnswerKey
   );
-  const phrasesFillInTheBlankAnswerKey = useSelector(
-    (state: DatabaseStates) => state.phrasesFillInTheBlankAnswerKey
+  const phrasesFillInTheBlankAnswerKey = useAppSelector(
+    (state) => state.sheetGenerator.phrasesFillInTheBlankAnswerKey
   );
 
   // calculating the total number of active elements to know if we need centering or not

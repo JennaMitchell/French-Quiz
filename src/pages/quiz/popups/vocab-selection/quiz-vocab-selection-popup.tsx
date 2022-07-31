@@ -1,4 +1,4 @@
-import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
@@ -19,20 +19,21 @@ import {
   EndSelectionBox,
   SelectionContainer,
   ButtonsContainer,
-} from "./vocab-selection-popup-styled-components";
+} from "./quiz-vocab-selection-popup-styled-components";
 import { useState, useEffect } from "react";
-import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
-import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
-const VocabSelectionPopup = () => {
+
+import { quizReset } from "../../../../components/functions/quiz-reset-function";
+const QuizVocabSelectionPopup = () => {
   const dispatch = useAppDispatch();
   const adjectivesDB = useAppSelector((state) => state.mainStore.adjectivesDB);
   const nounsDB = useAppSelector((state) => state.mainStore.nounsDB);
   const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
-  const vocabSelectPopupActive = useAppSelector(
-    (state) => state.sheetGenerator.vocabSelectPopupActive
+  const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
+  const quizVocabSelectionPopupActive = useAppSelector(
+    (state) => state.quizStore.quizVocabSelectionPopupActive
   );
-  const practiceSheetGeneratorVocabQuestionSetup = useAppSelector(
-    (state) => state.sheetGenerator.practiceSheetGeneratorVocabQuestionSetup
+  const userQuizQuestionSetup = useAppSelector(
+    (state) => state.quizStore.userQuizQuestionSetup
   );
   interface SelectedItemsTypes {
     french?: string;
@@ -42,6 +43,8 @@ const VocabSelectionPopup = () => {
   const [verbsDropDownMenuActive, setVerbsDropDownMenuActive] = useState(false);
   const [nounDropDownMenuActive, setNounDropDownMenuActive] = useState(false);
   const [adjectiveDropDownMenuActive, setAdjectiveDropDownMenuActive] =
+    useState(false);
+  const [phrasesDropDownMenuActive, setPhrasesDropDownMenuActive] =
     useState(false);
   const [selectedItems, setSelectedItems] = useState<SelectedItemsTypes[]>([]);
 
@@ -57,8 +60,11 @@ const VocabSelectionPopup = () => {
   const adjectiveHeadingHandler = () => {
     setAdjectiveDropDownMenuActive(!adjectiveDropDownMenuActive);
   };
+  const phrasesHeadingHandler = () => {
+    setPhrasesDropDownMenuActive(!phrasesDropDownMenuActive);
+  };
   const onCloseFunction = () => {
-    practiceSheetReset(false, dispatch);
+    quizReset(false, dispatch);
   };
 
   // Function below handler the adding and removing of verbs
@@ -74,6 +80,9 @@ const VocabSelectionPopup = () => {
         break;
       case "Adjectives":
         selectedItemData = adjectivesDB[index];
+        break;
+      case "Phrases":
+        selectedItemData = phrasesDB[index];
         break;
       default:
         break;
@@ -137,12 +146,24 @@ const VocabSelectionPopup = () => {
           }}
         >
           <Typography
-            sx={{ fontSize: "inherit", color: "inherit", paddingLeft: "5px" }}
+            sx={{
+              fontSize: "inherit",
+              color: "inherit",
+              paddingLeft: "5px",
+              maxWidth: "125px",
+            }}
           >
             {object.french}
           </Typography>
           <EndSelectionBox>
-            <Typography sx={{ fontSize: "inherit", color: "inherit" }}>
+            <Typography
+              sx={{
+                fontSize: "inherit",
+                color: "inherit",
+                maxWidth: "125px",
+                textAlign: "right",
+              }}
+            >
               {object.english}
             </Typography>
             {!matchFound && <AddWordIcon />}
@@ -160,9 +181,10 @@ const VocabSelectionPopup = () => {
     adjectivesDB,
     "Adjectives"
   );
+  const renderReadyPhraseItems = dropDownDataMaker(phrasesDB, "Phrases");
 
   if (
-    practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions <=
+    userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions <=
     selectedItems.length
   ) {
     submitButtonEnabled = true;
@@ -172,64 +194,41 @@ const VocabSelectionPopup = () => {
 
   const submitHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(true)
+      quizStoreSliceActions.setQuizConjugationNumberOfQuestionsPopup(true)
     );
-    dispatch(sheetGeneratorStoreSliceActions.setVocabSelectPopupActive(false));
+    dispatch(quizStoreSliceActions.setQuizVocabSelectionPopupActive(false));
     dispatch(
-      sheetGeneratorStoreSliceActions.setUserSelectedVocab(selectedItems)
-    );
-    const [multipleChoiceAnswers, matchingAnswers, fillInBlankAnswers] =
-      questionAnswerCreator(
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMultipleChoiceQuestions,
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabMatchingQuestions,
-        practiceSheetGeneratorVocabQuestionSetup.numberOfVocabFillInTheBlankQuestions,
-        selectedItems
-      );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestions({
-        vocabMultipleChoiceQuestions: multipleChoiceAnswers,
-        vocabMatchingQuestions: matchingAnswers,
-        vocabFillInTheBlankQuestions: fillInBlankAnswers,
-      })
+      quizStoreSliceActions.setUserSelectedQuizVocabNPhrases(selectedItems)
     );
   };
   ///Reset on Upload
   useEffect(() => {
-    if (vocabSelectPopupActive) {
+    if (quizVocabSelectionPopupActive) {
       setSelectedItems([]);
     }
-  }, [vocabSelectPopupActive]);
+  }, [quizVocabSelectionPopupActive]);
 
-  // Skip BUtton Handler
+  // Skip Button Handler
 
   const skipButtonHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestionSetup(
-        {
-          numberOfTotalVocabQuestions: 0,
-          numberOfVocabMultipleChoiceQuestions: 0,
-          numberOfVocabMatchingQuestions: 0,
-          numberOfVocabFillInTheBlankQuestions: 0,
-        }
-      )
-    );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(true)
-    );
-    dispatch(sheetGeneratorStoreSliceActions.setVocabSelectPopupActive(false));
-    dispatch(sheetGeneratorStoreSliceActions.setSelectedVocabTestType(""));
-    dispatch(sheetGeneratorStoreSliceActions.setUserSelectedVocab([]));
-    dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestions({
-        vocabMultipleChoiceQuestions: [],
-        vocabMatchingQuestions: [],
-        vocabFillInTheBlankQuestions: [],
+      quizStoreSliceActions.setUserQuizQuestionSetup({
+        numberOfTotalVocabNPhraseQuestions: 0,
+        numberOfVocabNPhraseMultipleChoiceQuestions: 0,
+        numberOfVocabNPhraseMatchingQuestions: 0,
+        numberOfVocabNPhraseFillInTheBlankQuestions: 0,
       })
     );
+    dispatch(
+      quizStoreSliceActions.setQuizConjugationNumberOfQuestionsPopup(true)
+    );
+    dispatch(quizStoreSliceActions.setQuizVocabSelectionPopupActive(false));
+    dispatch(quizStoreSliceActions.setUserSelectedQuizVocabQuestionTypes(""));
+    dispatch(quizStoreSliceActions.setUserSelectedQuizVocabNPhrases([]));
   };
   return (
     <Dialog
-      open={vocabSelectPopupActive}
+      open={quizVocabSelectionPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
@@ -284,7 +283,7 @@ const VocabSelectionPopup = () => {
               },
             }}
           >
-            Step 2 of 6
+            Step 2 of 4
           </Typography>
 
           <Typography
@@ -323,17 +322,17 @@ const VocabSelectionPopup = () => {
                 },
               }}
             >
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+              {userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions -
                 selectedItems.length >
                 0 &&
-                practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+                userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions -
                   selectedItems.length}
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+              {userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions -
                 selectedItems.length <=
                 0 && 0}
             </Typography>
           </SelectionContainer>
-          {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+          {userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions -
             selectedItems.length <=
             0 && (
             <Typography
@@ -414,6 +413,28 @@ const VocabSelectionPopup = () => {
               {renderReadyAdjectiveItems}
             </DropDownSelectionMenu>
           )}
+          <DropDownButton onClick={phrasesHeadingHandler}>
+            <Typography
+              variant="h5"
+              sx={{
+                "@media(max-width:580px)": { fontSize: "18px" },
+                "@media(max-width:520px)": { fontSize: "16px" },
+                "@media(max-width:475px)": {
+                  fontSize: "12px",
+                  textAlign: "center",
+                },
+              }}
+            >
+              Phrases
+            </Typography>
+            {!phrasesDropDownMenuActive && <DropDownDownArrow />}
+            {phrasesDropDownMenuActive && <DropDownUpArrow />}
+          </DropDownButton>
+          {phrasesDropDownMenuActive && (
+            <DropDownSelectionMenu>
+              {renderReadyPhraseItems}
+            </DropDownSelectionMenu>
+          )}
         </Grid>
 
         <ButtonsContainer>
@@ -429,4 +450,4 @@ const VocabSelectionPopup = () => {
     </Dialog>
   );
 };
-export default VocabSelectionPopup;
+export default QuizVocabSelectionPopup;

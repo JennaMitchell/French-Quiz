@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { DatabaseStates, storeActions } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import {
@@ -83,8 +83,8 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const conjugationTableDB = useSelector(
-    (state: DatabaseStates) => state.conjugationTableDB
+  const conjugationTableDB: any = useAppSelector(
+    (state) => state.mainStore.conjugationTableDB
   );
 
   const [useEffectTrigger, setUseEffectTrigger] = useState<string | number>(0);
@@ -92,7 +92,7 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
     string[] | { [key: string]: string[] }
   >({});
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const conjugationTitles = [
     "je",
     "tu",
@@ -209,7 +209,11 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
 
   useEffect(() => {
     if (typeof useEffectTrigger === "string") {
-      dispatch(storeActions.setConjugationAnswerKey(finalizedAnswerKey));
+      dispatch(
+        sheetGeneratorStoreSliceActions.setConjugationAnswerKey(
+          finalizedAnswerKey
+        )
+      );
     }
   }, [useEffectTrigger, dispatch, finalizedAnswerKey]);
   // useEffect is set to deal with the error of one ocmponent rendering at the same time as another

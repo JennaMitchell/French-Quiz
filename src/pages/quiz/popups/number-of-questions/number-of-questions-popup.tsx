@@ -5,7 +5,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 
 import { useState } from "react";
@@ -19,54 +19,48 @@ import {
   OptionContainer,
   DisabledActionButton,
   SelectionContainer,
-} from "./number-of-vocab-questions-popup-styled-components";
+
+} from "./number-of-questions-popup-styled-components";
 import {
   ClosingIconContainer,
   ClosingIcon,
 } from "../../../../components/generic-components/generic-popup-components";
-import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
-import { useEffect } from "react";
 
-const NumberOfVocabQuestionsPopup = () => {
-  const newPracticeSheetsPopupActive = useAppSelector(
-    (state) => state.sheetGenerator.newPracticeSheetsPopupActive
+import { useEffect } from "react";
+import { quizReset } from "../../../../components/functions/quiz-reset-function";
+const NumberOfQuestionsPopup = () => {
+  const numberOfQuizQuestionsPopupActive = useAppSelector(
+    (state) => state.quizStore.numberOfQuizQuestionsPopupActive
   );
-  const practiceSheetGeneratorVocabQuestionSetup = useAppSelector(
-    (state) => state.sheetGenerator.practiceSheetGeneratorVocabQuestionSetup
-  );
+
   const overAllVocabDB = useAppSelector(
     (state) => state.mainStore.overAllVocabDB
   );
+
+  const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
   const dispatch = useAppDispatch();
   const onCloseFunction = () => {
-    practiceSheetReset(false, dispatch);
+    quizReset(false, dispatch);
   };
 
   const submitButtonHandler = () => {
-    const deepCopyOfUserData = JSON.parse(
-      JSON.stringify(practiceSheetGeneratorVocabQuestionSetup)
-    );
-    // create a copy so that it's changable
-    deepCopyOfUserData.numberOfTotalVocabQuestions = numberOfQuestions;
-    deepCopyOfUserData.numberOfVocabMultipleChoiceQuestions =
-      numberOfMultipleChoiceQuestions;
-    deepCopyOfUserData.numberOfVocabMatchingQuestions =
-      numberOfMatchingQuestions;
-    deepCopyOfUserData.numberOfVocabFillInTheBlankQuestions =
-      numberOfFillInTheBlankQuestions;
-
     dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestionSetup(
-        deepCopyOfUserData
+      quizStoreSliceActions.setUserQuizQuestionSetup({
+        numberOfTotalVocabNPhraseQuestions: numberOfQuestions,
+        numberOfVocabNPhraseMultipleChoiceQuestions:
+          numberOfMultipleChoiceQuestions,
+        numberOfVocabNPhraseMatchingQuestions: numberOfMatchingQuestions,
+        numberOfVocabNPhraseFillInTheBlankQuestions:
+          numberOfFillInTheBlankQuestions,
+      })
+    );
+    dispatch(
+      quizStoreSliceActions.setUserSelectedQuizVocabQuestionTypes(
+        selectedTestType
       )
     );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setSelectedVocabTestType(selectedTestType)
-    );
-    dispatch(sheetGeneratorStoreSliceActions.setVocabSelectPopupActive(true));
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNewPracticeSheetsPopupActive(false)
-    );
+    dispatch(quizStoreSliceActions.setQuizVocabSelectionPopupActive(true));
+    dispatch(quizStoreSliceActions.setNumberOfQuizQuestionsPopupActive(false));
   };
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [numberOfMatchingQuestions, setNumberOfMatchingQuestions] = useState(0);
@@ -78,14 +72,14 @@ const NumberOfVocabQuestionsPopup = () => {
 
   // Reseting useEffect
   useEffect(() => {
-    if (newPracticeSheetsPopupActive) {
+    if (numberOfQuizQuestionsPopupActive) {
       setNumberOfQuestions(0);
       setNumberOfMatchingQuestions(0);
       setNumberOfMultipleChoiceQuestions(0);
       setNumberOfFillInTheBlankQuestions(0);
       setSelectedTestType(" ");
     }
-  }, [newPracticeSheetsPopupActive]);
+  }, [numberOfQuizQuestionsPopupActive]);
 
   let matchingQuestionsArray = [];
   let multipleChoiceQuestionsArray: any[] = [];
@@ -104,7 +98,7 @@ const NumberOfVocabQuestionsPopup = () => {
     }
   };
   // creating the max number of selected Questions
-  const maxNumberOfQuestions = overAllVocabDB.length;
+  const maxNumberOfQuestions = overAllVocabDB.length + phrasesDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
     let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
@@ -235,29 +229,32 @@ const NumberOfVocabQuestionsPopup = () => {
   };
   // Skip Button Handler
 
+  // {
+  //   numberOfTotalVocabNPhraseQuestions: 0,
+  //   numberOfVocabNPhraseMultipleChoiceQuestions: 0,
+  //   numberOfVocabNPhraseMatchingQuestions: 0,
+  //   numberOfVocabNPhraseFillInTheBlankQuestions: 0,
+  // },
+
   const skipButtonHandler = () => {
     dispatch(
-      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorVocabQuestionSetup(
-        {
-          numberOfTotalVocabQuestions: 0,
-          numberOfVocabMultipleChoiceQuestions: 0,
-          numberOfVocabMatchingQuestions: 0,
-          numberOfVocabFillInTheBlankQuestions: 0,
-        }
-      )
+      quizStoreSliceActions.setUserQuizQuestionSetup({
+        numberOfTotalVocabNPhraseQuestions: 0,
+        numberOfVocabNPhraseMultipleChoiceQuestions: 0,
+        numberOfVocabNPhraseMatchingQuestions: 0,
+        numberOfVocabNPhraseFillInTheBlankQuestions: 0,
+      })
     );
     dispatch(
-      sheetGeneratorStoreSliceActions.setNumberOfConjugationPopupActive(true)
+      quizStoreSliceActions.setQuizConjugationNumberOfQuestionsPopup(true)
     );
-    dispatch(
-      sheetGeneratorStoreSliceActions.setNewPracticeSheetsPopupActive(false)
-    );
-    dispatch(sheetGeneratorStoreSliceActions.setSelectedVocabTestType(""));
+    dispatch(quizStoreSliceActions.setNumberOfQuizQuestionsPopupActive(false));
+    dispatch(quizStoreSliceActions.setUserSelectedQuizVocabQuestionTypes(""));
   };
 
   return (
     <Dialog
-      open={newPracticeSheetsPopupActive}
+      open={numberOfQuizQuestionsPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
       sx={{
@@ -307,7 +304,7 @@ const NumberOfVocabQuestionsPopup = () => {
               },
             }}
           >
-            Step 1 of 6
+            Step 1 of 4
           </Typography>
 
           <Typography
@@ -319,7 +316,7 @@ const NumberOfVocabQuestionsPopup = () => {
               "@media(max-width:475px)": { fontSize: "18px" },
             }}
           >
-            Number of Vocab Questions
+            Number of Vocab/Phrase Questions
           </Typography>
         </Grid>
       </DialogContent>
@@ -436,4 +433,4 @@ const NumberOfVocabQuestionsPopup = () => {
     </Dialog>
   );
 };
-export default NumberOfVocabQuestionsPopup;
+export default NumberOfQuestionsPopup;

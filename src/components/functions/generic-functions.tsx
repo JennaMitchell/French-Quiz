@@ -1,5 +1,9 @@
-import { storeActions } from "../../store/store";
+interface UserSelectedData {
+  [french: string]: string;
+  english: string;
+}
 
+// Random NUmber generaor with Min Max, and a Number to Exclude
 export const randomNumberGenerator = (
   min: number,
   max: number,
@@ -11,6 +15,8 @@ export const randomNumberGenerator = (
   }
   return randomNumberGenerated;
 };
+
+// Random Number with Min, Max and  Array of Expections
 export const randomNumberGeneratorWithNumberArrayRestriction = (
   min: number,
   max: number,
@@ -26,6 +32,35 @@ interface SelectedItemsTypes {
   french?: string;
   english?: string;
 }
+
+export const stringArrayScrambler = (array: string[]) => {
+  const finalArray: string[] = [];
+  for (let q = 0; q < array.length; q++) {
+    finalArray.push("");
+  }
+
+  const arrayOfUsedNumbers = [array.length];
+
+  if (array.length !== 0) {
+    const arrayLength = array.length;
+
+    for (let indexOfString = 0; indexOfString < arrayLength; indexOfString++) {
+      const randomNumber = randomNumberGeneratorWithNumberArrayRestriction(
+        0,
+        arrayLength - 1,
+        arrayOfUsedNumbers
+      );
+
+      arrayOfUsedNumbers.push(randomNumber);
+      finalArray[indexOfString] = array[randomNumber];
+    }
+
+    return finalArray;
+  } else {
+    return [];
+  }
+};
+
 export const questionAnswerCreator = (
   numberOfQuestionsOne: number,
   numberOfQuestionsTwo: number,
@@ -79,73 +114,81 @@ export const questionAnswerCreator = (
 
   return [arrayOfDataOne, arrayOfDataTwo, arrayOfDataThree];
 };
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-export const practiceSheetReset = (
-  newButtonClicked: boolean,
-  dispatch: any
+// Random Question Maker
+//used if numberOfQuestions is less than what was selected than  we need to randomly generate the answers to be tested on
+export const randomUserSelectGenerator = (
+  userSelectedQuizVocabNPhrases: UserSelectedData[],
+  numberOfQuestions: number
 ) => {
-  if (newButtonClicked) {
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(true));
-  } else {
-    dispatch(storeActions.setNewPracticeSheetsPopupActive(false));
+  let arrayOfAnswersNumbers: number[] = [userSelectedQuizVocabNPhrases.length];
+  for (
+    let indexOfRandomNumber = 0;
+    indexOfRandomNumber < numberOfQuestions;
+    indexOfRandomNumber++
+  ) {
+    const randomNumber = randomNumberGeneratorWithNumberArrayRestriction(
+      0,
+      userSelectedQuizVocabNPhrases.length - 1,
+      arrayOfAnswersNumbers
+    );
+    arrayOfAnswersNumbers.push(randomNumber);
   }
-  dispatch(storeActions.setVocabSelectPopupActive(false));
-  dispatch(
-    storeActions.setPracticeSheetGeneratorVocabQuestionSetup({
-      numberOfTotalVocabQuestions: 0,
-      numberOfVocabMultipleChoiceQuestions: 0,
-      numberOfVocabMatchingQuestions: 0,
-      numberOfVocabFillInTheBlankQuestions: 0,
-    })
-  );
+  arrayOfAnswersNumbers = arrayOfAnswersNumbers.slice(1);
+  const arrayOfTestTerms = arrayOfAnswersNumbers.map((num: number) => {
+    return userSelectedQuizVocabNPhrases[num];
+  });
+  return arrayOfTestTerms;
+};
 
-  dispatch(
-    storeActions.setPracticeSheetGeneratorVocabQuestions({
-      vocabMultipleChoiceQuestions: [],
-      vocabMatchingQuestions: [],
-      vocabFillInTheBlankQuestions: [],
-    })
-  );
-  dispatch(storeActions.setUserSelectedVocab([]));
-  dispatch(storeActions.setNumberOfConjugationPopupActive(false));
-  dispatch(storeActions.setNumberOfConjugationQuestions(0));
-  dispatch(storeActions.setConjugationVerbChoicePopup(false));
-  dispatch(storeActions.setUserSelectedConjugations([]));
-  dispatch(storeActions.setUserSelectedConjugationGrouping(""));
-  dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
-  dispatch(
-    storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
-      numberOfTotalPhraseQuestions: 0,
-      numberOfPhraseMultipleChoiceQuestions: 0,
-      numberOfPhraseMatchingQuestions: 0,
-      numberOfPhraseFillInTheBlankQuestions: 0,
-    })
-  );
-  dispatch(
-    storeActions.setPracticeSheetGeneratorPhraseQuestions({
-      phraseMultipleChoiceQuestions: [],
-      phraseMatchingQuestions: [],
-      phraseFillInTheBlankQuestions: [],
-    })
-  );
-
-  dispatch(storeActions.setPhrasesSelectionPopupActive(false));
-  dispatch(storeActions.setUserSelectedPhrases([]));
-  dispatch(storeActions.setUserSelectedPhrasesTestType(""));
-  dispatch(storeActions.setSelectedVocabTestType(""));
-  dispatch(storeActions.setPracticeSheetsMultipleChoiceVocabAnswers([]));
-  dispatch(storeActions.setPracticeSheetsMultipleChoicePhrasesAnswers([]));
-  dispatch(storeActions.setPracticeSheetSetupComplete(false));
-
-  dispatch(storeActions.setPracticeSheetsFillInTheBlankVocabAnswers([]));
-  dispatch(storeActions.setPracticeSheetsFillInTheBlankPhrasesAnswers([]));
-  dispatch(storeActions.setPracticeSheetsMatchingVocabAnswers([]));
-  dispatch(storeActions.setPracticeSheetsMatchingPhrasesAnswers([]));
-  dispatch(storeActions.setConjugationAnswerKey([]));
-  dispatch(storeActions.setPhrasesMultipleChoiceAnswerKey([]));
-  dispatch(storeActions.setVocabMultipleChoiceAnswerKey([]));
-  dispatch(storeActions.setPhrasesMatchingAnswerKey([]));
-  dispatch(storeActions.setVocabMatchingAnswerKey([]));
-  dispatch(storeActions.setPhrasesFillInTheBlankAnswerKey([]));
-  dispatch(storeActions.setVocabFillInTheBlankAnswerKey([]));
+export const letterAnswerKeyCreator = (numberOfQuestions: number) => {
+  const alphbetArray = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+  let answerArray = alphbetArray;
+  if (numberOfQuestions > alphbetArray.length) {
+    const numberOfIterations = Math.ceil(
+      numberOfQuestions / alphbetArray.length
+    );
+    for (let z = 0; z < numberOfIterations; z++) {
+      let numberOfElementsToAdd = 0;
+      if (numberOfIterations > 1 && z !== numberOfIterations - 1) {
+        numberOfElementsToAdd = alphbetArray.length;
+      } else {
+        numberOfElementsToAdd = numberOfQuestions - alphbetArray.length * z;
+      }
+      for (let q = 0; q < numberOfElementsToAdd; q++) {
+        answerArray.push(`${alphbetArray[z]}${alphbetArray[q]}`);
+      }
+    }
+  }
+  return answerArray;
 };

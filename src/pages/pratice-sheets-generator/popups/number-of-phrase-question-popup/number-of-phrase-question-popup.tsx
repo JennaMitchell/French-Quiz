@@ -5,8 +5,8 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { storeActions, DatabaseStates } from "../../../../store/store";
+import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 
 import { useState } from "react";
 import { ChangeEventHandler } from "react";
@@ -25,17 +25,17 @@ import {
   ClosingIcon,
 } from "../../../../components/generic-components/generic-popup-components";
 import { useEffect } from "react";
-import { practiceSheetReset } from "../../../../components/functions/generic-functions";
+import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 
 const NumberOfPhraseQuestionsPopup = () => {
-  const numberOfPhraseQuestionsPopupActive = useSelector(
-    (state: DatabaseStates) => state.numberOfPhraseQuestionsPopupActive
+  const numberOfPhraseQuestionsPopupActive = useAppSelector(
+    (state) => state.sheetGenerator.numberOfPhraseQuestionsPopupActive
   );
-  const practiceSheetGeneratorPhrasesQuestionSetup = useSelector(
-    (state: DatabaseStates) => state.practiceSheetGeneratorPhrasesQuestionSetup
+  const practiceSheetGeneratorPhrasesQuestionSetup = useAppSelector(
+    (state) => state.sheetGenerator.practiceSheetGeneratorPhrasesQuestionSetup
   );
-  const phrasesDB = useSelector((state: DatabaseStates) => state.phrasesDB);
-  const dispatch = useDispatch();
+  const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
+  const dispatch = useAppDispatch();
 
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [numberOfMatchingQuestions, setNumberOfMatchingQuestions] = useState(0);
@@ -70,13 +70,23 @@ const NumberOfPhraseQuestionsPopup = () => {
       numberOfFillInTheBlankQuestions;
 
     dispatch(
-      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup(
+      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorPhrasesQuestionSetup(
         deepCopyOfUserData
       )
     );
-    dispatch(storeActions.setPhrasesSelectionPopupActive(true));
-    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
-    dispatch(storeActions.setUserSelectedPhrasesTestType(selectedTestType));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPhrasesSelectionPopupActive(true)
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setNumberOfPhraseQuestionsPopupActive(
+        false
+      )
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedPhrasesTestType(
+        selectedTestType
+      )
+    );
   };
 
   const numberOfQuestionsHandler: ChangeEventHandler<HTMLSelectElement> = (
@@ -231,17 +241,27 @@ const NumberOfPhraseQuestionsPopup = () => {
 
   const skipButtonHandler = () => {
     dispatch(
-      storeActions.setPracticeSheetGeneratorPhrasesQuestionSetup({
-        numberOfTotalPhraseQuestions: 0,
-        numberOfPhraseMultipleChoiceQuestions: 0,
-        numberOfPhraseMatchingQuestions: 0,
-        numberOfPhraseFillInTheBlankQuestions: 0,
-      })
+      sheetGeneratorStoreSliceActions.setPracticeSheetGeneratorPhrasesQuestionSetup(
+        {
+          numberOfTotalPhraseQuestions: 0,
+          numberOfPhraseMultipleChoiceQuestions: 0,
+          numberOfPhraseMatchingQuestions: 0,
+          numberOfPhraseFillInTheBlankQuestions: 0,
+        }
+      )
     );
 
-    dispatch(storeActions.setNumberOfPhraseQuestionsPopupActive(false));
-    dispatch(storeActions.setUserSelectedPhrasesTestType(""));
-    dispatch(storeActions.setPracticeSheetSetupComplete(true));
+    dispatch(
+      sheetGeneratorStoreSliceActions.setNumberOfPhraseQuestionsPopupActive(
+        false
+      )
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setUserSelectedPhrasesTestType("")
+    );
+    dispatch(
+      sheetGeneratorStoreSliceActions.setPracticeSheetSetupComplete(true)
+    );
   };
 
   return (

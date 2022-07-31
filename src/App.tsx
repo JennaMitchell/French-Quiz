@@ -7,8 +7,9 @@ import FlashcardsMain from "./pages/flashcards/flashcards-main";
 import Footer from "./components/footer/footer";
 import LocalDataBaseSetup from "./firebase/local-database-setup";
 import PracticeSheetsGenerator from "./pages/pratice-sheets-generator/practice-sheets-generator";
-import { useSelector } from "react-redux";
-import { DatabaseStates } from "./store/store";
+import QuizMainPage from "./pages/quiz/quiz-main-page";
+
+import { useAppSelector } from "./store/hooks";
 export const theme = createTheme({
   palette: {
     primary: {
@@ -30,8 +31,8 @@ export const theme = createTheme({
 });
 
 function App() {
-  const firebaseDataLoaded = useSelector(
-    (state: DatabaseStates) => state.firebaseDataLoaded
+  const firebaseDataLoaded = useAppSelector(
+    (state) => state.mainStore.firebaseDataLoaded
   );
   if (!firebaseDataLoaded) {
     document.body.classList.add("overflowHidden");
@@ -72,6 +73,16 @@ function App() {
               <>
                 <NavBar />
                 <PracticeSheetsGenerator />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/quiz"
+            element={
+              <>
+                <NavBar />
+                <QuizMainPage />
                 <Footer />
               </>
             }
