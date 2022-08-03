@@ -19,6 +19,7 @@ const MatchingTopContainer = styled("div", {
   padding: "40px",
   borderRadius: "10px",
   rowGap: "20px",
+  position: "relative",
 }));
 
 const MatchingRowContainer = styled("div", {
@@ -42,31 +43,41 @@ const StyledSelect = styled("select", {
   height: "max(max-content,max-content)",
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
-  textAlign: "right",
+  textAlign: "center",
   fontSize: "20px",
-  border: "none",
+  border: "1px solid",
+  borderColor: theme.palette.secondary.main,
+  borderRadius: "5px",
 }));
 const StyledOption = styled("option", {
   name: "StyledOption ",
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(45px,45px)",
-  textAlign: "right",
+  textAlign: "center",
   height: "max(max-content,max-content)",
   backgroundColor: theme.palette.secondary.dark,
   color: theme.palette.secondary.light,
   fontSize: "20px",
   border: "none",
+  "&:active": {
+    border: "1px solid",
+    borderColor: "secondary.light",
+  },
+  "&:focus": {
+    border: "1px solid",
+    borderColor: "secondary.light",
+    borderRadius: "5px",
+  },
 }));
 const StyledTypography = styled("p", {
   name: "StyledTypography",
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(100%,100%)",
-
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
-  fontSize: "20px",
+  fontSize: "24px",
 }));
 export {
   MatchingTopContainer,

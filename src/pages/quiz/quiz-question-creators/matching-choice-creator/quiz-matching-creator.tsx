@@ -17,6 +17,7 @@ import {
   MatchingRowContainer,
   StyledTypography,
 } from "./quiz-matching-creator-styled-components";
+import { QuestionNumberBox } from "../shared-styles/quiz-shared-styled-components";
 const QuizMatchingCreator = () => {
   const dispatch = useAppDispatch();
   const userQuizQuestionSetup = useAppSelector(
@@ -31,9 +32,24 @@ const QuizMatchingCreator = () => {
   const matchingAnswerKey = useAppSelector(
     (state) => state.quizStore.matchingAnswerKey
   );
-  const numberOfQuestions =
+  const matchingQuestionAnsweredArray = useAppSelector(
+    (state) => state.quizStore.matchingQuestionAnsweredArray
+  );
+  const totalNumberOfQuestions = useAppSelector(
+    (state) => state.quizStore.totalNumberOfQuestions
+  );
+  const numberOfMatchingQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseMatchingQuestions;
-
+  const numberOfMultipleChoiceQuestion =
+    userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
+  const numberOfFillInBlankQuestions =
+    userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
+  const startingQuestionValue =
+    numberOfMultipleChoiceQuestion + numberOfFillInBlankQuestions + 1;
+  const endingQuestionValue =
+    numberOfMatchingQuestions +
+    numberOfFillInBlankQuestions +
+    numberOfMultipleChoiceQuestion;
   const [finalrenderReadyItems, setFinalRenderReadyItems] = useState<
     JSX.Element[]
   >([]);
@@ -41,8 +57,35 @@ const QuizMatchingCreator = () => {
   const [processingState, setProcessingState] = useState<number | string>(
     "start"
   );
+  const [savedTestItems, setSavedTestItems] = useState<string[]>([]);
+  const [savedPromptTerms, setSavedPromptTerms] = useState<string[]>([]);
+  const [useEffectTrigger, setUseEffectTrigger] = useState<string | number>(1);
+  const initialArray: string[] = [];
+  for (let temp = 0; temp < numberOfMatchingQuestions; temp++) {
+    initialArray.push("");
+  }
+  const [userSelectedAnswersArray, setUserSelectedAnswersArray] =
+    useState<string[]>(initialArray);
 
-  // useEffect that pushses the answerKey to the store
+  // use effect to setup the stores answered question array
+  useEffect(() => {
+    const arrayOfAnsweredQuestions: boolean[] = [];
+    for (
+      let indexOfBoolean = 0;
+      indexOfBoolean < numberOfMatchingQuestions;
+      indexOfBoolean++
+    ) {
+      arrayOfAnsweredQuestions.push(false);
+    }
+
+    dispatch(
+      quizStoreSliceActions.setMatchingQuestionAnsweredArray(
+        arrayOfAnsweredQuestions
+      )
+    );
+  }, [numberOfMatchingQuestions, dispatch]);
+
+  // useEffect that pushses the initial answerKey to the store
   useEffect(() => {
     if (processingState === 1) {
       setProcessingState("end");
@@ -50,31 +93,94 @@ const QuizMatchingCreator = () => {
     }
   }, [answerKey, processingState, dispatch, matchingAnswerKey.length]);
 
-  // Step 1. Handeling numberOfquestions > userSelected Items and creating the two matching sides
+  // use Effect used to push an array of booleans to see if the answer was answered by the user
+  useEffect(() => {
+    if (
+      matchingQuestionAnsweredArray.length !== 0 &&
+      useEffectTrigger === "x"
+    ) {
+      let arrayNotEmpty = false;
+      const arrayOfAnsweredQuestions = [];
+      let updateDetected = false;
+      for (
+        let userTypedAnswersArrayIndex = 0;
+        userTypedAnswersArrayIndex < userSelectedAnswersArray.length;
+        userTypedAnswersArrayIndex++
+      ) {
+        if (userSelectedAnswersArray[userTypedAnswersArrayIndex] !== "") {
+          arrayNotEmpty = true;
+          arrayOfAnsweredQuestions.push(true);
+        } else {
+          arrayOfAnsweredQuestions.push(false);
+        }
+      }
+      if (arrayNotEmpty) {
+        // comparing what is already active to what isn't active
+        for (
+          let indexOfComparison = 0;
+          indexOfComparison < numberOfMatchingQuestions;
+          indexOfComparison++
+        ) {
+          if (
+            matchingQuestionAnsweredArray[indexOfComparison] !==
+            arrayOfAnsweredQuestions[indexOfComparison]
+          ) {
+            updateDetected = true;
+            break;
+          }
+        }
+      }
+
+      if (updateDetected) {
+        dispatch(
+          quizStoreSliceActions.setFillInBlankQuestionAnsweredArray(
+            arrayOfAnsweredQuestions
+          )
+        );
+      }
+    }
+    setUseEffectTrigger(1);
+  }, [
+    userSelectedAnswersArray,
+    dispatch,
+    matchingQuestionAnsweredArray,
+    numberOfMatchingQuestions,
+    useEffectTrigger,
+  ]);
+
+  //Creating drop down Options
+  const answerLettersArray = letterAnswerKeyCreator(numberOfMatchingQuestions);
+  const renderReadyStyledOptions: JSX.Element[] = [];
+  for (
+    let letterIndex = 0;
+    letterIndex < numberOfMatchingQuestions;
+    letterIndex++
+  ) {
+    // select drop down handler
+
+    renderReadyStyledOptions[letterIndex] = (
+      <StyledOption key={`${letterIndex} letterIndex`}>
+        {answerLettersArray[letterIndex]}
+      </StyledOption>
+    );
+  }
+  renderReadyStyledOptions.unshift(
+    <StyledOption key={`${-1} letterIndex`}>{""}</StyledOption>
+  );
+
+  // Step 1. Handeling numberOfMatchingQuestions > userSelected Items and creating the two matching sides
 
   if (finalrenderReadyItems.length === 0 && processingState === "start") {
-    const answerLettersArray = letterAnswerKeyCreator(numberOfQuestions);
     // if statement is here so that the questiosn are only generated once
     let arrayOfTestTerms: any[] = userSelectedQuizVocabNPhrases;
     let termsToBeTestedOn: string[] = [];
     let promptTerms: string[] = [];
-    if (numberOfQuestions < userSelectedQuizVocabQuestionTypes.length) {
+    if (numberOfMatchingQuestions < userSelectedQuizVocabQuestionTypes.length) {
       arrayOfTestTerms = randomUserSelectGenerator(
         userSelectedQuizVocabNPhrases,
-        numberOfQuestions
+        numberOfMatchingQuestions
       );
     }
-    const renderReadyStyledOptions: JSX.Element[] = [];
-    for (let letterIndex = 0; letterIndex < numberOfQuestions; letterIndex++) {
-      renderReadyStyledOptions[letterIndex] = (
-        <StyledOption key={`${letterIndex} letterIndex`}>
-          {answerLettersArray[letterIndex]}
-        </StyledOption>
-      );
-    }
-    renderReadyStyledOptions.unshift(
-      <StyledOption key={`${-1} letterIndex`}>{""}</StyledOption>
-    );
 
     if (userSelectedQuizVocabQuestionTypes === "English") {
       termsToBeTestedOn = arrayOfTestTerms.map(
@@ -98,7 +204,7 @@ const QuizMatchingCreator = () => {
       // randomly  coin toss for each term
       for (
         let indexOfCoinFlippedTerm = 0;
-        indexOfCoinFlippedTerm < numberOfQuestions;
+        indexOfCoinFlippedTerm < numberOfMatchingQuestions;
         indexOfCoinFlippedTerm++
       ) {
         const coinFlip = randomNumberGenerator(0, 1, 2);
@@ -117,11 +223,8 @@ const QuizMatchingCreator = () => {
     }
 
     // Step 2: Scrambling the array of TestOnTerms
-    //
-    console.log(promptTerms);
-    console.log(termsToBeTestedOn);
+
     const scrambledTestOnTerms = stringArrayScrambler(termsToBeTestedOn);
-    console.log(scrambledTestOnTerms);
 
     // Step 3. Creating the Answer via mtching the newly scrambled Tems with their original parings
 
@@ -165,22 +268,44 @@ const QuizMatchingCreator = () => {
       tempAnswerKey[indexOfScrambledAnswer] =
         answerLettersArray[positionOfAnswer];
     }
-    console.log(tempAnswerKey);
+
     const tempRenderReadyItems = [];
     for (
       let questionIndex = 0;
       questionIndex < arrayOfTestTerms.length;
       questionIndex++
     ) {
+      const selectDropDownHandler = (event: any) => {
+        const copyOfUserTypedAnswers = userSelectedAnswersArray.slice(0);
+
+        copyOfUserTypedAnswers[questionIndex] = event.target.value;
+        setUserSelectedAnswersArray(copyOfUserTypedAnswers);
+      };
+
       tempRenderReadyItems[questionIndex] = (
         <MatchingRowContainer key={`${questionIndex} Question Index`}>
           <StyledTypography
             sx={{ textAlign: "left" }}
             key={`${questionIndex} A`}
           >
-            {questionIndex + 1}. {promptTerms[questionIndex]}
+            {promptTerms[questionIndex]}
           </StyledTypography>
-          <StyledSelect>{renderReadyStyledOptions}</StyledSelect>
+          <StyledSelect
+            onChange={selectDropDownHandler}
+            sx={{
+              border: `${
+                userSelectedAnswersArray[questionIndex] && "1px solid"
+              }`,
+              borderColor: `${
+                userSelectedAnswersArray[questionIndex] && "secondary.light"
+              }`,
+              borderRadius: `${
+                userSelectedAnswersArray[questionIndex] && "5px"
+              }`,
+            }}
+          >
+            {renderReadyStyledOptions}
+          </StyledSelect>
           <StyledTypography
             sx={{ textAlign: "right" }}
             key={`${questionIndex} B`}
@@ -191,12 +316,83 @@ const QuizMatchingCreator = () => {
         </MatchingRowContainer>
       );
     }
+    setSavedTestItems(scrambledTestOnTerms);
+    setSavedPromptTerms(promptTerms);
 
     setFinalRenderReadyItems(tempRenderReadyItems);
     setAnswerKey(tempAnswerKey);
     setProcessingState(1);
+    setUseEffectTrigger("x");
   }
 
-  return <MatchingTopContainer>{finalrenderReadyItems}</MatchingTopContainer>;
+  if (
+    useEffectTrigger === 1 &&
+    savedTestItems.length !== 0 &&
+    savedPromptTerms.length !== 0
+  ) {
+    const tempRenderReadyItems = [];
+    for (
+      let questionIndex = 0;
+      questionIndex < savedPromptTerms.length;
+      questionIndex++
+    ) {
+      const selectDropDownHandler = (event: any) => {
+        const copyOfUserTypedAnswers = userSelectedAnswersArray.slice(0);
+
+        copyOfUserTypedAnswers[questionIndex] = event.target.value;
+
+        setUserSelectedAnswersArray(copyOfUserTypedAnswers);
+      };
+
+      tempRenderReadyItems[questionIndex] = (
+        <MatchingRowContainer key={`${questionIndex} Question Index`}>
+          <StyledTypography
+            sx={{ textAlign: "left" }}
+            key={`${questionIndex} A`}
+          >
+            {savedPromptTerms[questionIndex]}
+          </StyledTypography>
+          <StyledSelect
+            onChange={selectDropDownHandler}
+            sx={{
+              border: `${
+                userSelectedAnswersArray[questionIndex] && "1px solid"
+              }`,
+              borderColor: `${
+                userSelectedAnswersArray[questionIndex] && "secondary.light"
+              }`,
+              borderRadius: `${
+                userSelectedAnswersArray[questionIndex] && "5px"
+              }`,
+            }}
+          >
+            {renderReadyStyledOptions}
+          </StyledSelect>
+          <StyledTypography
+            sx={{ textAlign: "right" }}
+            key={`${questionIndex} B`}
+          >
+            {answerLettersArray[questionIndex]}.{"  "}
+            {savedTestItems[questionIndex]}
+          </StyledTypography>
+        </MatchingRowContainer>
+      );
+    }
+    setFinalRenderReadyItems(tempRenderReadyItems);
+    setUseEffectTrigger("x");
+  }
+
+  return (
+    <MatchingTopContainer>
+      <QuestionNumberBox>
+        {startingQuestionValue}
+        {"   "}-{"   "}
+        {endingQuestionValue}
+        {"   "} of {"   "}
+        {totalNumberOfQuestions}
+      </QuestionNumberBox>
+      {finalrenderReadyItems}
+    </MatchingTopContainer>
+  );
 };
 export default QuizMatchingCreator;

@@ -18,6 +18,7 @@ const QuestionContainer = styled("div", {
   boxShadow: "0 0 20px black",
   padding: "40px",
   borderRadius: "10px",
+  position: "relative",
 }));
 
 const QuestionTitle = styled("div", {
@@ -31,7 +32,7 @@ const QuestionTitle = styled("div", {
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
   textAlign: "center",
-  fontSize: "48px",
+  fontSize: "36px",
   marginBottom: "40px",
 
   textTransform: "capitalize",
@@ -76,10 +77,10 @@ const QuestionAnswer = styled("button", {
   padding: "10px",
   borderRadius: "5px",
   transition: "all 0.5s",
-  border: "3px solid",
+  border: "1px solid",
   borderColor: theme.palette.secondary.main,
   "&:hover": {
-    borderColor: "rgb(98, 249, 98)",
+    borderColor: theme.palette.secondary.light,
   },
 }));
 

@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
-const FillInBlankTopContainer = styled("div", {
-  name: "FillInBlankContainer",
+const TopContainer = styled("div", {
+  name: "TopContainer",
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(640px,640px)",
@@ -18,10 +18,11 @@ const FillInBlankTopContainer = styled("div", {
   boxShadow: "0 0 20px black",
   padding: "40px",
   borderRadius: "10px",
+  position: "relative",
 }));
 
-const FillInBlankQuestionContainer = styled("div", {
-  name: "FillInBlankQuestionContainer",
+const QuestionContainer = styled("div", {
+  name: "QuestionContainer",
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(100%,100%)",
@@ -50,7 +51,7 @@ const QuestionTypography = styled("p", {
   maxHeight: "100%",
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
-  fontSize: "20px",
+  fontSize: "24px",
   textAlign: "left",
 }));
 
@@ -60,14 +61,14 @@ const StyledTextField = styled(TextField, {
 })(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: theme.palette.secondary.light,
+      borderColor: theme.palette.secondary.main,
       color: theme.palette.secondary.light,
     },
     "&:hover fieldset": {
       borderColor: "white",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "rgb(98, 249, 98)",
+      borderColor: theme.palette.secondary.light,
     },
   },
   "&.MuiTextField-root .css-itfxkg-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -81,8 +82,8 @@ const StyledTextField = styled(TextField, {
   },
 }));
 
-const FillInBlankTitle = styled("p", {
-  name: "FillInBlankTitle",
+const TitleText = styled("p", {
+  name: "TitleText ",
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(100%,100%)",
@@ -96,11 +97,29 @@ const FillInBlankTitle = styled("p", {
   gridColumn: "1/span 2",
   marginBottom: "20px",
 }));
-
+const QuestionNumberBox = styled("div", {
+  name: "QuestionNumberBox",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  padding: "5px",
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.secondary.light,
+  textSize: "16px",
+  position: "absolute",
+  top: "15px",
+  right: "15px",
+}));
 export {
-  FillInBlankQuestionContainer,
-  FillInBlankTopContainer,
+  TopContainer,
+  QuestionContainer,
   QuestionTypography,
   StyledTextField,
-  FillInBlankTitle,
+  TitleText,
+  QuestionNumberBox,
 };

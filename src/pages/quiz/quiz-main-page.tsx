@@ -6,10 +6,14 @@ import QuizConjugationSelectionPopup from "./popups/conjugation-selection/quiz-c
 import QuizMultipleChoiceCreator from "./quiz-question-creators/quiz-multiple-choice-creator/quiz-mulitple-choice-creator";
 import QuizFillInBlankCreator from "./quiz-question-creators/fill-in-blank-creator/quiz-fill-in-blank-creator";
 import QuizMatchingCreator from "./quiz-question-creators/matching-choice-creator/quiz-matching-creator";
+import QuizConjugationTableCreator from "./quiz-question-creators/quiz-conjugation-table-creator/quiz-conjugation-table-creator";
+import QuizQuestionsDropDown from "./questions-drop-down/quiz-questions-drop-down";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { quizReset } from "../../components/functions/quiz-reset-function";
 import { useEffect, useState } from "react";
 import { mainStoreSliceActions } from "../../store/store";
+import MenuIcon from "@mui/icons-material/Menu";
+import { quizStoreSliceActions } from "../../store/quiz-store-slice";
 
 interface UserQuizQuestionSetup {
   numberOfTotalVocabNPhraseQuestions: number;
@@ -33,7 +37,9 @@ const QuizMainPage = () => {
   const quizSetupComplete = useAppSelector(
     (state) => state.quizStore.quizSetupComplete
   );
-
+  const questionListActive = useAppSelector(
+    (state) => state.quizStore.questionListActive
+  );
   const userQuizQuestionSetup: UserQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
   );
@@ -43,6 +49,10 @@ const QuizMainPage = () => {
   const firebaseDataLoaded = useAppSelector(
     (state) => state.mainStore.firebaseDataLoaded
   );
+  const numberOfQuizConjugationQuestions = useAppSelector(
+    (state) => state.quizStore.numberOfQuizConjugationQuestions
+  );
+
   const [initialPopupActive, setInitialPopupActive] = useState(false);
 
   useEffect(() => {
@@ -63,7 +73,9 @@ const QuizMainPage = () => {
     quizReset(true, dispatch);
   };
 
-  // use Effect handles creation of initial answer key based on the user selection
+  const questionMenuHandler = () => {
+    dispatch(quizStoreSliceActions.setQuestionListActive(true));
+  };
 
   return (
     <TopContainer>
@@ -75,28 +87,46 @@ const QuizMainPage = () => {
       {quizConjugationVerbSelectionPopupActive && (
         <QuizConjugationSelectionPopup />
       )}
-
+      {quizSetupComplete && questionListActive && <QuizQuestionsDropDown />}
       <StyledButton
         sx={{ top: "40px", right: "60px" }}
         onClick={newQuizHandler}
       >
         New Quiz
       </StyledButton>
-      <StyledButton
-        sx={{
-          top: "40px",
-          left: "60px",
-          color: "#c0bebe",
-          backgroundColor: "#878787",
-          ":hover": {
+      {!quizSetupComplete && (
+        <StyledButton
+          sx={{
+            top: "40px",
+            left: "60px",
             color: "#c0bebe",
             backgroundColor: "#878787",
-            boxShadow: "none",
-          },
-        }}
-      >
-        Questions
-      </StyledButton>
+            ":hover": {
+              color: "#c0bebe",
+              backgroundColor: "#878787",
+              boxShadow: "none",
+            },
+            padding: "10px",
+            borderRadius: "50%",
+          }}
+        >
+          <MenuIcon />
+        </StyledButton>
+      )}
+      {quizSetupComplete && !questionListActive && (
+        <StyledButton
+          sx={{
+            top: "40px",
+            left: "60px",
+
+            padding: "10px",
+            borderRadius: "50%",
+          }}
+          onClick={questionMenuHandler}
+        >
+          <MenuIcon />
+        </StyledButton>
+      )}
 
       {quizSetupComplete &&
         userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions !==
@@ -108,6 +138,9 @@ const QuizMainPage = () => {
         userQuizQuestionSetup.numberOfVocabNPhraseMatchingQuestions !== 0 && (
           <QuizMatchingCreator />
         )}
+      {quizSetupComplete && numberOfQuizConjugationQuestions !== 0 && (
+        <QuizConjugationTableCreator />
+      )}
     </TopContainer>
   );
 };

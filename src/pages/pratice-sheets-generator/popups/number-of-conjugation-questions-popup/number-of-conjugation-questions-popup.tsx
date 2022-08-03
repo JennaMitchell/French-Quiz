@@ -18,7 +18,7 @@ import {
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
-
+import { totalNumberOfQuizQuestionCalculator } from "../../../../components/functions/generic-functions";
 const NumberOfConjugationQuestionsPopup = () => {
   const dispatch = useAppDispatch();
 
@@ -26,6 +26,7 @@ const NumberOfConjugationQuestionsPopup = () => {
   const numberOfConjugationPopupActive = useAppSelector(
     (state) => state.sheetGenerator.numberOfConjugationPopupActive
   );
+
   const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
 
   // creating the max number of selected Questions

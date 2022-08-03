@@ -1,3 +1,4 @@
+import { UserQuizQuestionSetup } from "../../store/quiz-store-slice";
 interface UserSelectedData {
   [french: string]: string;
   english: string;
@@ -191,4 +192,39 @@ export const letterAnswerKeyCreator = (numberOfQuestions: number) => {
     }
   }
   return answerArray;
+};
+
+export const verbPrefixRemover = (inputString: string) => {
+  const arrayOfConjugationTableKeys = [
+    "je",
+    "tu",
+    "il",
+    "elle",
+    "vous",
+    "nous",
+    "elles",
+    "ils",
+  ];
+  let tempString = inputString;
+  for (
+    let indexOfPrefix = 0;
+    indexOfPrefix < arrayOfConjugationTableKeys.length;
+    indexOfPrefix++
+  ) {
+    tempString = tempString.replace(
+      arrayOfConjugationTableKeys[indexOfPrefix],
+      ""
+    );
+  }
+  return tempString;
+};
+
+export const totalNumberOfQuizQuestionCalculator = (
+  userSelectedObject: UserQuizQuestionSetup,
+  numberOfConjugationQuestions: number
+) => {
+  const numberOfVocabQuestions =
+    userSelectedObject.numberOfTotalVocabNPhraseQuestions;
+
+  return numberOfVocabQuestions + numberOfConjugationQuestions * 8;
 };

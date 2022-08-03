@@ -26,6 +26,11 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
   const quizConjugationNumberOfQuestionsPopup = useAppSelector(
     (state) => state.quizStore.quizConjugationNumberOfQuestionsPopup
   );
+  const userQuizQuestionSetup = useAppSelector(
+    (state) => state.quizStore.userQuizQuestionSetup
+  );
+  const numberOfVocabQuestions =
+    userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions;
   const verbsDB = useAppSelector((state) => state.mainStore.verbsDB);
 
   // creating the max number of selected Questions
@@ -72,6 +77,11 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
     dispatch(
       quizStoreSliceActions.setQuizConjugationVerbSelectionPopupActive(true)
     );
+    dispatch(
+      quizStoreSliceActions.setTotalNumberOfQuestions(
+        numberOfVocabQuestions + numberOfQuestions * 8
+      )
+    );
   };
 
   const skipButtonHandler = () => {
@@ -81,6 +91,9 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
     dispatch(quizStoreSliceActions.setNumberOfQuizConjugationQuestions(0));
 
     dispatch(quizStoreSliceActions.setQuizSetupComplete(true));
+    dispatch(
+      quizStoreSliceActions.setTotalNumberOfQuestions(numberOfVocabQuestions)
+    );
   };
 
   return (

@@ -23,6 +23,12 @@ const initialState = {
   multipleChoiceQuestionsCreated: false,
   fillInBlankQuestionsCreated: false,
   matchingAnswerKey: [],
+  matchingQuestionAnsweredArray: [],
+  conjugationAnswerKey: [],
+  conjugationQuestionAnsweredArray: [],
+  userSelectedMultipleChoiceQuizAnswers: [],
+  totalNumberOfQuestions: 0,
+  questionListActive: false,
 };
 export const quizStoreSlice = createSlice({
   name: "French Quiz Database",
@@ -76,6 +82,24 @@ export const quizStoreSlice = createSlice({
     setMatchingAnswerKey(state, { payload }) {
       state.matchingAnswerKey = payload;
     },
+    setMatchingQuestionAnsweredArray(state, { payload }) {
+      state.matchingQuestionAnsweredArray = payload;
+    },
+    setConjugationAnswerKey(state, { payload }) {
+      state.conjugationAnswerKey = payload;
+    },
+    setConjugationQuestionAnsweredArray(state, { payload }) {
+      state.conjugationQuestionAnsweredArray = payload;
+    },
+    setUserSelectedMultipleChoiceQuizAnswers(state, { payload }) {
+      state.userSelectedMultipleChoiceQuizAnswers = payload;
+    },
+    setTotalNumberOfQuestions(state, { payload }) {
+      state.totalNumberOfQuestions = payload;
+    },
+    setQuestionListActive(state, { payload }) {
+      state.questionListActive = payload;
+    },
   },
 });
 
@@ -115,5 +139,10 @@ export interface QuizDatabaseStates {
   vocabPhraseQuizAnswerKey: VocabPhraseAnswerKey;
   fillInBlankQuestionAnsweredArray: boolean[];
   matchingAnswerKey: string[];
+  matchingQuestionAnsweredArray: boolean[];
+  conjugationAnswerKey: string[];
+  conjugationQuestionAnsweredArray: boolean[];
+  userSelectedMultipleChoiceQuizAnswers: string[];
+  totalNumberOfQuestions: number;
 }
 export const quizStoreSliceActions = quizStoreSlice.actions;

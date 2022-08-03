@@ -22,6 +22,7 @@ const QuizMultipleChoiceCreator = () => {
   const userQuizQuestionSetup: UserQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
   );
+
   const numberOfQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
 
@@ -34,10 +35,29 @@ const QuizMultipleChoiceCreator = () => {
 
   const [useEffectTrigger, setUseEffectTrigger] = useState<string | number>(0);
   const [finalKeyPushArray, setFinalKeyPushArray] = useState<string[]>([]);
+
   const [
     renderReadyMultipleChoiceQuestions,
     setRenderReadyMultipleChoiceQuestions,
   ] = useState<any>([]);
+
+  useEffect(() => {
+    const initialAnswerKey = [];
+
+    for (
+      let indexOfInitialQuestion = 0;
+      indexOfInitialQuestion < numberOfQuestions;
+      indexOfInitialQuestion++
+    ) {
+      initialAnswerKey.push("");
+    }
+
+    dispatch(
+      quizStoreSliceActions.setUserSelectedMultipleChoiceQuizAnswers(
+        initialAnswerKey
+      )
+    );
+  }, [numberOfQuestions, dispatch]);
 
   if (useEffectTrigger === 0) {
     // if statement so that this only renders once
@@ -160,8 +180,7 @@ const QuizMultipleChoiceCreator = () => {
 
       // Handeling Question Title
       let questionTitle = "";
-      console.log(userSelectedFrenchTerm);
-      console.log(vocabNPhrasesDB[userSelectedFrenchTerm]);
+
       if (answerType === "French") {
         // title should be english term
         questionTitle = vocabNPhrasesDB[indexOfUserSelectedItem].english;

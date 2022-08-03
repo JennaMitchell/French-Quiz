@@ -32,6 +32,11 @@ const QuizConjugationSelectionPopup = () => {
   const quizConjugationVerbSelectionPopupActive = useAppSelector(
     (state) => state.quizStore.quizConjugationVerbSelectionPopupActive
   );
+  const userQuizQuestionSetup = useAppSelector(
+    (state) => state.quizStore.userQuizQuestionSetup
+  );
+  const numberOfVocabQuestions =
+    userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions;
 
   const numberOfQuizConjugationQuestions = useAppSelector(
     (state) => state.quizStore.numberOfQuizConjugationQuestions
@@ -190,6 +195,9 @@ const QuizConjugationSelectionPopup = () => {
     dispatch(quizStoreSliceActions.setUserSelectedQuizConjugations([]));
     dispatch(quizStoreSliceActions.setUserSelectedQuizConjugationGrouping(""));
     dispatch(quizStoreSliceActions.setQuizSetupComplete(true));
+    dispatch(
+      quizStoreSliceActions.setTotalNumberOfQuestions(numberOfVocabQuestions)
+    );
   };
 
   return (

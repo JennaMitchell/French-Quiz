@@ -32,7 +32,7 @@ const initialState = {
   verbsDB: [],
   phrasesDB: [],
   overAllVocabDB: [],
-  conjugationTableDB: [],
+  conjugationTableDB: {},
 };
 
 // setHomepageSelectedSection(state, action: PayloadAction<string>) {
@@ -94,6 +94,11 @@ interface DatabaseType {
   english: string;
   id: string;
 }
+export interface conjugationDB {
+  [key: string]: {
+    [key: string]: string;
+  };
+}
 
 export interface MainStoreDatabaseStates {
   homepageFeatureDatabase: {
@@ -108,7 +113,7 @@ export interface MainStoreDatabaseStates {
   activePage: string;
   flashcardsDB: FlashcardDatabaseTypes[];
   firebaseDataLoaded: boolean;
-  conjugationTableDB: any;
+  conjugationTableDB: conjugationDB;
 }
 export type RootState = ReturnType<typeof store.getState>;
 // used to set it so our usestate perfectly match what is in the store
