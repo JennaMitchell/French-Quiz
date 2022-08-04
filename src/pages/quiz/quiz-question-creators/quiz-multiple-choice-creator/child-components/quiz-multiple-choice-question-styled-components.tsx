@@ -73,6 +73,7 @@ const QuestionAnswer = styled("button", {
   justifyContent: "space-between",
   fontSize: "20px",
   textAlign: "left",
+  position: "relative",
 
   padding: "10px",
   borderRadius: "5px",

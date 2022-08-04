@@ -29,6 +29,17 @@ const initialState = {
   userSelectedMultipleChoiceQuizAnswers: [],
   totalNumberOfQuestions: 0,
   questionListActive: false,
+  userSelectedConjugationAnswers: [],
+  quizSubmitButtonClicked: false,
+  userSelectedMatchingAnswers: [],
+  userSelectedFillInBlankAnswers: [],
+  multipleChoiceQuestionAnswers: [],
+  multipleChoiceQuestionTitles: [],
+  fillInTheBlankTestTerms: [],
+  matchingTestTerms: [],
+  matchingPromptTerms: [],
+  quizConjugationTerms: [],
+  userAnswerRetrieved: false,
 };
 export const quizStoreSlice = createSlice({
   name: "French Quiz Database",
@@ -100,6 +111,39 @@ export const quizStoreSlice = createSlice({
     setQuestionListActive(state, { payload }) {
       state.questionListActive = payload;
     },
+    setUserSelectedConjugationAnswers(state, { payload }) {
+      state.userSelectedConjugationAnswers = payload;
+    },
+    setQuizSubmitButtonClicked(state, { payload }) {
+      state.quizSubmitButtonClicked = payload;
+    },
+    setUserSelectedMatchingAnswers(state, { payload }) {
+      state.userSelectedMatchingAnswers = payload;
+    },
+    setUserSelectedFillInBlankAnswers(state, { payload }) {
+      state.userSelectedFillInBlankAnswers = payload;
+    },
+    setMultipleChoiceQuestionAnswers(state, { payload }) {
+      state.multipleChoiceQuestionAnswers = payload;
+    },
+    setMultipleChoiceQuestionTitles(state, { payload }) {
+      state.multipleChoiceQuestionTitles = payload;
+    },
+    setFillInTheBlankTestTerms(state, { payload }) {
+      state.fillInTheBlankTestTerms = payload;
+    },
+    setMatchingTestTerms(state, { payload }) {
+      state.matchingTestTerms = payload;
+    },
+    setMatchingPromptTerms(state, { payload }) {
+      state.matchingPromptTerms = payload;
+    },
+    setQuizConjugationTerms(state, { payload }) {
+      state.quizConjugationTerms = payload;
+    },
+    setUserAnswerRetrieved(state, { payload }) {
+      state.userAnswerRetrieved = payload;
+    },
   },
 });
 
@@ -144,5 +188,15 @@ export interface QuizDatabaseStates {
   conjugationQuestionAnsweredArray: boolean[];
   userSelectedMultipleChoiceQuizAnswers: string[];
   totalNumberOfQuestions: number;
+  userSelectedConjugationAnswers: string[];
+  quizSubmitButtonClicked: boolean;
+  userSelectedMatchingAnswers: string[];
+  userSelectedFillInBlankAnswers: string[];
+  muiltipleChoiceQuestionTitles: string[];
+  multipleChoiceQuestionAnswers: string[];
+  fillInTheBlankTestTerms: string[];
+  matchingTestTerms: string[];
+  quizConjugationTerms: string[];
+  userAnswerRetrieved: boolean;
 }
 export const quizStoreSliceActions = quizStoreSlice.actions;

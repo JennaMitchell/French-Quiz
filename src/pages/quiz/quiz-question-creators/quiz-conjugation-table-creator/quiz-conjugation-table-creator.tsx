@@ -51,7 +51,14 @@ const QuizConjugationTableCreator = () => {
   const conjugationQuestionAnsweredArray = useAppSelector(
     (state) => state.quizStore.conjugationQuestionAnsweredArray
   );
+
+  const quizSubmitButtonClicked = useAppSelector(
+    (state) => state.quizStore.quizSubmitButtonClicked
+  );
+
   const [processState, setProcessState] = useState<string | number>("start");
+  const [savedTermData, setSavedTermData] = useState<setupDatabase[]>([]);
+  const tempTermsData: setupDatabase[] = [];
 
   const arrayOfConjugationTableKeys = [
     "je",
@@ -76,6 +83,17 @@ const QuizConjugationTableCreator = () => {
   const [userTypedAnswers, setUserTypedAnswers] = useState<string[]>(
     initialUserTypedAnswers
   );
+  // useEffect used to push the users final answers once they push the quiz submit button
+  useEffect(() => {
+    if (quizSubmitButtonClicked) {
+      dispatch(
+        quizStoreSliceActions.setUserSelectedConjugationAnswers(
+          userTypedAnswers
+        )
+      );
+    }
+  }, [quizSubmitButtonClicked, dispatch, userTypedAnswers]);
+
   // use effect to setup the stores answered question array
   useEffect(() => {
     const arrayOfAnsweredQuestions: boolean[] = [];
@@ -98,39 +116,37 @@ const QuizConjugationTableCreator = () => {
   useEffect(() => {
     if (savedAnswerKey.length !== 0) {
       dispatch(quizStoreSliceActions.setConjugationAnswerKey(savedAnswerKey));
+      dispatch(quizStoreSliceActions.setQuizConjugationTerms(savedTermData));
     }
-  }, [savedAnswerKey, dispatch]);
+  }, [savedAnswerKey, dispatch, savedTermData]);
   // use Effect used to push an array of booleans to see if the answer was answered by the user
-  const userEnteredDataChecker = () => {
-    let arrayNotEmpty = false;
+  const userEnteredDataChecker = (copyOfUserTypedAnswers: string[]) => {
     const arrayOfAnsweredQuestions = [];
     let updateDetected = false;
     for (
       let userTypedAnswersArrayIndex = 0;
-      userTypedAnswersArrayIndex < userTypedAnswers.length;
+      userTypedAnswersArrayIndex < copyOfUserTypedAnswers.length;
       userTypedAnswersArrayIndex++
     ) {
-      if (userTypedAnswers[userTypedAnswersArrayIndex] !== "") {
-        arrayNotEmpty = true;
+      if (copyOfUserTypedAnswers[userTypedAnswersArrayIndex].length !== 0) {
         arrayOfAnsweredQuestions.push(true);
       } else {
         arrayOfAnsweredQuestions.push(false);
       }
     }
-    if (arrayNotEmpty) {
-      // comparing what is already active to what isn't active
-      for (
-        let indexOfComparison = 0;
-        indexOfComparison < numberOfQuestions * 8;
-        indexOfComparison++
+
+    // comparing what is already active to what isn't active
+    for (
+      let indexOfComparison = 0;
+      indexOfComparison < numberOfQuestions * 8;
+      indexOfComparison++
+    ) {
+      if (
+        conjugationQuestionAnsweredArray[indexOfComparison] !==
+        arrayOfAnsweredQuestions[indexOfComparison]
       ) {
-        if (
-          conjugationQuestionAnsweredArray[indexOfComparison] !==
-          arrayOfAnsweredQuestions[indexOfComparison]
-        ) {
-          updateDetected = true;
-          break;
-        }
+        updateDetected = true;
+        break;
       }
     }
 
@@ -155,7 +171,6 @@ const QuizConjugationTableCreator = () => {
       indexOfConjugation < userSelectedQuizConjugations.length;
       indexOfConjugation++
     ) {
-      // Random selection creates an overall data that will be randomly sorted
       const selectedFrenchTerm =
         userSelectedQuizConjugations[indexOfConjugation].french;
       const conjugationData = conjugationsTableDB[selectedFrenchTerm];
@@ -176,6 +191,13 @@ const QuizConjugationTableCreator = () => {
           conjugation: conjugation,
         });
         tempAnswerKey.push(conjugation);
+        if (userSelectedQuizConjugationGrouping === "By Verb") {
+          tempTermsData.push({
+            verb: verb,
+            prefix: prefix,
+            conjugation: conjugation,
+          });
+        }
       }
     }
 
@@ -204,6 +226,7 @@ const QuizConjugationTableCreator = () => {
         tempAnswerKey.push(
           userSelectedRandomConjugationTable[randomNumber].conjugation
         );
+        tempTermsData.push(userSelectedRandomConjugationTable[randomNumber]);
       }
     }
 
@@ -218,10 +241,10 @@ const QuizConjugationTableCreator = () => {
 
             copyOfUserTypedAnswers[index] = event.target.value;
             setUserTypedAnswers(copyOfUserTypedAnswers);
-            userEnteredDataChecker();
+            userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer>
+            <QuestionContainer key={`Question ${index}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -257,11 +280,11 @@ const QuizConjugationTableCreator = () => {
 
             copyOfUserTypedAnswers[index] = event.target.value;
             setUserTypedAnswers(copyOfUserTypedAnswers);
-            userEnteredDataChecker();
+            userEnteredDataChecker(copyOfUserTypedAnswers);
           };
 
           return (
-            <QuestionContainer>
+            <QuestionContainer key={`Question ${index}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -325,6 +348,7 @@ const QuizConjugationTableCreator = () => {
 
     setSavedAnswerKey(tempAnswerKey);
     setProcessState("production");
+    setSavedTermData(tempTermsData);
   }
 
   // Handeling Data rendering after the intial push
@@ -340,10 +364,10 @@ const QuizConjugationTableCreator = () => {
 
             copyOfUserTypedAnswers[index] = event.target.value;
             setUserTypedAnswers(copyOfUserTypedAnswers);
-            userEnteredDataChecker();
+            userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer>
+            <QuestionContainer key={`Question ${index}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -379,10 +403,10 @@ const QuizConjugationTableCreator = () => {
 
             copyOfUserTypedAnswers[index] = event.target.value;
             setUserTypedAnswers(copyOfUserTypedAnswers);
-            userEnteredDataChecker();
+            userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer>
+            <QuestionContainer key={`Question ${index}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -430,7 +454,7 @@ const QuizConjugationTableCreator = () => {
           const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
           finalRenderReadyItems.push(
-            <TopContainer>
+            <TopContainer key={`Top Container ${indexOfGrouping}`}>
               <QuestionNumberBox>
                 {totalnumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
                 {totalnumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
@@ -447,7 +471,7 @@ const QuizConjugationTableCreator = () => {
       }
     } else {
       finalRenderReadyItems = (
-        <TopContainer>
+        <TopContainer key={`Top Container`}>
           <QuestionNumberBox>
             {totalnumberOfVocabQuestions + 1} -{"  "}
             {totalnumberOfVocabQuestions + numberOfQuestions * 8} of{"  "}

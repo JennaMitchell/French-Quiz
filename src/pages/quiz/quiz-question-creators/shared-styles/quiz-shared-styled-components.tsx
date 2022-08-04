@@ -37,6 +37,7 @@ const QuestionContainer = styled("div", {
   alignItems: "center",
   justifyContent: "center",
   marginTop: "20px",
+  position: "relative",
 
   columnGap: "40px",
   borderRadius: "10px",

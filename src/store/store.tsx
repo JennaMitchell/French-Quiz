@@ -9,19 +9,23 @@ const initialState = {
     Flashcards: {
       title: "Flashcards",
       description: "Practice your vocab with traditional flashcard.",
+      link: "/flashcards",
     },
     "Practice Sheets": {
       title: "Practice Sheets",
       description:
         "Create a computer generated practice sheets to practice offline.",
+      link: "/practice-sheet-generator",
     },
     Quizes: {
       title: "Quizes",
       description: "Practice your knowledge with a vocab quizes.",
+      link: "/quiz",
     },
     "Grammar Test": {
       title: "Grammar Test",
       description: "Test your grammar knowledge with a generated grammar quiz.",
+      link: "/grammar-test",
     },
   },
   homepageSelectedSection: "Flashcards",
@@ -99,10 +103,12 @@ export interface conjugationDB {
     [key: string]: string;
   };
 }
-
+export interface hompageFeatureDB {
+  [key: string]: { title: string; description: string; link: string };
+}
 export interface MainStoreDatabaseStates {
   homepageFeatureDatabase: {
-    [key: string]: { title: string; description: string };
+    [key: string]: { title: string; description: string; link: string };
   };
   adjectivesDB: DatabaseType[];
   nounsDB: DatabaseType[];

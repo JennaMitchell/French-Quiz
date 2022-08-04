@@ -3,6 +3,7 @@ import {
   SectionContentContainer,
   GetStartedButton,
 } from "./homepage-main-styled-components";
+
 import { SectionContainer } from "../../components/generic-components/generic-components";
 import voyageImage from "../../images/homepage-images/voyage.jpg";
 import FeatureOverviewSection from "./feature-overview-section/feature-overview-section";
@@ -51,7 +52,7 @@ const HomepageMain = () => {
           >
             Start your language learning journey today by taking a quiz
           </Typography>
-          <GetStartedButton>Quiz Me</GetStartedButton>
+          <GetStartedButton to="/quiz">Quiz Me</GetStartedButton>
         </SectionContentContainer>
       </SectionContainer>
       <FeatureOverviewSection />

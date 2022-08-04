@@ -20,6 +20,7 @@ import { QuestionNumberBox } from "../shared-styles/quiz-shared-styled-component
 const QuizFillInBlankCreator = () => {
   const [savedTestItems, setSavedTestItems] = useState<string[]>([]);
   const [savedAnswerItems, setSavedAnswerItems] = useState<string[]>([]);
+  const [reRenderComponent, setReRenderComponent] = useState<boolean>(false);
 
   const userQuizQuestionSetup: UserQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
@@ -41,6 +42,9 @@ const QuizFillInBlankCreator = () => {
   const userSelectedQuizVocabNPhrases: UserSelectedData[] = useAppSelector(
     (state) => state.quizStore.userSelectedQuizVocabNPhrases
   );
+  const quizSubmitButtonClicked = useAppSelector(
+    (state) => state.quizStore.quizSubmitButtonClicked
+  );
   const dispatch = useAppDispatch();
   const fillInBlankQuestionAnsweredArray: boolean[] = useAppSelector(
     (state) => state.quizStore.fillInBlankQuestionAnsweredArray
@@ -53,6 +57,20 @@ const QuizFillInBlankCreator = () => {
   const [userTypedAnswers, setUserTypedAnswers] =
     useState<string[]>(initialArray);
   const [questionGenerated, setQuestionGenerated] = useState<boolean>(false);
+
+  // use Effect to push the users respond once the quiz submit button is pressed
+  useEffect(() => {
+    if (quizSubmitButtonClicked) {
+      dispatch(
+        quizStoreSliceActions.setUserSelectedFillInBlankAnswers(
+          userTypedAnswers
+        )
+      );
+      dispatch(
+        quizStoreSliceActions.setFillInTheBlankTestTerms(savedTestItems)
+      );
+    }
+  }, [quizSubmitButtonClicked, dispatch, userTypedAnswers, savedTestItems]);
 
   // use effect to setup the stores answered question array
   useEffect(() => {
@@ -80,36 +98,33 @@ const QuizFillInBlankCreator = () => {
   }, [savedAnswerItems.length, dispatch, savedAnswerItems]);
 
   // use Effect used to push an array of booleans to see if the answer was answered by the user
-  const userEnteredDataChecker = () => {
-    let arrayNotEmpty = false;
+  const userEnteredDataChecker = (copyOfUserTypedAnswers: string[]) => {
     const arrayOfAnsweredQuestions = [];
     let updateDetected = false;
+
     for (
       let userTypedAnswersArrayIndex = 0;
       userTypedAnswersArrayIndex < userTypedAnswers.length;
       userTypedAnswersArrayIndex++
     ) {
-      if (userTypedAnswers[userTypedAnswersArrayIndex] !== "") {
-        arrayNotEmpty = true;
+      if (copyOfUserTypedAnswers[userTypedAnswersArrayIndex].length !== 0) {
         arrayOfAnsweredQuestions.push(true);
       } else {
         arrayOfAnsweredQuestions.push(false);
       }
     }
-    if (arrayNotEmpty) {
-      // comparing what is already active to what isn't active
-      for (
-        let indexOfComparison = 0;
-        indexOfComparison < numberOfFillInBlankQuestions;
-        indexOfComparison++
+
+    for (
+      let indexOfComparison = 0;
+      indexOfComparison < numberOfFillInBlankQuestions;
+      indexOfComparison++
+    ) {
+      if (
+        fillInBlankQuestionAnsweredArray[indexOfComparison] !==
+        arrayOfAnsweredQuestions[indexOfComparison]
       ) {
-        if (
-          fillInBlankQuestionAnsweredArray[indexOfComparison] !==
-          arrayOfAnsweredQuestions[indexOfComparison]
-        ) {
-          updateDetected = true;
-          break;
-        }
+        updateDetected = true;
+        break;
       }
     }
 
@@ -120,6 +135,7 @@ const QuizFillInBlankCreator = () => {
         )
       );
     }
+    setReRenderComponent(!reRenderComponent);
   };
 
   let renderReadyItems: any[] = [];
@@ -164,7 +180,7 @@ const QuizFillInBlankCreator = () => {
 
           copyOfUserTypedAnswers[questionIndex] = event.target.value;
           setUserTypedAnswers(copyOfUserTypedAnswers);
-          userEnteredDataChecker();
+          userEnteredDataChecker(copyOfUserTypedAnswers);
         };
 
         return (
@@ -205,7 +221,7 @@ const QuizFillInBlankCreator = () => {
 
           copyOfUserTypedAnswers[questionIndex] = event.target.value;
           setUserTypedAnswers(copyOfUserTypedAnswers);
-          userEnteredDataChecker();
+          userEnteredDataChecker(copyOfUserTypedAnswers);
         };
 
         return (

@@ -329,7 +329,7 @@ const SheetGenerator = () => {
                 inputArray={
                   practiceSheetGeneratorPhraseQuestions.phraseMatchingQuestions
                 }
-                databaseType="Vocab"
+                databaseType="Phrases"
                 testOn={userSelectedPhrasesTestType}
               />
             </TestContainer>

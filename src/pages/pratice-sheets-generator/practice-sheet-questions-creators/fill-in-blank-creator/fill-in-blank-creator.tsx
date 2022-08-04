@@ -155,7 +155,7 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
     const lastEntry = renderReadyData[renderReadyData.length - 1];
 
     renderReadyData[renderReadyData.length - 1] = (
-      <SingleItemRowContainer key="last entry">
+      <SingleItemRowContainer key="last entry" sx={{ marginTop: "10px" }}>
         {lastEntry}
       </SingleItemRowContainer>
     );

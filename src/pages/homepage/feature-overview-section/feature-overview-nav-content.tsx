@@ -1,8 +1,13 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import notebookImage from "../../../images/homepage-images/notebook.jpg";
-import { ThemeButton } from "../../../components/generic-components/generic-components";
-import { useAppSelector } from "../../../store/hooks";
+import flashcardsPhoto from "../../../images/homepage-images/flashcards-photo.jpg";
+import quizPhoto from "../../../images/homepage-images/quiz-photo.jpg";
+import grammarTestPhoto from "../../../images/homepage-images/grammar-test-photo.jpg";
+import { NavLink } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { hompageFeatureDB } from "../../../store/store";
+import { mainStoreSliceActions } from "../../../store/store";
 const TopContainer = styled("div", {
   name: "TopContainer",
   slot: "Wrapper",
@@ -51,24 +56,49 @@ const ImageContainer = styled("img", {
 
   position: "relative",
 }));
-const LinkButton = styled(ThemeButton, {
+const LinkButton = styled(NavLink, {
   name: "LinkButton",
   slot: "Wrapper",
-})(() => ({
-  padding: "10px 20px",
-  fontSize: "24px",
-  position: "relative",
-  borderRadius: "0px",
-  marginTop: "10px",
+})(({ theme }) => ({
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  padding: "10px 15px",
+  display: "grid",
+  placeItems: "center",
+  textAlign: "center",
+  borderRadius: "10px",
+  fontSize: "32px",
+  textDecoration: "none",
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.secondary.light,
+  transition: "all 0.5s",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.dark,
+    boxShadow: "0 0 10px black",
+  },
 }));
 
 const FeatureOverviewNavContent: React.FC = () => {
-  const homepageFeatureDatabase = useAppSelector(
+  const homepageFeatureDatabase: hompageFeatureDB = useAppSelector(
     (state) => state.mainStore.homepageFeatureDatabase
   );
   const homepageSelectedSection = useAppSelector(
     (state) => state.mainStore.homepageSelectedSection
   );
+  const dispatch = useAppDispatch();
+
+  const navButtonHandler = () => {
+    dispatch(
+      mainStoreSliceActions.setActivePage(
+        homepageFeatureDatabase[homepageSelectedSection].title
+      )
+    );
+  };
   return (
     <TopContainer>
       <InfoContainer>
@@ -80,12 +110,26 @@ const FeatureOverviewNavContent: React.FC = () => {
           {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].description}
         </Typography>
-        <LinkButton>
+        <LinkButton
+          onClick={navButtonHandler}
+          to={`${homepageFeatureDatabase[homepageSelectedSection].link}`}
+        >
           {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].title}
         </LinkButton>
       </InfoContainer>
-      <ImageContainer src={notebookImage} alt="notebook" />
+      {homepageSelectedSection === "Practice Sheets" && (
+        <ImageContainer src={notebookImage} alt="notebook" />
+      )}
+      {homepageSelectedSection === "Quizes" && (
+        <ImageContainer src={quizPhoto} alt="quiz" />
+      )}
+      {homepageSelectedSection === "Flashcards" && (
+        <ImageContainer src={flashcardsPhoto} alt="flashcard" />
+      )}
+      {homepageSelectedSection === "Grammar Test" && (
+        <ImageContainer src={grammarTestPhoto} alt="notebook" />
+      )}
     </TopContainer>
   );
 };

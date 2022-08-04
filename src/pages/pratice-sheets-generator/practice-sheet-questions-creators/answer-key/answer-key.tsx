@@ -331,7 +331,7 @@ const AnswerKey = () => {
       }}
     >
       <StyledTitleTypography variant="h4">
-        Vocab Multiple Choice Answers
+        Phrases Multiple Choice Answers
       </StyledTitleTypography>
       {renderReadyPhraseMultipleChoiceAnswers}
     </AnswerBlock>
@@ -347,7 +347,7 @@ const AnswerKey = () => {
       }}
     >
       <StyledTitleTypography variant="h4">
-        Vocab Matching Answers
+        Phrases Matching Answers
       </StyledTitleTypography>
       {renderReadyPhrasesMatchingAnswers}
     </AnswerBlock>
@@ -363,7 +363,7 @@ const AnswerKey = () => {
       }}
     >
       <StyledTitleTypography variant="h4">
-        Vocab Fill in Blank Answers
+        Phrases Fill in Blank Answers
       </StyledTitleTypography>
       {renderReadyPhrasesFillInBlankAnswers}
     </AnswerBlock>

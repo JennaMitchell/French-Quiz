@@ -7,6 +7,7 @@ import quizIcon from "../../../images/homepage-images/quiz.png";
 import hightlightImage from "../../../images/homepage-images/blue-hightlight.png";
 import { mainStoreSliceActions } from "../../../store/store";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { useState } from "react";
 
 const TopContainer = styled("div", {
   name: "TopContainer",
@@ -27,7 +28,7 @@ const TopContainer = styled("div", {
 const FeatureButton = styled("div", {
   name: "FeatureButton",
   slot: "Wrapper",
-})(() => ({
+})(({ theme }) => ({
   color: "inherit",
   transition: "all 0.5s",
   width: "max(max-content,max-content)",
@@ -78,6 +79,7 @@ const FeatureOverviewNavMenu: React.FC = () => {
       dispatch(mainStoreSliceActions.setHomepageSelectedSection(type));
     }
   };
+  const [currentMousedOverSection, setCurrentMouseOverSection] = useState("");
 
   const practiceSheetsButtonHandler = () => {
     buttonHandler("Practice Sheets");
@@ -94,10 +96,42 @@ const FeatureOverviewNavMenu: React.FC = () => {
   const flashcardsButtonHandler = () => {
     buttonHandler("Flashcards");
   };
+  const flashcardMouseEventHandler = () => {
+    if (currentMousedOverSection !== "Flashcards") {
+      setCurrentMouseOverSection("Flashcards");
+    } else {
+      setCurrentMouseOverSection("");
+    }
+  };
+
+  const practiceSheetsMouseEventHandler = () => {
+    if (currentMousedOverSection !== "Practice Sheets") {
+      setCurrentMouseOverSection("Practice Sheets");
+    } else {
+      setCurrentMouseOverSection("");
+    }
+  };
+  const quizesMouseEventHandler = () => {
+    if (currentMousedOverSection !== "Quizes") {
+      setCurrentMouseOverSection("Quizes");
+    } else {
+      setCurrentMouseOverSection("");
+    }
+  };
+  const grammarTestMouseEventHandler = () => {
+    if (currentMousedOverSection !== "Grammar Test") {
+      setCurrentMouseOverSection("Grammar Test");
+    } else {
+      setCurrentMouseOverSection("");
+    }
+  };
 
   return (
     <TopContainer>
-      <FeatureButton>
+      <FeatureButton
+        onMouseEnter={flashcardMouseEventHandler}
+        onMouseLeave={flashcardMouseEventHandler}
+      >
         <FeatureIcon src={flashCardIcon} onClick={flashcardsButtonHandler} />
         <Typography variant="h6" color="secondary.dark">
           Flashcards
@@ -105,17 +139,29 @@ const FeatureOverviewNavMenu: React.FC = () => {
         {homepageSelectedSection === "Flashcards" && (
           <HightlightImage src={hightlightImage} />
         )}
+        {currentMousedOverSection === "Flashcards" && (
+          <HightlightImage src={hightlightImage} />
+        )}
       </FeatureButton>
-      <FeatureButton>
+      <FeatureButton
+        onMouseEnter={practiceSheetsMouseEventHandler}
+        onMouseLeave={practiceSheetsMouseEventHandler}
+      >
         <FeatureIcon src={paperIcon} onClick={practiceSheetsButtonHandler} />
         {homepageSelectedSection === "Practice Sheets" && (
+          <HightlightImage src={hightlightImage} />
+        )}
+        {currentMousedOverSection === "Practice Sheets" && (
           <HightlightImage src={hightlightImage} />
         )}
         <Typography variant="h6" color="secondary.dark">
           Practice Sheets
         </Typography>
       </FeatureButton>
-      <FeatureButton>
+      <FeatureButton
+        onMouseEnter={quizesMouseEventHandler}
+        onMouseLeave={quizesMouseEventHandler}
+      >
         <FeatureIcon src={quizIcon} onClick={quizesButtonHandler} />
         <Typography variant="h6" color="secondary.dark">
           Quizes
@@ -123,13 +169,22 @@ const FeatureOverviewNavMenu: React.FC = () => {
         {homepageSelectedSection === "Quizes" && (
           <HightlightImage src={hightlightImage} />
         )}
+        {currentMousedOverSection === "Quizes" && (
+          <HightlightImage src={hightlightImage} />
+        )}
       </FeatureButton>
-      <FeatureButton>
+      <FeatureButton
+        onMouseEnter={grammarTestMouseEventHandler}
+        onMouseLeave={grammarTestMouseEventHandler}
+      >
         <FeatureIcon src={pencilIcon} onClick={grammarTestButtonHandler} />
         <Typography variant="h6" color="secondary.dark">
           Grammar Test
         </Typography>
         {homepageSelectedSection === "Grammar Test" && (
+          <HightlightImage src={hightlightImage} />
+        )}
+        {currentMousedOverSection === "Grammar Test" && (
           <HightlightImage src={hightlightImage} />
         )}
       </FeatureButton>

@@ -9,10 +9,6 @@ import {
   letterAnswerKeyCreator,
 } from "../../../../components/functions/generic-functions";
 import { useEffect, useState } from "react";
-import {
-  SingleItemRowContainer,
-  TwoItemRowContainer,
-} from "../../../../components/generic-components/generic-components";
 
 const StyledTypography = styled(Typography, {
   name: "StyledTypography",
@@ -27,7 +23,7 @@ const StyledTypography = styled(Typography, {
 const RowContainer = styled("div", {
   name: "RowContainer",
   slot: "Wrapper",
-})(({ theme }) => ({
+})(() => ({
   width: "max(100%,100%)",
   height: "max-content",
   display: "grid",
@@ -60,6 +56,7 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const dispatch = useAppDispatch();
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
   const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
+  const [renderReadyItems, setRenderReadyItems] = useState<JSX.Element[]>([]);
 
   // Mixing the Selected Questions
   const tempMixedArray: number[] = [];
@@ -94,59 +91,61 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   }
 
   // Answer Side
-
-  for (let u = 0; u < inputArray.length; u++) {
-    switch (testOn) {
-      case "French":
-        // english on empty side right
-        // frnech on left side
-        answerSide.push(inputArray[u].french);
-        testOnSideArray[tempMixedArray[u]] = `${
-          answerArray[tempMixedArray[u]]
-        }. ${inputArray[u].english}`;
-        answerKey.push(answerArray[tempMixedArray[u]]);
-        break;
-      case "English":
-        // english on empty side left
-        // frnech on right side
-        answerSide.push(inputArray[u].english);
-        testOnSideArray[tempMixedArray[u]] = `${
-          answerArray[tempMixedArray[u]]
-        }. ${inputArray[u].french}`;
-        answerKey.push(answerArray[tempMixedArray[u]]);
-        break;
-      default:
-        const coinFlip = randomNumberGenerator(0, 1, 2);
-        if (coinFlip === 0) {
+  if (pushedAnswerKey.length === 0) {
+    for (let u = 0; u < inputArray.length; u++) {
+      switch (testOn) {
+        case "French":
+          // english on empty side right
+          // frnech on left side
           answerSide.push(inputArray[u].french);
           testOnSideArray[tempMixedArray[u]] = `${
             answerArray[tempMixedArray[u]]
           }. ${inputArray[u].english}`;
           answerKey.push(answerArray[tempMixedArray[u]]);
-        } else {
+          break;
+        case "English":
+          // english on empty side left
+          // frnech on right side
           answerSide.push(inputArray[u].english);
           testOnSideArray[tempMixedArray[u]] = `${
             answerArray[tempMixedArray[u]]
           }. ${inputArray[u].french}`;
           answerKey.push(answerArray[tempMixedArray[u]]);
-        }
-        break;
+          break;
+        default:
+          const coinFlip = randomNumberGenerator(0, 1, 2);
+          if (coinFlip === 0) {
+            answerSide.push(inputArray[u].french);
+            testOnSideArray[tempMixedArray[u]] = `${
+              answerArray[tempMixedArray[u]]
+            }. ${inputArray[u].english}`;
+            answerKey.push(answerArray[tempMixedArray[u]]);
+          } else {
+            answerSide.push(inputArray[u].english);
+            testOnSideArray[tempMixedArray[u]] = `${
+              answerArray[tempMixedArray[u]]
+            }. ${inputArray[u].french}`;
+            answerKey.push(answerArray[tempMixedArray[u]]);
+          }
+          break;
+      }
     }
-  }
 
-  // Getting Everything Render Ready
-  const renderReadyData = [];
-  for (let z = 0; z < inputArray.length; z++) {
-    renderReadyData.push(
-      <RowContainer key={z}>
-        <StyledTypography>{answerSide[z]}</StyledTypography>
-        <UnderlineContainer />
+    // Getting Everything Render Ready
+    const tempRenderReadyData = [];
+    for (let z = 0; z < inputArray.length; z++) {
+      tempRenderReadyData.push(
+        <RowContainer key={z}>
+          <StyledTypography>{answerSide[z].trim()}</StyledTypography>
+          <UnderlineContainer />
 
-        <StyledTypography sx={{ textAlign: "right" }}>
-          {testOnSideArray[z]}
-        </StyledTypography>
-      </RowContainer>
-    );
+          <StyledTypography sx={{ textAlign: "right" }}>
+            {testOnSideArray[z].trim()}
+          </StyledTypography>
+        </RowContainer>
+      );
+    }
+    setRenderReadyItems(tempRenderReadyData);
   }
 
   useEffect(() => {
@@ -171,30 +170,11 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
   }, [pushedAnswerKey, databaseType, dispatch, answerKeyDispatched]);
 
   // useffect is here to allow the answerkey to pushed after the componet is rendered
-  // if you ttry to do it durng the intial renderyou will cause an error that says yo uare updating somehintg while in the process of updating
+  // if you try to do it during the intial render you will cause an error that says yo uare updating somehintg while in the process of updating
   if (pushedAnswerKey.length === 0 && answerKey.length !== 0) {
     setPushedAnswerKey(answerKey);
   }
-  if (renderReadyData.length % 3 === 1) {
-    const lastEntry = renderReadyData[renderReadyData.length - 1];
 
-    renderReadyData[renderReadyData.length - 1] = (
-      <SingleItemRowContainer key="last entry">
-        {lastEntry}
-      </SingleItemRowContainer>
-    );
-  }
-
-  if (renderReadyData.length % 3 === 2) {
-    const lastEntrys = renderReadyData.splice(renderReadyData.length - 2, 2);
-
-    renderReadyData.push(
-      <TwoItemRowContainer key="last entry">
-        {lastEntrys[0]} {lastEntrys[1]}
-      </TwoItemRowContainer>
-    );
-  }
-
-  return <>{renderReadyData}</>;
+  return <>{renderReadyItems}</>;
 };
 export default MatchingCreator;

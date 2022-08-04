@@ -22,7 +22,7 @@ import { Typography, Grid } from "@mui/material";
 const Footer: React.FC = () => {
   return (
     <TopContainer>
-      <ColumnOne>
+      <ColumnOne sx={{ justifySelf: "flex-start" }}>
         <Typography
           sx={{
             color: "secondary.light",
@@ -47,6 +47,8 @@ const Footer: React.FC = () => {
             color: "secondary.light",
             fontSize: "18px",
             marginBottom: "15px",
+            textAlign: "left",
+            width: "250px",
             "@media (max-width:1050px)": {
               fontSize: "16px",
             },

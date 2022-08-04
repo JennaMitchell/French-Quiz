@@ -38,6 +38,9 @@ const QuizMatchingCreator = () => {
   const totalNumberOfQuestions = useAppSelector(
     (state) => state.quizStore.totalNumberOfQuestions
   );
+  const quizSubmitButtonClicked = useAppSelector(
+    (state) => state.quizStore.quizSubmitButtonClicked
+  );
   const numberOfMatchingQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseMatchingQuestions;
   const numberOfMultipleChoiceQuestion =
@@ -59,13 +62,25 @@ const QuizMatchingCreator = () => {
   );
   const [savedTestItems, setSavedTestItems] = useState<string[]>([]);
   const [savedPromptTerms, setSavedPromptTerms] = useState<string[]>([]);
-  const [useEffectTrigger, setUseEffectTrigger] = useState<string | number>(1);
+  const [processStep, setProcessStep] = useState<string | number>(1);
   const initialArray: string[] = [];
   for (let temp = 0; temp < numberOfMatchingQuestions; temp++) {
     initialArray.push("");
   }
   const [userSelectedAnswersArray, setUserSelectedAnswersArray] =
     useState<string[]>(initialArray);
+
+  // useEffect to push users nswers once the user presses the submit button
+
+  useEffect(() => {
+    if (quizSubmitButtonClicked) {
+      dispatch(
+        quizStoreSliceActions.setUserSelectedMatchingAnswers(
+          userSelectedAnswersArray
+        )
+      );
+    }
+  }, [quizSubmitButtonClicked, dispatch, userSelectedAnswersArray]);
 
   // use effect to setup the stores answered question array
   useEffect(() => {
@@ -90,63 +105,59 @@ const QuizMatchingCreator = () => {
     if (processingState === 1) {
       setProcessingState("end");
       dispatch(quizStoreSliceActions.setMatchingAnswerKey(answerKey));
+      dispatch(quizStoreSliceActions.setMatchingPromptTerms(savedPromptTerms));
+      dispatch(quizStoreSliceActions.setMatchingTestTerms(savedTestItems));
     }
-  }, [answerKey, processingState, dispatch, matchingAnswerKey.length]);
+  }, [
+    answerKey,
+    processingState,
+    dispatch,
+    matchingAnswerKey.length,
+    savedPromptTerms,
+    savedTestItems,
+  ]);
 
   // use Effect used to push an array of booleans to see if the answer was answered by the user
-  useEffect(() => {
-    if (
-      matchingQuestionAnsweredArray.length !== 0 &&
-      useEffectTrigger === "x"
+  const questionAnsweredUpdater = (copyOfUserTypedAnswers: string[]) => {
+    const arrayOfAnsweredQuestions = [];
+    let updateDetected = false;
+    for (
+      let userTypedAnswersArrayIndex = 0;
+      userTypedAnswersArrayIndex < copyOfUserTypedAnswers.length;
+      userTypedAnswersArrayIndex++
     ) {
-      let arrayNotEmpty = false;
-      const arrayOfAnsweredQuestions = [];
-      let updateDetected = false;
-      for (
-        let userTypedAnswersArrayIndex = 0;
-        userTypedAnswersArrayIndex < userSelectedAnswersArray.length;
-        userTypedAnswersArrayIndex++
-      ) {
-        if (userSelectedAnswersArray[userTypedAnswersArrayIndex] !== "") {
-          arrayNotEmpty = true;
-          arrayOfAnsweredQuestions.push(true);
-        } else {
-          arrayOfAnsweredQuestions.push(false);
-        }
-      }
-      if (arrayNotEmpty) {
-        // comparing what is already active to what isn't active
-        for (
-          let indexOfComparison = 0;
-          indexOfComparison < numberOfMatchingQuestions;
-          indexOfComparison++
-        ) {
-          if (
-            matchingQuestionAnsweredArray[indexOfComparison] !==
-            arrayOfAnsweredQuestions[indexOfComparison]
-          ) {
-            updateDetected = true;
-            break;
-          }
-        }
-      }
-
-      if (updateDetected) {
-        dispatch(
-          quizStoreSliceActions.setFillInBlankQuestionAnsweredArray(
-            arrayOfAnsweredQuestions
-          )
-        );
+      if (copyOfUserTypedAnswers[userTypedAnswersArrayIndex].length !== 0) {
+        arrayOfAnsweredQuestions.push(true);
+      } else {
+        arrayOfAnsweredQuestions.push(false);
       }
     }
-    setUseEffectTrigger(1);
-  }, [
-    userSelectedAnswersArray,
-    dispatch,
-    matchingQuestionAnsweredArray,
-    numberOfMatchingQuestions,
-    useEffectTrigger,
-  ]);
+    console.log(arrayOfAnsweredQuestions);
+    console.log(matchingQuestionAnsweredArray);
+
+    // comparing what is already active to what isn't active
+    for (
+      let indexOfComparison = 0;
+      indexOfComparison < numberOfMatchingQuestions;
+      indexOfComparison++
+    ) {
+      if (
+        `${matchingQuestionAnsweredArray[indexOfComparison]}` !==
+        `${arrayOfAnsweredQuestions[indexOfComparison]}`
+      ) {
+        updateDetected = true;
+        break;
+      }
+    }
+    console.log(updateDetected);
+    if (updateDetected) {
+      dispatch(
+        quizStoreSliceActions.setMatchingQuestionAnsweredArray(
+          arrayOfAnsweredQuestions
+        )
+      );
+    }
+  };
 
   //Creating drop down Options
   const answerLettersArray = letterAnswerKeyCreator(numberOfMatchingQuestions);
@@ -280,6 +291,8 @@ const QuizMatchingCreator = () => {
 
         copyOfUserTypedAnswers[questionIndex] = event.target.value;
         setUserSelectedAnswersArray(copyOfUserTypedAnswers);
+        questionAnsweredUpdater(copyOfUserTypedAnswers);
+        setProcessStep("rerender");
       };
 
       tempRenderReadyItems[questionIndex] = (
@@ -322,11 +335,11 @@ const QuizMatchingCreator = () => {
     setFinalRenderReadyItems(tempRenderReadyItems);
     setAnswerKey(tempAnswerKey);
     setProcessingState(1);
-    setUseEffectTrigger("x");
+    setProcessStep("rerender");
   }
 
   if (
-    useEffectTrigger === 1 &&
+    processStep === "rerender" &&
     savedTestItems.length !== 0 &&
     savedPromptTerms.length !== 0
   ) {
@@ -342,6 +355,8 @@ const QuizMatchingCreator = () => {
         copyOfUserTypedAnswers[questionIndex] = event.target.value;
 
         setUserSelectedAnswersArray(copyOfUserTypedAnswers);
+        questionAnsweredUpdater(copyOfUserTypedAnswers);
+        setProcessStep("rerender");
       };
 
       tempRenderReadyItems[questionIndex] = (
@@ -379,7 +394,7 @@ const QuizMatchingCreator = () => {
       );
     }
     setFinalRenderReadyItems(tempRenderReadyItems);
-    setUseEffectTrigger("x");
+    setProcessStep("stop");
   }
 
   return (

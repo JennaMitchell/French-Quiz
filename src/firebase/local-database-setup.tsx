@@ -75,9 +75,9 @@ const LocalDataBaseSetup = () => {
           if (databaseType === "flashcards") {
             for (const key in val) {
               loadedCards.push({
-                id: key,
-                answer: val[key].answer,
-                question: val[key].question,
+                id: key.trim(),
+                answer: val[key].answer.trim(),
+                question: val[key].question.trim(),
               });
             }
           }
@@ -90,9 +90,9 @@ const LocalDataBaseSetup = () => {
           ) {
             for (const key in val) {
               loadedCards.push({
-                id: key,
-                french: key,
-                english: val[key],
+                id: key.trim(),
+                french: key.trim(),
+                english: val[key].trim(),
               });
             }
           }
@@ -137,8 +137,8 @@ const LocalDataBaseSetup = () => {
       for (const key in database) {
         let tempObject: UserSelectedData = {
           id: `${database[key].french}`,
-          english: `${database[key].english}`,
-          french: `${database[key].french}`,
+          english: `${database[key].english}`.trim(),
+          french: `${database[key].french}`.trim(),
         };
 
         tempAllVocabDB.push(tempObject);

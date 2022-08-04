@@ -228,3 +228,27 @@ export const totalNumberOfQuizQuestionCalculator = (
 
   return numberOfVocabQuestions + numberOfConjugationQuestions * 8;
 };
+
+export const arrayComparer = (
+  correctArray: string[],
+  userInputArray: string[]
+) => {
+  const numberOfAnswers = correctArray.length;
+  const arrayOfComparisons: boolean[] = [];
+  for (
+    let indexOfAnswer = 0;
+    indexOfAnswer < numberOfAnswers;
+    indexOfAnswer++
+  ) {
+    if (
+      correctArray[indexOfAnswer].trim() ===
+      userInputArray[indexOfAnswer].trim()
+    ) {
+      arrayOfComparisons.push(true);
+    } else {
+      arrayOfComparisons.push(false);
+    }
+  }
+
+  return arrayOfComparisons;
+};

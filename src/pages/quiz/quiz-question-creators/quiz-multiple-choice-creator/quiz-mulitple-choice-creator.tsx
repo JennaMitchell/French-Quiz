@@ -31,10 +31,11 @@ const QuizMultipleChoiceCreator = () => {
   const overAllVocabDB = useAppSelector(
     (state) => state.mainStore.overAllVocabDB
   );
-  const finalAnswerKey: string[] = [];
 
   const [useEffectTrigger, setUseEffectTrigger] = useState<string | number>(0);
   const [finalKeyPushArray, setFinalKeyPushArray] = useState<string[]>([]);
+  const [scrambledAnswers, setScrambledAnswers] = useState<string[][]>([]);
+  const [questionTitleArray, setQuestionTitleArray] = useState<string[]>([]);
 
   const [
     renderReadyMultipleChoiceQuestions,
@@ -58,9 +59,15 @@ const QuizMultipleChoiceCreator = () => {
       )
     );
   }, [numberOfQuestions, dispatch]);
+  // const multipleChoiceQuestionAnswers = useAppSelector(
+  //   (state) => state.quizStore.multipleChoiceQuestionAnswers
+  // );
 
   if (useEffectTrigger === 0) {
     // if statement so that this only renders once
+
+    const tempArrayOfTitles: string[] = [];
+
     /// Step 1.  Creating a overallVOcab AN Phrase Database
     const copyOfPhrasesDB = JSON.parse(JSON.stringify(phrasesDB));
     const copyOfOverAllVocabDB = JSON.parse(JSON.stringify(overAllVocabDB));
@@ -159,24 +166,25 @@ const QuizMultipleChoiceCreator = () => {
       } else {
         questionAnswers.push(vocabNPhrasesDB[indexOfUserSelectedItem].english);
       }
+
       // Scrambling The Answers
 
       const scrambledAnswers: string[] = stringArrayScrambler(questionAnswers);
 
       // Finding the correct answer inside the new Scrambled array
       let termToLookUp = "";
+
       if (answerType === "French") {
         termToLookUp = userSelectedFrenchTerm;
       } else {
-        termToLookUp = vocabNPhrasesDB[userSelectedFrenchTerm];
+        termToLookUp = vocabNPhrasesDB[indexOfUserSelectedItem].english;
       }
-      const indexOfCorrectAnswer = scrambledAnswers?.indexOf(termToLookUp);
+
+      const indexOfCorrectAnswer = scrambledAnswers.indexOf(termToLookUp);
+
       // creating answer key
       const letterArray = ["A", "B", "C", "D"];
-      const correctAnswer = letterArray[indexOfCorrectAnswer ?? 0];
-
-      // Pushing To the Question Child Component
-      finalAnswerKey.push(correctAnswer);
+      const correctAnswer: string = letterArray[indexOfCorrectAnswer ?? 0];
 
       // Handeling Question Title
       let questionTitle = "";
@@ -188,15 +196,21 @@ const QuizMultipleChoiceCreator = () => {
         // title should be french term
         questionTitle = vocabNPhrasesDB[indexOfUserSelectedItem].french;
       }
+      tempArrayOfTitles.push(questionTitle);
 
-      return (
-        <QuizMultipleChoiceQuestion
-          key={questionIndex}
-          arrayOfAnswers={scrambledAnswers}
-          questionIndex={questionIndex}
-          title={questionTitle}
-        />
-      );
+      return {
+        jsxElement: (
+          <QuizMultipleChoiceQuestion
+            key={questionIndex}
+            arrayOfAnswers={scrambledAnswers}
+            questionIndex={questionIndex}
+            title={questionTitle}
+          />
+        ),
+        correctAnswer: correctAnswer,
+        scrambledAnswers: scrambledAnswers,
+        questionTitle: questionTitle,
+      };
     };
     // Creating The Multiple Choice Questions
 
@@ -207,26 +221,60 @@ const QuizMultipleChoiceCreator = () => {
         userSelectedQuizVocabNPhrases,
         numberOfQuestions
       );
+      const finalJSXElements: JSX.Element[] = [];
+      const arrayOfCorrectAnswers: string[] = [];
+      const scrambledAnswersArray: string[][] = [];
+      const questionTitlesArray: string[] = [];
+      for (
+        let indexOfQuestion = 0;
+        indexOfQuestion < arrayOfTestTerms.length;
+        indexOfQuestion++
+      ) {
+        const { jsxElement, correctAnswer, scrambledAnswers, questionTitle } =
+          multipleChoiceQuestionCreator(
+            arrayOfTestTerms[indexOfQuestion],
+            indexOfQuestion
+          );
 
-      setRenderReadyMultipleChoiceQuestions(
-        arrayOfTestTerms.map((word: UserSelectedData, index: number) => {
-          return multipleChoiceQuestionCreator(word, index);
-        })
-      );
+        finalJSXElements.push(jsxElement);
+        arrayOfCorrectAnswers.push(correctAnswer);
+        scrambledAnswersArray.push(scrambledAnswers);
+        questionTitlesArray.push(questionTitle);
+      }
+
+      setRenderReadyMultipleChoiceQuestions(finalJSXElements);
+      setFinalKeyPushArray(arrayOfCorrectAnswers);
+      setScrambledAnswers(scrambledAnswersArray);
+      setQuestionTitleArray(questionTitlesArray);
     } else {
-      setRenderReadyMultipleChoiceQuestions(
-        userSelectedQuizVocabNPhrases.map(
-          (word: UserSelectedData, index: number) => {
-            return multipleChoiceQuestionCreator(word, index);
-          }
-        )
-      );
+      const finalJSXElements: JSX.Element[] = [];
+      const arrayOfCorrectAnswers: string[] = [];
+      const scrambledAnswersArray: string[][] = [];
+      const questionTitlesArray: string[] = [];
+      for (
+        let indexOfQuestion = 0;
+        indexOfQuestion < userSelectedQuizVocabNPhrases.length;
+        indexOfQuestion++
+      ) {
+        const { jsxElement, correctAnswer, scrambledAnswers, questionTitle } =
+          multipleChoiceQuestionCreator(
+            userSelectedQuizVocabNPhrases[indexOfQuestion],
+            indexOfQuestion
+          );
+
+        finalJSXElements.push(jsxElement);
+        arrayOfCorrectAnswers.push(correctAnswer);
+        scrambledAnswersArray.push(scrambledAnswers);
+        questionTitlesArray.push(questionTitle);
+      }
+
+      setRenderReadyMultipleChoiceQuestions(finalJSXElements);
+      setFinalKeyPushArray(arrayOfCorrectAnswers);
+      setScrambledAnswers(scrambledAnswersArray);
+      setQuestionTitleArray(questionTitlesArray);
     }
 
-    if (finalAnswerKey.length === numberOfQuestions) {
-      setUseEffectTrigger("x");
-      setFinalKeyPushArray(finalAnswerKey);
-    }
+    setUseEffectTrigger("x");
   }
 
   useEffect(() => {
@@ -236,9 +284,25 @@ const QuizMultipleChoiceCreator = () => {
           finalKeyPushArray
         )
       );
-      setUseEffectTrigger("y");
+
+      dispatch(
+        quizStoreSliceActions.setMultipleChoiceQuestionAnswers(scrambledAnswers)
+      );
+      dispatch(
+        quizStoreSliceActions.setMultipleChoiceQuestionTitles(
+          questionTitleArray
+        )
+      );
+
+      setUseEffectTrigger("done");
     }
-  }, [useEffectTrigger, dispatch, finalKeyPushArray]);
+  }, [
+    useEffectTrigger,
+    dispatch,
+    finalKeyPushArray,
+    questionTitleArray,
+    scrambledAnswers,
+  ]);
 
   return <>{renderReadyMultipleChoiceQuestions}</>;
 };
