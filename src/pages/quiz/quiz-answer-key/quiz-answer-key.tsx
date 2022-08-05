@@ -78,8 +78,7 @@ const QuizAnswerKeyMain = () => {
     vocabPhraseQuizFillInBlankAnswerKey,
     userSelectedFillInBlankAnswers
   );
-  console.log(conjugationAnswerKey);
-  console.log(userSelectedConjugationAnswers);
+
   const comparedConjugationsArray = arrayComparer(
     conjugationAnswerKey,
     userSelectedConjugationAnswers
@@ -129,7 +128,7 @@ const QuizAnswerKeyMain = () => {
   return (
     <>
       <PercentCorrectContainer>
-        {numberOfCorrectResponses} / {totalNumberOfQuestions} - {percentCorrect}{" "}
+        {numberOfCorrectResponses} / {totalNumberOfQuestions} - {percentCorrect}
         %
       </PercentCorrectContainer>
       {vocabPhraseQuizMultipleChoiceAnswerKey.length !== 0 &&

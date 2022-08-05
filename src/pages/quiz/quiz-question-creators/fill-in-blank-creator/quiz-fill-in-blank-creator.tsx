@@ -16,6 +16,7 @@ import {
   UserQuizQuestionSetup,
 } from "../../../../store/quiz-store-slice";
 import { QuestionNumberBox } from "../shared-styles/quiz-shared-styled-components";
+import { scrollToHandler } from "../../../../components/functions/generic-functions";
 
 const QuizFillInBlankCreator = () => {
   const [savedTestItems, setSavedTestItems] = useState<string[]>([]);
@@ -27,6 +28,7 @@ const QuizFillInBlankCreator = () => {
   );
   const numberOfFillInBlankQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
+  const numberOfMultipleChoiceQuestions = userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
 
   const totalNumberOfQuestions = useAppSelector(
     (state) => state.quizStore.totalNumberOfQuestions
@@ -60,7 +62,6 @@ const QuizFillInBlankCreator = () => {
 
   // use Effect to push the users respond once the quiz submit button is pressed
   useEffect(() => {
-    console.log(userTypedAnswers);
     if (quizSubmitButtonClicked) {
       dispatch(
         quizStoreSliceActions.setUserSelectedFillInBlankAnswers(
@@ -187,9 +188,10 @@ const QuizFillInBlankCreator = () => {
           setUserTypedAnswers(copyOfUserTypedAnswers);
           userEnteredDataChecker(copyOfUserTypedAnswers);
         };
+        console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
-          <QuestionContainer key={questionIndex}>
+          <QuestionContainer key={questionIndex} id = {`question-${questionIndex + numberOfMultipleChoiceQuestions}`}>
             <QuestionTypography>{testItem}</QuestionTypography>
 
             <StyledTextField
@@ -228,9 +230,10 @@ const QuizFillInBlankCreator = () => {
           setUserTypedAnswers(copyOfUserTypedAnswers);
           userEnteredDataChecker(copyOfUserTypedAnswers);
         };
+        console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
-          <QuestionContainer key={questionIndex}>
+          <QuestionContainer key={questionIndex} id = {`question-${questionIndex + numberOfMultipleChoiceQuestions}`}>
             <QuestionTypography>{term}</QuestionTypography>
 
             <StyledTextField

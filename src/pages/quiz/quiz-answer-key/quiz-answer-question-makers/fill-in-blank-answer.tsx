@@ -36,6 +36,7 @@ const FillInBlankAnswer = () => {
   const userQuizQuestionSetup: UserQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
   );
+  const numberOfMultipleChoiceQuestions = userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
   const numberOfFillInBlankQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
 
@@ -71,7 +72,7 @@ const FillInBlankAnswer = () => {
   renderReadyItems = comparedResponsesArray.map(
     (correct: boolean, questionIndex: number) => {
       return (
-        <QuestionContainer key={questionIndex}>
+        <QuestionContainer key={questionIndex} id = {`question ${questionIndex + numberOfMultipleChoiceQuestions}`}>
           <QuestionTypography>
             {fillInTheBlankTestTerms[questionIndex]}
           </QuestionTypography>

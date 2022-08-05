@@ -43,16 +43,16 @@ const QuizMatchingCreator = () => {
   );
   const numberOfMatchingQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseMatchingQuestions;
-  const numberOfMultipleChoiceQuestion =
+  const numberOfMultipleChoiceQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
   const numberOfFillInBlankQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
   const startingQuestionValue =
-    numberOfMultipleChoiceQuestion + numberOfFillInBlankQuestions + 1;
+    numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions + 1;
   const endingQuestionValue =
     numberOfMatchingQuestions +
     numberOfFillInBlankQuestions +
-    numberOfMultipleChoiceQuestion;
+    numberOfMultipleChoiceQuestions;
   const [finalrenderReadyItems, setFinalRenderReadyItems] = useState<
     JSX.Element[]
   >([]);
@@ -294,7 +294,7 @@ const QuizMatchingCreator = () => {
       };
 
       tempRenderReadyItems[questionIndex] = (
-        <MatchingRowContainer key={`${questionIndex} Question Index`}>
+        <MatchingRowContainer key={`${questionIndex} Question Index`} id = {`question-${questionIndex+ numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`}>
           <StyledTypography
             sx={{ textAlign: "left" }}
             key={`${questionIndex} A`}
@@ -358,7 +358,7 @@ const QuizMatchingCreator = () => {
       };
 
       tempRenderReadyItems[questionIndex] = (
-        <MatchingRowContainer key={`${questionIndex} Question Index`}>
+        <MatchingRowContainer key={`${questionIndex} Question Index`} id = {`question-${questionIndex+ numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`}>
           <StyledTypography
             sx={{ textAlign: "left" }}
             key={`${questionIndex} A`}

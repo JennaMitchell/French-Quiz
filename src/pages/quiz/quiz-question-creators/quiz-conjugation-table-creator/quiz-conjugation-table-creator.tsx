@@ -43,7 +43,7 @@ const QuizConjugationTableCreator = () => {
   const userQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
   );
-  const totalnumberOfVocabQuestions =
+  const totalNumberOfVocabQuestions =
     userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions;
   const conjugationsTableDB: conjugationDB = useAppSelector(
     (state) => state.mainStore.conjugationTableDB
@@ -244,14 +244,14 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`}>
+            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
               </QuestionTypography>
               <StyledTextField
-                id={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
-                label={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
+                id={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
+                label={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
                 variant="outlined"
                 onChange={changeHandler}
                 multiline
@@ -284,14 +284,14 @@ const QuizConjugationTableCreator = () => {
           };
 
           return (
-            <QuestionContainer key={`Question ${index}`}>
+            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
               </QuestionTypography>
               <StyledTextField
-                id={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
-                label={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
+                id={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
+                label={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
                 variant="outlined"
                 onChange={changeHandler}
                 multiline
@@ -330,7 +330,7 @@ const QuizConjugationTableCreator = () => {
           const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
           finalRenderReadyItems = (
-            <TopContainer key={indexOfGrouping}>
+            <TopContainer key={indexOfGrouping} id = {`grouping-${indexOfGrouping+1}`}>
               <TitleText>Conjugate {titleVerb}</TitleText>
               {tempJSXArray}
             </TopContainer>
@@ -367,14 +367,14 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`}>
+            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
               </QuestionTypography>
               <StyledTextField
-                id={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
-                label={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
+                id={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
+                label={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
                 variant="outlined"
                 onChange={changeHandler}
                 multiline
@@ -406,14 +406,14 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`}>
+            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
               </QuestionTypography>
               <StyledTextField
-                id={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
-                label={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
+                id={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
+                label={`answer-${index + 1 + totalNumberOfVocabQuestions}`}
                 variant="outlined"
                 onChange={changeHandler}
                 multiline
@@ -454,10 +454,10 @@ const QuizConjugationTableCreator = () => {
           const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
           finalRenderReadyItems.push(
-            <TopContainer key={`Top Container ${indexOfGrouping}`}>
+            <TopContainer key={`Top Container ${indexOfGrouping}`} id = {`grouping-${(indexOfGrouping+1)/8}`}>
               <QuestionNumberBox>
-                {totalnumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
-                {totalnumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
+                {totalNumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
+                {totalNumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
                 {totalNumberOfQuestions}
               </QuestionNumberBox>
               <TitleText sx={{ paddingBottom: "0px", paddingTop: "0px" }}>
@@ -471,10 +471,10 @@ const QuizConjugationTableCreator = () => {
       }
     } else {
       finalRenderReadyItems = (
-        <TopContainer key={`Top Container`}>
+        <TopContainer key={`Top Container`} id = {`grouping-${1}`}>
           <QuestionNumberBox>
-            {totalnumberOfVocabQuestions + 1} -{"  "}
-            {totalnumberOfVocabQuestions + numberOfQuestions * 8} of{"  "}
+            {totalNumberOfVocabQuestions + 1} -{"  "}
+            {totalNumberOfVocabQuestions + numberOfQuestions * 8} of{"  "}
             {totalNumberOfQuestions}
           </QuestionNumberBox>
           {finalRenderReadyItems}

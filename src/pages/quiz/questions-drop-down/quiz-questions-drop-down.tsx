@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { quizStoreSliceActions } from "../../../store/quiz-store-slice";
 import CheckIcon from "@mui/icons-material/Check";
+import { scrollToHandler } from "../../../components/functions/generic-functions"
 const QuestionButton = styled("button", {
   name: "QuestionButton",
   slot: "Wrapper",
@@ -141,8 +142,13 @@ const QuizQuestionsDropDown = () => {
       multipleChoiceQuestionIndex < numberOfMultipleChoiceQuestions;
       multipleChoiceQuestionIndex++
     ) {
+
+      const clickHandler = ()=>{
+        scrollToHandler(`question-${multipleChoiceQuestionIndex}`)
+      }
+
       renderReadyMultipleChoiceQuestions.push(
-        <QuestionButton key={multipleChoiceQuestionIndex}>
+        <QuestionButton key={multipleChoiceQuestionIndex} onClick = {clickHandler}>
           <StyledText>{multipleChoiceQuestionIndex + 1}</StyledText>
           {userSelectedMultipleChoiceQuizAnswers[
             multipleChoiceQuestionIndex
@@ -157,8 +163,14 @@ const QuizQuestionsDropDown = () => {
       fillInBlankIndex < numberOfFillInBlankQuestions;
       fillInBlankIndex++
     ) {
+
+      const clickHandler = ()=>{
+        console.log(`question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`)
+        scrollToHandler(`question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`)
+      }
+
       renderReadyFillInBlankQuestions.push(
-        <QuestionButton key={fillInBlankIndex}>
+        <QuestionButton key={fillInBlankIndex} onClick = {clickHandler}>
           <StyledText>
             {fillInBlankIndex + 1 + numberOfQuizConjugationQuestions}
           </StyledText>
@@ -176,8 +188,13 @@ const QuizQuestionsDropDown = () => {
       matchingQuestionIndex < numberOfMatchingQuestions;
       matchingQuestionIndex++
     ) {
+
+      const clickHandler = ()=>{
+        scrollToHandler(`question-${matchingQuestionIndex + numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`)
+      }
+
       renderReadyMatchingQuestions.push(
-        <QuestionButton key={matchingQuestionIndex}>
+        <QuestionButton key={matchingQuestionIndex} onClick = {clickHandler}>
           <StyledText>
             {matchingQuestionIndex +
               1 +
@@ -209,8 +226,15 @@ const QuizQuestionsDropDown = () => {
         if ((indexOfConjugation + 1) % 8 === 0) {
           // 8 is number of prefixes
           if (arrayOfAnsweredQuestions.includes(`false`)) {
+
+            const clickHandler = ()=>{
+              console.log(`grouping-${(indexOfConjugation+1)/8}`)
+              scrollToHandler(`grouping-${(indexOfConjugation+1)/8}`)
+            }
+      
+
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation}>
+              <QuestionButton key={indexOfConjugation} onClick = {clickHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
@@ -218,8 +242,14 @@ const QuizQuestionsDropDown = () => {
               </QuestionButton>
             );
           } else {
+            const clickHandler = ()=>{
+
+              console.log(`grouping-${(indexOfConjugation+1)/8}`)
+              scrollToHandler(`grouping-${(indexOfConjugation+1)/8}`)
+            }
+      
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation}>
+              <QuestionButton key={indexOfConjugation} onClick = {clickHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
@@ -235,8 +265,14 @@ const QuizQuestionsDropDown = () => {
         (string) => `${string}`
       );
       if (stringifiedAnswerArray.includes("false")) {
+
+      const clickHandler = ()=>{
+        scrollToHandler(`grouping-1`)
+      }
+
+        
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"}>
+          <QuestionButton key={"all"} onClick = {clickHandler }>
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}
@@ -244,8 +280,11 @@ const QuizQuestionsDropDown = () => {
           </QuestionButton>
         );
       } else {
+        const clickHandler = ()=>{
+          scrollToHandler(`grouping-1`)
+        }
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"}>
+          <QuestionButton key={"all"} onClick = {clickHandler}>
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}

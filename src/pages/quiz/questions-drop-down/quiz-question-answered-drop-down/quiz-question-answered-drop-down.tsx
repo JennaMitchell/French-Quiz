@@ -2,6 +2,10 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from '@mui/icons-material/Close';
+
+
+import { arrayComparer,scrollToHandler } from "../../../../components/functions/generic-functions";
 const QuestionButton = styled("button", {
   name: "QuestionButton",
   slot: "Wrapper",
@@ -46,8 +50,18 @@ const StyledCheckIcon = styled(CheckIcon, {
 })(({ theme }) => ({
   width: "max(20px,20px)",
   height: "max(20px,20px)",
-  color: "inherit",
+  color: "rgb(67, 239, 76)",
   backgroundColor: "inherit",
+}));
+
+const StyledXIcon = styled(CloseIcon,{
+  name : "StyledXIcon",
+  slot: "Wrapper"
+})(({ theme }) => ({
+  width: "max(20px,20px)",
+  height: "max(20px,20px)",
+  backgroundColor: "inherit",
+  color: "rgb(255, 17, 0)" ,
 }));
 
 const QuestionTitle = styled("h6", {
@@ -90,19 +104,8 @@ const QuestionMenuContainer = styled("div", {
 
   padding: "20px",
 }));
-interface Props {
-  // Step 1. Comparing users Answers to what is actualy there
-  comparedMultipleChoiceArray: boolean[];
-  comparedFillInBlankArray: boolean[];
-  comparedConjugationsArray: boolean[];
-  comparedMatchingArray: boolean[];
-}
-const QuizQuestionAnsweredDropDown = ({
-  comparedMultipleChoiceArray,
-  comparedFillInBlankArray,
-  comparedConjugationsArray,
-  comparedMatchingArray,
-}: Props) => {
+
+const QuizQuestionAnsweredDropDown = () => {
   // const questionListActive = useAppSelector(
   //   (state) => state.quizStore.questionListActive
   // );
@@ -110,11 +113,49 @@ const QuizQuestionAnsweredDropDown = ({
     (state) => state.quizStore.userSelectedQuizConjugationGrouping
   );
 
+  const userSelectedFillInBlankAnswers = useAppSelector(
+    (state) => state.quizStore.userSelectedFillInBlankAnswers
+  );
+  const userSelectedConjugationAnswers = useAppSelector(
+    (state) => state.quizStore.userSelectedConjugationAnswers
+  );
+  const userSelectedMatchingAnswers = useAppSelector(
+    (state) => state.quizStore.userSelectedMatchingAnswers
+  );
+  const conjugationAnswerKey = useAppSelector((state)=>state.quizStore.conjugationAnswerKey);
+  const vocabPhraseQuizFillInBlankAnswerKey = useAppSelector((state)=>state.quizStore.vocabPhraseQuizFillInBlankAnswerKey);
+  const matchingAnswerKey = useAppSelector((state)=>state.quizStore.matchingAnswerKey);
+  const vocabPhraseQuizMultipleChoiceAnswerKey = useAppSelector((state)=>state.quizStore.vocabPhraseQuizMultipleChoiceAnswerKey);
+  const userSelectedMultipleChoiceQuizAnswers = useAppSelector((state)=>state.quizStore.userSelectedMultipleChoiceQuizAnswers);
+
+  // Step 1. Comparing users Answers to what is actualy there
+
+  const comparedMultipleChoiceArray = arrayComparer(
+    vocabPhraseQuizMultipleChoiceAnswerKey,
+    userSelectedMultipleChoiceQuizAnswers
+  );
+
+  const comparedFillInBlankArray = arrayComparer(
+    vocabPhraseQuizFillInBlankAnswerKey,
+    userSelectedFillInBlankAnswers
+  );
+
+  const comparedConjugationsArray = arrayComparer(
+    conjugationAnswerKey,
+    userSelectedConjugationAnswers
+  );
+
+  const comparedMatchingArray = arrayComparer(
+    matchingAnswerKey,
+    userSelectedMatchingAnswers
+  );
+
+
   const dispatch = useAppDispatch();
 
   const numberOfMultipleChoiceQuestions = comparedMultipleChoiceArray.length;
-  const numberOfMatchingQuestions = comparedFillInBlankArray.length;
-  const numberOfFillInBlankQuestions = comparedConjugationsArray.length;
+  const numberOfMatchingQuestions = comparedMatchingArray.length;
+  const numberOfFillInBlankQuestions = comparedFillInBlankArray.length;
   const numberOfVocabQuestions = comparedMatchingArray.length;
   // const numberOfQuestions =
   //   userQuizQuestionSetup.numberOfTotalVocabNPhraseQuestions;
@@ -134,33 +175,40 @@ const QuizQuestionAnsweredDropDown = ({
       multipleChoiceQuestionIndex < numberOfMultipleChoiceQuestions;
       multipleChoiceQuestionIndex++
     ) {
+      const buttonHandler = ()=>{
+        scrollToHandler(`question-${multipleChoiceQuestionIndex}`)
+      }
       renderReadyMultipleChoiceQuestions.push(
-        <QuestionButton key={multipleChoiceQuestionIndex}>
+        <QuestionButton key={multipleChoiceQuestionIndex} onClick = {buttonHandler}>
           <StyledText>{multipleChoiceQuestionIndex + 1}</StyledText>
           {comparedMultipleChoiceArray[multipleChoiceQuestionIndex] ? (
-            <StyledCheckIcon sx={{ color: "rgb(67, 239, 76)" }} />
+            <StyledCheckIcon />
           ) : (
-            <StyledCheckIcon sx={{ color: "rgb(255, 17, 0)" }} />
+            <StyledXIcon />
           )}
         </QuestionButton>
       );
     }
   }
+ 
   if (numberOfFillInBlankQuestions !== 0) {
     for (
       let fillInBlankIndex = 0;
       fillInBlankIndex < numberOfFillInBlankQuestions;
       fillInBlankIndex++
     ) {
+      const buttonHandler = ()=>{
+        scrollToHandler(`question-${fillInBlankIndex+ numberOfMultipleChoiceQuestions}`)
+      }
       renderReadyFillInBlankQuestions.push(
-        <QuestionButton key={fillInBlankIndex}>
+        <QuestionButton key={fillInBlankIndex} onClick ={buttonHandler}>
           <StyledText>
             {fillInBlankIndex + 1 + numberOfQuizConjugationQuestions}
           </StyledText>
           {comparedFillInBlankArray[fillInBlankIndex] ? (
-            <StyledCheckIcon sx={{ color: "rgb(67, 239, 76)" }} />
+            <StyledCheckIcon />
           ) : (
-            <StyledCheckIcon sx={{ color: "rgb(255, 17, 0)" }} />
+            <StyledXIcon />
           )}
         </QuestionButton>
       );
@@ -173,8 +221,13 @@ const QuizQuestionAnsweredDropDown = ({
       matchingQuestionIndex < numberOfMatchingQuestions;
       matchingQuestionIndex++
     ) {
+
+      const buttonHandler = ()=>{
+        scrollToHandler(`question-${matchingQuestionIndex+ numberOfMultipleChoiceQuestions +numberOfFillInBlankQuestions}`)
+      }
+
       renderReadyMatchingQuestions.push(
-        <QuestionButton key={matchingQuestionIndex}>
+        <QuestionButton key={matchingQuestionIndex} onClick = {buttonHandler}>
           <StyledText>
             {matchingQuestionIndex +
               1 +
@@ -182,9 +235,9 @@ const QuizQuestionAnsweredDropDown = ({
               numberOfFillInBlankQuestions}
           </StyledText>
           {comparedMatchingArray[matchingQuestionIndex] ? (
-            <StyledCheckIcon sx={{ color: "rgb(67, 239, 76)" }} />
+            <StyledCheckIcon  />
           ) : (
-            <StyledCheckIcon sx={{ color: "rgb(255, 17, 0)" }} />
+            <StyledXIcon />
           )}
         </QuestionButton>
       );
@@ -208,17 +261,25 @@ const QuizQuestionAnsweredDropDown = ({
         if ((indexOfConjugation + 1) % 8 === 0) {
           // 8 is number of prefixes
           if (arrayOfAnsweredQuestions.includes(`false`)) {
+            const buttonHandler = ()=>{
+              scrollToHandler(`grouping-${(indexOfConjugation + 1) / 8}`)
+            }
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation}>
+              <QuestionButton key={indexOfConjugation} onClick = {buttonHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
                 </StyledText>
+                <StyledXIcon />
+               
               </QuestionButton>
             );
           } else {
+            const buttonHandler = ()=>{
+              scrollToHandler(`grouping-${(indexOfConjugation + 1) / 8}`)
+            }
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation}>
+              <QuestionButton key={indexOfConjugation} onClick = {buttonHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
@@ -233,24 +294,28 @@ const QuizQuestionAnsweredDropDown = ({
       const stringifiedAnswerArray = comparedConjugationsArray.map(
         (string) => `${string}`
       );
+      const buttonHandler = ()=>{
+        scrollToHandler(`grouping-1`)
+      }
+
       if (stringifiedAnswerArray.includes("false")) {
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"}>
+          <QuestionButton key={"all"} onClick = {buttonHandler}>
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}
             </StyledText>
-            <StyledCheckIcon sx={{ color: "rgb(255, 17, 0)" }} />
+            <StyledXIcon />
           </QuestionButton>
         );
       } else {
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"}>
+          <QuestionButton key={"all"} onClick = {buttonHandler}> 
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}
             </StyledText>
-            <StyledCheckIcon sx={{ color: "rgb(67, 239, 76)" }} />
+            <StyledCheckIcon  />
           </QuestionButton>
         );
       }
@@ -260,7 +325,7 @@ const QuizQuestionAnsweredDropDown = ({
   const hideQuestionHandler = () => {
     dispatch(quizStoreSliceActions.setQuestionListActive(false));
   };
-
+ 
   return (
     <QuestionMenuContainer>
       <QuestionButton onClick={hideQuestionHandler}>

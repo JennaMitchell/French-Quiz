@@ -34,7 +34,8 @@ const CorrectAnswerText = styled("p", {
   top: "-2.5%",
   right: "20px",
   translate: "0% -50%",
-  fontSize: "24px",
+  fontSize: "20px",
+
 
   zIndex: "2",
 }));
@@ -105,14 +106,52 @@ const QuizConjugationAnswered = () => {
               disabled
               value={userSelectedConjugationAnswers[index]}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
+                ".css-itfxkg-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
                     borderColor: `${
                       comparedConjugationsArray[index]
                         ? "rgb(67, 239, 76)"
                         : "rgb(255, 17, 0)"
                     }`,
                   },
+                ".MuiOutlinedInput-root .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":
+                  {
+                    color: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                    WebkitTextFillColor: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                    textDecoration: `${
+                      !comparedConjugationsArray[index] && "line-through"
+                    }`,
+                    textDecorationColor: `${
+                      !comparedConjugationsArray[index] && "rgb(255, 17, 0)"
+                    }`,
+                    textDecorationThickness: `${
+                      !comparedConjugationsArray[index] && "2px"
+                    }`,
+                  },
+
+                ".MuiOutlinedInput-root ": {
+                  "&:hover fieldset": {
+                    borderColor: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                  },
+                },
+                "&.MuiTextField-root .MuiInputLabel-root": {
+                  color: `${
+                    comparedConjugationsArray[index]
+                      ? "rgb(67, 239, 76)"
+                      : "rgb(255, 17, 0)"
+                  }`,
                 },
               }}
             />
@@ -216,7 +255,7 @@ const QuizConjugationAnswered = () => {
         const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
         finalRenderReadyItems.push(
-          <TopContainer key={`Top Container ${indexOfGrouping}`}>
+          <TopContainer key={`Top Container ${indexOfGrouping}`} id = {`grouping-${(indexOfGrouping + 1) /8}`}>
             <QuestionNumberBox>
               {totalnumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
               {totalnumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
@@ -234,7 +273,7 @@ const QuizConjugationAnswered = () => {
   } else {
     // Random Selection
     finalRenderReadyItems = (
-      <TopContainer key={`Top Container`}>
+      <TopContainer key={`Top Container`} id = {"grouping-1"}>
         <QuestionNumberBox>
           {totalnumberOfVocabQuestions + 1} -{"  "}
           {totalnumberOfVocabQuestions +

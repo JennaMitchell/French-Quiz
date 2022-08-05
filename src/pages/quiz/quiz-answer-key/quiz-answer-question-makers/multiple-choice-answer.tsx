@@ -105,7 +105,7 @@ const AnsweredQuizMultipleChoiceQuestion = ({
   });
 
   return (
-    <QuestionContainer>
+    <QuestionContainer id = {`question-${questionIndex}`}>
       <QuestionNumberBox>
         {questionIndex + 1} of {totalNumberOfQuestions}
       </QuestionNumberBox>

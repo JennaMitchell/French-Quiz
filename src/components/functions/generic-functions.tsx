@@ -252,3 +252,11 @@ export const arrayComparer = (
 
   return arrayOfComparisons;
 };
+
+  /// Handeling Scroll to button Presses 
+
+  export const scrollToHandler = (idToScrollTo:string) =>{
+    const ref = document.getElementById(idToScrollTo);
+    console.log(ref);
+    ref?.scrollIntoView();
+  }

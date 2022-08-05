@@ -70,12 +70,14 @@ const LinkButton = styled(NavLink, {
   display: "grid",
   placeItems: "center",
   textAlign: "center",
-  borderRadius: "10px",
-  fontSize: "32px",
+  borderRadius: "5px",
+  fontSize: "28px",
   textDecoration: "none",
   backgroundColor: theme.palette.primary.dark,
   color: theme.palette.secondary.light,
   transition: "all 0.5s",
+
+  marginTop:"10px",
   "&:hover": {
     backgroundColor: theme.palette.secondary.light,
     color: theme.palette.secondary.dark,

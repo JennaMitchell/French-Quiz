@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { quizStoreSliceActions } from "../../../../../store/quiz-store-slice";
 import { capitalizeFirstLetter } from "../../../../../components/functions/generic-functions";
 import { QuestionNumberBox } from "../../shared-styles/quiz-shared-styled-components";
+import { scrollToHandler } from "../../../../../components/functions/generic-functions"
 interface Props {
   arrayOfAnswers: string[];
   questionIndex: number;
@@ -40,6 +41,7 @@ const QuizMultipleChoiceQuestion = ({
           deepCopyOfCurrentAnwerKey
         )
       );
+      scrollToHandler(`question-${questionIndex+1}`)
     };
     if (
       userSelectedMultipleChoiceQuizAnswers[questionIndex] === letterArray[i]
@@ -51,15 +53,17 @@ const QuizMultipleChoiceQuestion = ({
         key={i}
         onClick={answerClickedHandler}
         sx={{ borderColor: `${activeAnswer && "secondary.light"}` }}
+        
       >
         <QuestionTypography>{letterArray[i]}.</QuestionTypography>
         <QuestionTypography>{capitalizeFirstLetter(answer)}</QuestionTypography>
       </QuestionAnswer>
     );
   });
+  
 
   return (
-    <QuestionContainer>
+    <QuestionContainer id = {`question-${questionIndex}`}>
       <QuestionNumberBox>
         {questionIndex + 1} of {totalNumberOfQuestions}
       </QuestionNumberBox>

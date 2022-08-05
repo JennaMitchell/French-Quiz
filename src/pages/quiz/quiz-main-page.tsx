@@ -9,6 +9,7 @@ import QuizMatchingCreator from "./quiz-question-creators/matching-choice-creato
 import QuizConjugationTableCreator from "./quiz-question-creators/quiz-conjugation-table-creator/quiz-conjugation-table-creator";
 import QuizQuestionsDropDown from "./questions-drop-down/quiz-questions-drop-down";
 import QuizAnswerKeyMain from "./quiz-answer-key/quiz-answer-key";
+import QuizQuestionAnsweredDropDown from "./questions-drop-down/quiz-question-answered-drop-down/quiz-question-answered-drop-down"
 
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { quizReset } from "../../components/functions/quiz-reset-function";
@@ -228,6 +229,7 @@ const QuizMainPage = () => {
           !arrayOfCheckedValues.includes(false) &&
           arrayOfCheckedValues.length !== 0
         ) {
+          dispatch(quizStoreSliceActions.setQuestionListActive(false));
           dispatch(quizStoreSliceActions.setUserAnswerRetrieved(true));
         }
       }
@@ -244,18 +246,23 @@ const QuizMainPage = () => {
     userSelectedFillInBlankAnswers.length,
   ]);
 
+
+
+
+
   return (
     <TopContainer>
       {userAnswerRetrieved && <QuizAnswerKeyMain />}
       {initialPopupActive && <NumberOfQuestionsPopup />}
       {quizVocabSelectionPopupActive && <QuizVocabSelectionPopup />}
+      {userAnswerRetrieved && questionListActive && <QuizQuestionAnsweredDropDown />}
       {quizConjugationNumberOfQuestionsPopup && (
         <NumberOfConjugationQuizQuestionsPopup />
       )}
       {quizConjugationVerbSelectionPopupActive && (
         <QuizConjugationSelectionPopup />
       )}
-      {quizSetupComplete && questionListActive && <QuizQuestionsDropDown />}
+      {!userAnswerRetrieved && quizSetupComplete && questionListActive && <QuizQuestionsDropDown />}
       <StyledButton
         sx={{ top: "40px", right: "60px" }}
         onClick={newQuizHandler}
@@ -291,7 +298,7 @@ const QuizMainPage = () => {
         </StyledButton>
       )}
 
-      {!quizSetupComplete && (
+      {!userAnswerRetrieved && !quizSetupComplete && (
         <StyledButton
           sx={{
             top: "40px",
