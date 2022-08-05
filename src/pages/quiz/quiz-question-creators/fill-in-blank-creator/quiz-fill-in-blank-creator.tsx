@@ -60,6 +60,7 @@ const QuizFillInBlankCreator = () => {
 
   // use Effect to push the users respond once the quiz submit button is pressed
   useEffect(() => {
+    console.log(userTypedAnswers);
     if (quizSubmitButtonClicked) {
       dispatch(
         quizStoreSliceActions.setUserSelectedFillInBlankAnswers(
@@ -93,7 +94,11 @@ const QuizFillInBlankCreator = () => {
   // useEffect used to push answer key after the data is rendered
   useEffect(() => {
     if (savedAnswerItems.length !== 0) {
-      dispatch(quizStoreSliceActions.setMatchingAnswerKey(savedAnswerItems));
+      dispatch(
+        quizStoreSliceActions.setVocabPhraseQuizFillInBlankAnswerKey(
+          savedAnswerItems
+        )
+      );
     }
   }, [savedAnswerItems.length, dispatch, savedAnswerItems]);
 

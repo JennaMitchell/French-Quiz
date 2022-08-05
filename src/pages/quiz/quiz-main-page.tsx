@@ -80,6 +80,9 @@ const QuizMainPage = () => {
   const quizSubmitButtonClicked = useAppSelector(
     (state) => state.quizStore.quizSubmitButtonClicked
   );
+  const userSelectedMatchingAnswers = useAppSelector(
+    (state) => state.quizStore.userSelectedMatchingAnswers
+  );
   const [initialPopupActive, setInitialPopupActive] = useState(false);
   const [submitButtonEnabled, setSubmitButtonEnabled] = useState(false);
 
@@ -174,6 +177,7 @@ const QuizMainPage = () => {
   useEffect(() => {
     const arrayOfValuesToCheck: string[] = [];
     const arrayOfCheckedValues: boolean[] = [];
+
     if (quizSubmitButtonClicked) {
       if (
         userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions !== 0
@@ -203,7 +207,7 @@ const QuizMainPage = () => {
               }
               break;
             case "Matching":
-              if (matchingQuestionAnsweredArray.length !== 0) {
+              if (userSelectedMatchingAnswers.length !== 0) {
                 arrayOfCheckedValues.push(true);
               } else {
                 arrayOfCheckedValues.push(false);
@@ -220,7 +224,10 @@ const QuizMainPage = () => {
               break;
           }
         }
-        if (!arrayOfCheckedValues.includes(false)) {
+        if (
+          !arrayOfCheckedValues.includes(false) &&
+          arrayOfCheckedValues.length !== 0
+        ) {
           dispatch(quizStoreSliceActions.setUserAnswerRetrieved(true));
         }
       }
@@ -228,7 +235,7 @@ const QuizMainPage = () => {
   }, [
     userAnswerRetrieved,
     dispatch,
-    matchingQuestionAnsweredArray.length,
+    userSelectedMatchingAnswers.length,
     numberOfQuizConjugationQuestions,
     quizSubmitButtonClicked,
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions,
@@ -239,7 +246,7 @@ const QuizMainPage = () => {
 
   return (
     <TopContainer>
-      {quizSubmitButtonClicked && <QuizAnswerKeyMain />}
+      {userAnswerRetrieved && <QuizAnswerKeyMain />}
       {initialPopupActive && <NumberOfQuestionsPopup />}
       {quizVocabSelectionPopupActive && <QuizVocabSelectionPopup />}
       {quizConjugationNumberOfQuestionsPopup && (
@@ -255,7 +262,7 @@ const QuizMainPage = () => {
       >
         New Quiz
       </StyledButton>
-      {!submitButtonEnabled && (
+      {!userAnswerRetrieved && !submitButtonEnabled && (
         <StyledButton
           sx={{
             top: "40px",
@@ -272,7 +279,7 @@ const QuizMainPage = () => {
           Submit
         </StyledButton>
       )}
-      {submitButtonEnabled && !quizSubmitButtonClicked && (
+      {!userAnswerRetrieved && submitButtonEnabled && !quizSubmitButtonClicked && (
         <StyledButton
           sx={{
             top: "40px",
@@ -331,9 +338,11 @@ const QuizMainPage = () => {
         userQuizQuestionSetup.numberOfVocabNPhraseMatchingQuestions !== 0 && (
           <QuizMatchingCreator />
         )}
-      {quizSetupComplete && numberOfQuizConjugationQuestions !== 0 && (
-        <QuizConjugationTableCreator />
-      )}
+      {!userAnswerRetrieved &&
+        quizSetupComplete &&
+        numberOfQuizConjugationQuestions !== 0 && (
+          <QuizConjugationTableCreator />
+        )}
     </TopContainer>
   );
 };

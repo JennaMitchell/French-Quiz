@@ -132,8 +132,6 @@ const QuizMatchingCreator = () => {
         arrayOfAnsweredQuestions.push(false);
       }
     }
-    console.log(arrayOfAnsweredQuestions);
-    console.log(matchingQuestionAnsweredArray);
 
     // comparing what is already active to what isn't active
     for (
@@ -149,7 +147,7 @@ const QuizMatchingCreator = () => {
         break;
       }
     }
-    console.log(updateDetected);
+
     if (updateDetected) {
       dispatch(
         quizStoreSliceActions.setMatchingQuestionAnsweredArray(

@@ -18,10 +18,7 @@ const initialState = {
   userSelectedQuizConjugationGrouping: "",
   vocabPhraseQuizMultipleChoiceAnswerKey: [],
   vocabPhraseQuizFillInBlankAnswerKey: [],
-  vocabPhraseQuizMatchingAnswerKey: [],
   fillInBlankQuestionAnsweredArray: [],
-  multipleChoiceQuestionsCreated: false,
-  fillInBlankQuestionsCreated: false,
   matchingAnswerKey: [],
   matchingQuestionAnsweredArray: [],
   conjugationAnswerKey: [],
@@ -84,9 +81,7 @@ export const quizStoreSlice = createSlice({
     setVocabPhraseQuizFillInBlankAnswerKey(state, { payload }) {
       state.vocabPhraseQuizFillInBlankAnswerKey = payload;
     },
-    setVocabPhraseQuizMatchingAnswerKey(state, { payload }) {
-      state.vocabPhraseQuizMatchingAnswerKey = payload;
-    },
+
     setFillInBlankQuestionAnsweredArray(state, { payload }) {
       state.fillInBlankQuestionAnsweredArray = payload;
     },

@@ -24,8 +24,12 @@ const CorrectAnswerText = styled("p", {
   padding: "10px",
   textAlign: "center",
   position: "absolute",
-  top: "20px",
-  left: "20px",
+  top: "-2.5%",
+  right: "20px",
+  translate: "0% -50%",
+  fontSize: "24px",
+
+  zIndex: "2",
 }));
 
 const FillInBlankAnswer = () => {
@@ -56,7 +60,7 @@ const FillInBlankAnswer = () => {
     (state) => state.quizStore.fillInTheBlankTestTerms
   );
 
-  const correctArray = arrayComparer(
+  const comparedResponsesArray = arrayComparer(
     vocabPhraseQuizFillInBlankAnswerKey,
     userSelectedFillInBlankAnswers
   );
@@ -64,7 +68,7 @@ const FillInBlankAnswer = () => {
   let renderReadyItems: any[] = [];
   //// Generating the Data
 
-  renderReadyItems = correctArray.map(
+  renderReadyItems = comparedResponsesArray.map(
     (correct: boolean, questionIndex: number) => {
       return (
         <QuestionContainer key={questionIndex}>
@@ -85,12 +89,32 @@ const FillInBlankAnswer = () => {
             disabled
             value={userSelectedFillInBlankAnswers[questionIndex]}
             sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
+              ".css-itfxkg-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
                   borderColor: `${
                     correct ? "rgb(67, 239, 76)" : "rgb(255, 17, 0)"
                   }`,
                 },
+              ".MuiOutlinedInput-root .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":
+                {
+                  color: `${correct ? "rgb(67, 239, 76)" : "rgb(255, 17, 0)"}`,
+                  WebkitTextFillColor: `${
+                    correct ? "rgb(67, 239, 76)" : "rgb(255, 17, 0)"
+                  }`,
+                  textDecoration: `${!correct && "line-through"}`,
+                  textDecorationColor: `${!correct && "rgb(255, 17, 0)"}`,
+                  textDecorationThickness: `${!correct && "2px"}`,
+                },
+
+              ".MuiOutlinedInput-root ": {
+                "&:hover fieldset": {
+                  borderColor: `${
+                    correct ? "rgb(67, 239, 76)" : "rgb(255, 17, 0)"
+                  }`,
+                },
+              },
+              "&.MuiTextField-root .MuiInputLabel-root": {
+                color: `${correct ? "rgb(67, 239, 76)" : "rgb(255, 17, 0)"}`,
               },
             }}
           />

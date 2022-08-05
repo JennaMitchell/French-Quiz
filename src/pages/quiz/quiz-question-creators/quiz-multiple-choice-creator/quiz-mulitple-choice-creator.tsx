@@ -68,12 +68,13 @@ const QuizMultipleChoiceCreator = () => {
 
     const tempArrayOfTitles: string[] = [];
 
-    /// Step 1.  Creating a overallVOcab AN Phrase Database
+    /// Step 1.  Creating a overallVocab and Phrase Database
     const copyOfPhrasesDB = JSON.parse(JSON.stringify(phrasesDB));
     const copyOfOverAllVocabDB = JSON.parse(JSON.stringify(overAllVocabDB));
     const vocabNPhrasesDB = copyOfOverAllVocabDB.concat(copyOfPhrasesDB);
 
     // Getting French Term Array so we know where we are in our newly created Database
+    // "object key is the french term and value of that key value pair is the english term"
     const vocabNPhrasesDBFrenchArray = vocabNPhrasesDB.map(
       (item: UserSelectedData) => {
         return item.french;

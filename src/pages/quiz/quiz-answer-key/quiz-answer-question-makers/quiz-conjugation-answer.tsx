@@ -28,11 +28,15 @@ const CorrectAnswerText = styled("p", {
   width: "max-content",
   maxWidth: "max-content",
   height: "max-content",
-  padding: "10px",
+  padding: "2px 10px",
   textAlign: "center",
   position: "absolute",
-  top: "20px",
-  left: "20px",
+  top: "-2.5%",
+  right: "20px",
+  translate: "0% -50%",
+  fontSize: "24px",
+
+  zIndex: "2",
 }));
 const QuizConjugationAnswered = () => {
   const userQuizQuestionSetup = useAppSelector(
@@ -47,9 +51,7 @@ const QuizConjugationAnswered = () => {
   const userSelectedConjugationAnswers = useAppSelector(
     (state) => state.quizStore.userSelectedConjugationAnswers
   );
-  const conjugationQuestionAnsweredArray = useAppSelector(
-    (state) => state.quizStore.conjugationQuestionAnsweredArray
-  );
+
   const userSelectedQuizConjugationGrouping = useAppSelector(
     (state) => state.quizStore.userSelectedQuizConjugationGrouping
   );
@@ -59,8 +61,9 @@ const QuizConjugationAnswered = () => {
   const totalNumberOfQuestions = useAppSelector(
     (state) => state.quizStore.totalNumberOfQuestions
   );
+
   const comparedConjugationsArray = arrayComparer(
-    conjugationQuestionAnsweredArray,
+    conjugationAnswerKey,
     userSelectedConjugationAnswers
   );
 
@@ -105,7 +108,7 @@ const QuizConjugationAnswered = () => {
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: `${
-                      comparedConjugationsArray
+                      comparedConjugationsArray[index]
                         ? "rgb(67, 239, 76)"
                         : "rgb(255, 17, 0)"
                     }`,
@@ -136,15 +139,55 @@ const QuizConjugationAnswered = () => {
               label={`answer-${index + 1 + totalnumberOfVocabQuestions}`}
               variant="outlined"
               multiline
+              disabled
+              value={userSelectedConjugationAnswers[index]}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
+                ".css-itfxkg-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
                     borderColor: `${
-                      comparedConjugationsArray
+                      comparedConjugationsArray[index]
                         ? "rgb(67, 239, 76)"
                         : "rgb(255, 17, 0)"
                     }`,
                   },
+                ".MuiOutlinedInput-root .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":
+                  {
+                    color: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                    WebkitTextFillColor: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                    textDecoration: `${
+                      !comparedConjugationsArray[index] && "line-through"
+                    }`,
+                    textDecorationColor: `${
+                      !comparedConjugationsArray[index] && "rgb(255, 17, 0)"
+                    }`,
+                    textDecorationThickness: `${
+                      !comparedConjugationsArray[index] && "2px"
+                    }`,
+                  },
+
+                ".MuiOutlinedInput-root ": {
+                  "&:hover fieldset": {
+                    borderColor: `${
+                      comparedConjugationsArray[index]
+                        ? "rgb(67, 239, 76)"
+                        : "rgb(255, 17, 0)"
+                    }`,
+                  },
+                },
+                "&.MuiTextField-root .MuiInputLabel-root": {
+                  color: `${
+                    comparedConjugationsArray[index]
+                      ? "rgb(67, 239, 76)"
+                      : "rgb(255, 17, 0)"
+                  }`,
                 },
               }}
             />

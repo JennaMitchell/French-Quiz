@@ -22,17 +22,18 @@ const CorrectAnswer = styled("p", {
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
-  padding: "2.5px",
+  padding: "0px",
   backgroundColor: theme.palette.primary.dark,
   color: "rgb(67, 239, 76)",
   border: "none",
   position: "absolute",
   top: "50%",
-  left: "50%",
-  translateX: "-50%",
-  translateY: "-50%",
+  left: "52.25%",
+  translate: "-50% -50%",
+  zIndex: "2",
+  fontSize: "16px",
+  lineHeight: "16px",
 }));
-
 
 const QuizMatchingAnswered = () => {
   const userQuizQuestionSetup = useAppSelector(
@@ -42,18 +43,21 @@ const QuizMatchingAnswered = () => {
   const totalNumberOfQuestions = useAppSelector(
     (state) => state.quizStore.totalNumberOfQuestions
   );
-  const vocabPhraseQuizMatchingAnswerKey = useAppSelector(
-    (state) => state.quizStore.vocabPhraseQuizMatchingAnswerKey
+  const matchingAnswerKey = useAppSelector(
+    (state) => state.quizStore.matchingAnswerKey
   );
   const userSelectedMatchingAnswers = useAppSelector(
     (state) => state.quizStore.userSelectedMatchingAnswers
   );
-  const matchingTestTerms = useAppSelector((state)=>state.quizStore.matchingTestTerms);
+
+  const matchingTestTerms = useAppSelector(
+    (state) => state.quizStore.matchingTestTerms
+  );
   const matchingPromptTerms = useAppSelector(
     (state) => state.quizStore.matchingPromptTerms
   );
   const comparedMatchingArray = arrayComparer(
-    vocabPhraseQuizMatchingAnswerKey,
+    matchingAnswerKey,
     userSelectedMatchingAnswers
   );
 
@@ -102,13 +106,13 @@ const QuizMatchingAnswered = () => {
           {matchingPromptTerms[questionIndex]}
         </StyledTypography>
         {!comparedMatchingArray[questionIndex] && (
-          <CorrectAnswer>{comparedMatchingArray[questionIndex]}</CorrectAnswer>
+          <CorrectAnswer>{matchingAnswerKey[questionIndex]}</CorrectAnswer>
         )}
         <StyledSelect
           disabled
           value={
             comparedMatchingArray[questionIndex]
-              ? vocabPhraseQuizMatchingAnswerKey[questionIndex]
+              ? matchingAnswerKey[questionIndex]
               : userSelectedMatchingAnswers[questionIndex]
           }
           sx={{
@@ -120,7 +124,18 @@ const QuizMatchingAnswered = () => {
                 ? "rgb(67, 239, 76)"
                 : "rgb(255, 17, 0)"
             }`,
-            borderRadius: `${comparedMatchingArray[questionIndex] ? "5px" : "5px"}`,
+            borderRadius: `${
+              comparedMatchingArray[questionIndex] ? "5px" : "5px"
+            }`,
+            textDecoration: `${
+              !comparedMatchingArray[questionIndex] && "line-through"
+            }`,
+            textDecorationColor: `${
+              !comparedMatchingArray[questionIndex] && "rgb(255, 17, 0)"
+            }`,
+            textDecorationThickness: `${
+              !comparedMatchingArray[questionIndex] && "2px"
+            }`,
           }}
         >
           {renderReadyStyledOptions}

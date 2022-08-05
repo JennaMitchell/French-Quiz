@@ -33,6 +33,7 @@ const MatchingRowContainer = styled("div", {
   gridTemplateRows: "max-content",
   alignItems: "center",
   justifyItems: "center",
+  position: "relative",
 });
 
 const StyledSelect = styled("select", {
@@ -48,6 +49,7 @@ const StyledSelect = styled("select", {
   border: "1px solid",
   borderColor: theme.palette.secondary.main,
   borderRadius: "5px",
+  position: "relative",
 }));
 const StyledOption = styled("option", {
   name: "StyledOption ",
@@ -60,6 +62,7 @@ const StyledOption = styled("option", {
   color: theme.palette.secondary.light,
   fontSize: "20px",
   border: "none",
+  position: "relative",
   "&:active": {
     border: "1px solid",
     borderColor: "secondary.light",
@@ -78,6 +81,7 @@ const StyledTypography = styled("p", {
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
   fontSize: "24px",
+  position: "relative",
 }));
 export {
   MatchingTopContainer,
