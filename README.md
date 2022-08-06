@@ -1,3 +1,19 @@
+# French Quiz
+
+## Project Description
+
+French Quiz is a french student teaching aid, that helps students with verb conjugation, vocab, and common french phrases. The site features online flashcards, practice sheet creator, a custom quiz creator and grammar tests.
+
+### Developers Aside
+
+  This project was created to practice Typescript, React, and Javascript. The hardest part was getting used to using Typescript. 
+
+## How to Use
+
+   See snippet below to deploy the project on your own editor, or click the link ----.
+   
+  
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
