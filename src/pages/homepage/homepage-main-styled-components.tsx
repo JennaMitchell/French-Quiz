@@ -34,5 +34,14 @@ const GetStartedButton = styled(NavLink, {
     color: theme.palette.secondary.dark,
     boxShadow: "0 0 10px white",
   },
+  "@media(max-width:560px)": {
+    minWidth: "max-content",
+    width: "max-content",
+    maxWidth: "max-content",
+    minHeight: "max-content",
+    height: "max-content",
+    maxHeight: "max-content",
+    padding: "20px",
+  },
 }));
 export { SectionContentContainer, GetStartedButton };

@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import notebookImage from "../../../images/homepage-images/notebook.jpg";
 import flashcardsPhoto from "../../../images/homepage-images/flashcards-photo.jpg";
 import quizPhoto from "../../../images/homepage-images/quiz-photo.jpg";
-import grammarTestPhoto from "../../../images/homepage-images/grammar-test-photo.jpg";
+import scenariosPhoto from "../../../images/homepage-images/grammar-test-photo.jpg";
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { hompageFeatureDB } from "../../../store/store";
@@ -26,6 +26,17 @@ const TopContainer = styled("div", {
   marginBottom: "40px",
   position: "relative",
   boxShadow: "0 0 20px grey",
+  "@media(max-width:850px)": { width: "max(600px,600px)" },
+  "@media(max-width:650px)": {
+    width: "max(400px,400px)",
+    marginTop: "20px",
+    marginBottom: "20px",
+  },
+  "@media(max-width:450px)": {
+    width: "max(300px,300px)",
+    gridTemplateColumns: "max-content",
+    rowGap: "20px",
+  },
 }));
 const InfoContainer = styled("div", {
   name: "InfoContainer",
@@ -41,6 +52,14 @@ const InfoContainer = styled("div", {
   padding: "10px 20px",
   gap: "10px",
   position: "relative",
+  "@media(max-width:850px)": {
+    width: "max(200px,200px)",
+  },
+  "@media(max-width:650px)": { width: "max(150px,150px)", padding: "5px 10px" },
+  "@media(max-width:450px)": {
+    width: "max(250px,250px)",
+    padding: "0px",
+  },
 }));
 const ImageContainer = styled("img", {
   name: "ImageContainer",
@@ -53,8 +72,22 @@ const ImageContainer = styled("img", {
   display: "flex",
   placeItems: "center",
   padding: "10px 20px",
-
   position: "relative",
+  "@media(max-width:850px)": {
+    width: "max(300px,300px)",
+    height: "max(300px,300px)",
+  },
+  "@media(max-width:650px)": {
+    width: "max(200px,200px)",
+    height: "max(200px,200px)",
+    padding: "0px",
+    paddingLeft: "20px",
+  },
+  "@media(max-width:450px)": {
+    width: "max(250px,250px)",
+    paddingLeft: "0px",
+    marginLeft: "5px",
+  },
 }));
 const LinkButton = styled(NavLink, {
   name: "LinkButton",
@@ -77,7 +110,7 @@ const LinkButton = styled(NavLink, {
   color: theme.palette.secondary.light,
   transition: "all 0.5s",
 
-  marginTop:"10px",
+  marginTop: "10px",
   "&:hover": {
     backgroundColor: theme.palette.secondary.light,
     color: theme.palette.secondary.dark,
@@ -93,7 +126,6 @@ const FeatureOverviewNavContent: React.FC = () => {
     (state) => state.mainStore.homepageSelectedSection
   );
   const dispatch = useAppDispatch();
-
   const navButtonHandler = () => {
     dispatch(
       mainStoreSliceActions.setActivePage(
@@ -104,17 +136,35 @@ const FeatureOverviewNavContent: React.FC = () => {
   return (
     <TopContainer>
       <InfoContainer>
-        <Typography variant="h2" sx={{ textAlign: "center" }}>
+        <Typography
+          variant="h2"
+          sx={{
+            textAlign: "center",
+            "@media(max-width:850px)": { fontSize: "32px" },
+            "@media(max-width:650px)": { fontSize: "28px" },
+          }}
+        >
           {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].title}
         </Typography>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            textAlign: "center",
+            "@media(max-width:850px)": { fontSize: "16px" },
+            "@media(max-width:650px)": { fontSize: "12px" },
+          }}
+        >
           {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].description}
         </Typography>
         <LinkButton
           onClick={navButtonHandler}
           to={`${homepageFeatureDatabase[homepageSelectedSection].link}`}
+          sx={{
+            textAlign: "center",
+            "@media(max-width:850px)": { fontSize: "16px" },
+          }}
         >
           {/* @ts-ignore  */}
           {homepageFeatureDatabase[homepageSelectedSection].title}
@@ -129,8 +179,8 @@ const FeatureOverviewNavContent: React.FC = () => {
       {homepageSelectedSection === "Flashcards" && (
         <ImageContainer src={flashcardsPhoto} alt="flashcard" />
       )}
-      {homepageSelectedSection === "Grammar Test" && (
-        <ImageContainer src={grammarTestPhoto} alt="notebook" />
+      {homepageSelectedSection === "Scenarios" && (
+        <ImageContainer src={scenariosPhoto} alt="notebook" />
       )}
     </TopContainer>
   );

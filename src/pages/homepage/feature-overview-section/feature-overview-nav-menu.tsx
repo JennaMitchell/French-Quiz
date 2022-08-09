@@ -23,6 +23,22 @@ const TopContainer = styled("div", {
   gap: "120px",
   marginTop: "40px",
   position: "relative",
+  "@media(max-width:850px)": {
+    gap: "50px",
+  },
+  "@media(max-width:650px)": {
+    display: "grid",
+    gridTemplateRow: "max-content max-content",
+    gridTemplateColumns: "max-content max-content",
+    marginTop: "20px",
+  },
+  "@media(max-width:370px)": {
+    display: "grid",
+    gridTemplateRow: "max-content max-content",
+    gridTemplateColumns: "max-content max-content",
+    padding: "0px",
+    gap: "20px",
+  },
 }));
 
 const FeatureButton = styled("div", {
@@ -51,6 +67,14 @@ const FeatureIcon = styled("img", {
   placeItems: "center",
   zIndex: "2",
   position: "relative",
+  "@media(max-width:850px)": {
+    width: "max(50px,50px)",
+    height: "max(50px,50px)",
+  },
+  "@media(max-width:650px)": {
+    width: "max(40px,40px)",
+    height: "max(40px,40px)",
+  },
 }));
 
 const HightlightImage = styled("img", {
@@ -65,7 +89,16 @@ const HightlightImage = styled("img", {
   position: "absolute",
   top: "50%",
   left: "50%",
-  transform: "translate(-50%,-70%)",
+  translate: "-50% -70%",
+  "@media(max-width:850px)": {
+    width: "max(70px,70px)",
+    height: "max(70px,70px)",
+  },
+  "@media(max-width:650px)": {
+    width: "max(60px,60px)",
+    height: "max(60px,60px)",
+    top: "40%",
+  },
 }));
 
 const FeatureOverviewNavMenu: React.FC = () => {
@@ -89,8 +122,8 @@ const FeatureOverviewNavMenu: React.FC = () => {
     buttonHandler("Quizes");
   };
 
-  const grammarTestButtonHandler = () => {
-    buttonHandler("Grammar Test");
+  const realLifeScenarioButtonHandler = () => {
+    buttonHandler("Scenarios");
   };
 
   const flashcardsButtonHandler = () => {
@@ -118,9 +151,9 @@ const FeatureOverviewNavMenu: React.FC = () => {
       setCurrentMouseOverSection("");
     }
   };
-  const grammarTestMouseEventHandler = () => {
-    if (currentMousedOverSection !== "Grammar Test") {
-      setCurrentMouseOverSection("Grammar Test");
+  const scenariosMouseEventHandler = () => {
+    if (currentMousedOverSection !== "Scenarios") {
+      setCurrentMouseOverSection("Scenarios");
     } else {
       setCurrentMouseOverSection("");
     }
@@ -174,17 +207,17 @@ const FeatureOverviewNavMenu: React.FC = () => {
         )}
       </FeatureButton>
       <FeatureButton
-        onMouseEnter={grammarTestMouseEventHandler}
-        onMouseLeave={grammarTestMouseEventHandler}
+        onMouseEnter={scenariosMouseEventHandler}
+        onMouseLeave={scenariosMouseEventHandler}
       >
-        <FeatureIcon src={pencilIcon} onClick={grammarTestButtonHandler} />
+        <FeatureIcon src={pencilIcon} onClick={realLifeScenarioButtonHandler} />
         <Typography variant="h6" color="secondary.dark">
-          Grammar Test
+          Scenarios
         </Typography>
-        {homepageSelectedSection === "Grammar Test" && (
+        {homepageSelectedSection === "Scenarios" && (
           <HightlightImage src={hightlightImage} />
         )}
-        {currentMousedOverSection === "Grammar Test" && (
+        {currentMousedOverSection === "Scenarios" && (
           <HightlightImage src={hightlightImage} />
         )}
       </FeatureButton>

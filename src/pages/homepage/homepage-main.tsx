@@ -11,6 +11,7 @@ import FeatureOverviewSection from "./feature-overview-section/feature-overview-
 import { mainStoreSliceActions } from "../../store/store";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { useEffect } from "react";
+
 const HomepageMain = () => {
   const dispatch = useAppDispatch();
   const activePage = useAppSelector((state) => state.mainStore.activePage);
@@ -29,6 +30,12 @@ const HomepageMain = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
+          "@media(max-width:560px)": {
+            height: "max(800px,800px)",
+          },
+          "@media(max-width:400px)": {
+            height: "max(700px,700px)",
+          },
         }}
       >
         <SectionContentContainer>
@@ -38,6 +45,13 @@ const HomepageMain = () => {
               marginBottom: "20px",
               fontWeight: "bold",
               color: "secondary.light",
+              "@media(max-width:560px)": {
+                fontSize: "48px",
+                width: "max(100%,100%)",
+              },
+              "@media(max-width:400px)": {
+                fontSize: "36px",
+              },
             }}
           >
             Start Today !
@@ -48,11 +62,30 @@ const HomepageMain = () => {
               marginBottom: "40px",
               width: "max(550px,550px)",
               color: "secondary.light",
+              "@media(max-width:560px)": {
+                fontSize: "24px",
+                width: "max(85%,85%)",
+              },
+              "@media(max-width:400px)": {
+                fontSize: "20px",
+              },
             }}
           >
             Start your language learning journey today by taking a quiz
           </Typography>
-          <GetStartedButton to="/quiz">Quiz Me</GetStartedButton>
+          <GetStartedButton
+            to="/quiz"
+            sx={{
+              "@media(max-width:560px)": {
+                fontSize: "24px",
+              },
+              "@media(max-width:400px)": {
+                fontSize: "20px",
+              },
+            }}
+          >
+            Quiz Me
+          </GetStartedButton>
         </SectionContentContainer>
       </SectionContainer>
       <FeatureOverviewSection />

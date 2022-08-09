@@ -22,10 +22,11 @@ const initialState = {
       description: "Practice your knowledge with a vocab quizes.",
       link: "/quiz",
     },
-    "Grammar Test": {
-      title: "Grammar Test",
-      description: "Test your grammar knowledge with a generated grammar quiz.",
-      link: "/grammar-test",
+    Scenarios: {
+      title: "Scenarios",
+      description:
+        "Test your grammar knowledge and sentence formation with real life scenarios",
+      link: "/secnarios",
     },
   },
   homepageSelectedSection: "Flashcards",

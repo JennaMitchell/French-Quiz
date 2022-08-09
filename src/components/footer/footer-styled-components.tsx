@@ -15,6 +15,10 @@ const TopContainer = styled("div", {
   alignContent: "flex-start",
   justifyContent: "space-evenly",
   position: "relative",
+  "@media(max-width:475px)": {
+    gridTemplateColumns: "325px",
+    justifyContent: "center",
+  },
 }));
 
 const ColumnOne = styled("div", { name: "ColumnOne", slot: "Wrapper" })(() => ({
@@ -41,7 +45,7 @@ const ColumnTwo = styled("div", { name: "ColumnTwo", slot: "Wrapper" })(() => ({
   display: "grid",
   gridTemplateRows: "repeat(4,max-content)",
   alignItems: "center",
-  justifyContent: "center",
+  justifyItems: "center",
   position: "relative",
   marginTop: "40px",
 }));
@@ -56,14 +60,16 @@ const SocialIcons = styled("div", {
   borderRadius: "5px",
   display: "grid",
   placeItems: "center",
+  gap: "0px",
 
   "@media (max-width:1050px)": {
-    width: "max(20px,20px)",
-    height: "max(20px,20px)",
-  },
-  "@media (max-width:880px)": {
-    width: "max(15px,15px)",
-    height: "max(15px,15px)",
+    minWidth: "max-content",
+    width: "max-content",
+    maxWidth: "max-content",
+    minHeight: "max-content",
+    height: "max-content",
+    maxHeight: "max-content",
+    padding: "2.5px",
   },
 }));
 const ContactInfoContainer = styled("div", {
@@ -87,7 +93,10 @@ const ContactInfoContainer = styled("div", {
   },
   "@media (max-width:880px)": {
     fontSize: "16px",
-    gridTemplateColumns: "15px max-content",
+    gridTemplateColumns: "20px max-content",
+  },
+  "@media (max-width:375px)": {
+    width: "280px",
   },
 }));
 
@@ -97,8 +106,6 @@ const StyledFooterNavLink = styled(NavLink, {
 })(({ theme }) => ({
   backgroundColor: "inherit",
 
-  width: "max(max-content,max-content)",
-  padding: "10px 15px 10px 15px",
   borderRadius: "5px",
   textDecoration: "none",
   textTransform: "uppercase",
@@ -107,6 +114,11 @@ const StyledFooterNavLink = styled(NavLink, {
   fontSize: "21px",
   marginBottom: "15px",
   textAlign: "center",
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  display: "inline-block",
+  padding: "10px 20px",
   "&:hover": {
     backgroundColor: theme.palette.primary.main,
   },
@@ -128,6 +140,10 @@ const StyledFooterNavLink = styled(NavLink, {
   "@media (max-width:680px)": {
     fontSize: "8px",
     padding: "5px",
+  },
+  "@media(max-width:475px)": {
+    fontSize: "22px",
+    padding: "10px 20px",
   },
 }));
 const StyledContactText = styled(Typography, {
@@ -151,6 +167,9 @@ const StyledContactText = styled(Typography, {
   "@media (max-width:560px)": {
     fontSize: "8px",
   },
+  "@media(max-width:475px)": {
+    fontSize: "18px",
+  },
 }));
 
 const StyledFooterHeading = styled(Typography, {
@@ -170,6 +189,10 @@ const StyledFooterHeading = styled(Typography, {
   "@media (max-width:760px)": {
     fontSize: "12px",
   },
+  "@media(max-width:475px)": {
+    fontSize: "32px",
+    width: "325px",
+  },
 }));
 
 const StyledLink = styled(Link, {
@@ -183,7 +206,13 @@ const StyledLink = styled(Link, {
   textDecoration: "none",
   textTransform: "uppercase",
   borderRadius: "5px",
-  padding: "10px",
+
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  displat: "inline-block",
+  padding: "10px 20px",
+
   "&:hover": {
     backgroundColor: theme.palette.primary.main,
   },
@@ -204,6 +233,10 @@ const StyledLink = styled(Link, {
   "@media (max-width:680px)": {
     fontSize: "8px",
     padding: "5px",
+  },
+  "@media(max-width:475px)": {
+    fontSize: "22px",
+    padding: "10px 20px",
   },
 }));
 

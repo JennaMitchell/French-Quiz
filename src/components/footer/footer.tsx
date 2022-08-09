@@ -38,6 +38,10 @@ const Footer: React.FC = () => {
             "@media (max-width:740px)": {
               fontSize: "12px",
             },
+            "@media(max-width:475px)": {
+              fontSize: "22px",
+              width: "250px",
+            },
           }}
         >
           French Quiz
@@ -51,18 +55,31 @@ const Footer: React.FC = () => {
             width: "250px",
             "@media (max-width:1050px)": {
               fontSize: "16px",
+              width: "200px",
             },
             "@media (max-width:880px)": {
               fontSize: "14px",
+              width: "175px",
             },
             "@media (max-width:740px)": {
-              fontSize: "12px",
+              fontSize: "10px",
+              width: "150px",
             },
             "@media (max-width:680px)": {
               fontSize: "10px",
+              width: "97.5px",
             },
-            "@media(max-width:510px)": {
+            "@media(max-width:600px)": {
               fontSize: "8px",
+              width: "97.5px",
+            },
+            "@media(max-width:475px)": {
+              fontSize: "16px",
+              width: "300px",
+            },
+            "@media(max-width:350px)": {
+              fontSize: "16px",
+              width: "280px",
             },
           }}
         >
@@ -73,79 +90,113 @@ const Footer: React.FC = () => {
           columns={4}
           sx={{
             width: "175px",
+            gap: "10px",
             "@media (max-width:740px)": {
               width: "100px",
             },
+            "@media (max-width:680px)": {
+              width: "97.5px",
+            },
+            "@media(max-width:475px)": {
+              width: "175px",
+            },
           }}
         >
-          <Grid item xs={1}>
-            <SocialIcons>
-              <FacebookIcon
-                sx={{
-                  "@media (max-width:1050px)": {
-                    width: "max(20px,20px)",
-                    height: "max(20px,20px)",
-                  },
-                  "@media (max-width:880px)": {
-                    width: "max(15px,15px)",
-                    height: "max(15px,15px)",
-                  },
-                  color: "secondary.dark",
-                }}
-              />
-            </SocialIcons>
-          </Grid>
-          <Grid item xs={1}>
-            <SocialIcons>
-              <TwitterIcon
-                sx={{
-                  "@media (max-width:1050px)": {
-                    width: "max(20px,20px)",
-                    height: "max(20px,20px)",
-                  },
-                  "@media (max-width:880px)": {
-                    width: "max(15px,15px)",
-                    height: "max(15px,15px)",
-                  },
-                  color: "secondary.dark",
-                }}
-              />
-            </SocialIcons>
-          </Grid>
-          <Grid item xs={1}>
-            <SocialIcons>
-              <LinkedInIcon
-                sx={{
-                  color: "secondary.dark",
-                  "@media (max-width:1050px)": {
-                    width: "max(20px,20px)",
-                    height: "max(20px,20px)",
-                  },
-                  "@media (max-width:880px)": {
-                    width: "max(15px,15px)",
-                    height: "max(15px,15px)",
-                  },
-                }}
-              />
-            </SocialIcons>
-          </Grid>
-          <Grid item xs={1}>
-            <SocialIcons>
-              <InstagramIcon
-                sx={{
-                  "@media (max-width:1050px)": {
-                    width: "max(20px,20px)",
-                    height: "max(20px,20px)",
-                  },
-                  "@media (max-width:880px)": {
-                    width: "max(15px,15px)",
-                    height: "max(15px,15px)",
-                  },
-                  color: "secondary.dark",
-                }}
-              />
-            </SocialIcons>
-          </Grid>
+          <SocialIcons>
+            <FacebookIcon
+              sx={{
+                "@media (max-width:1050px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                "@media (max-width:880px)": {
+                  width: "max(15px,15px)",
+                  height: "max(15px,15px)",
+                },
+                "@media (max-width:710px)": {
+                  width: "max(10px,10px)",
+                  height: "max(10px,10px)",
+                },
+                "@media(max-width:475px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                color: "secondary.dark",
+              }}
+            />
+          </SocialIcons>
+
+          <SocialIcons>
+            <TwitterIcon
+              sx={{
+                "@media (max-width:1050px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                "@media (max-width:880px)": {
+                  width: "max(15px,15px)",
+                  height: "max(15px,15px)",
+                },
+                "@media (max-width:710px)": {
+                  width: "max(10px,10px)",
+                  height: "max(10px,10px)",
+                },
+                "@media(max-width:475px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                color: "secondary.dark",
+              }}
+            />
+          </SocialIcons>
+
+          <SocialIcons>
+            <LinkedInIcon
+              sx={{
+                color: "secondary.dark",
+                "@media (max-width:1050px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                "@media (max-width:880px)": {
+                  width: "max(15px,15px)",
+                  height: "max(15px,15px)",
+                },
+                "@media (max-width:710px)": {
+                  width: "max(10px,10px)",
+                  height: "max(10px,10px)",
+                },
+                "@media(max-width:475px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+              }}
+            />
+          </SocialIcons>
+
+          <SocialIcons>
+            <InstagramIcon
+              sx={{
+                "@media (max-width:1050px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                "@media (max-width:880px)": {
+                  width: "max(15px,15px)",
+                  height: "max(15px,15px)",
+                },
+                "@media (max-width:710px)": {
+                  width: "max(10px,10px)",
+                  height: "max(10px,10px)",
+                },
+                "@media(max-width:475px)": {
+                  width: "max(20px,20px)",
+                  height: "max(20px,20px)",
+                },
+                color: "secondary.dark",
+              }}
+            />
+          </SocialIcons>
         </Grid>
       </ColumnOne>
       <ColumnTwo>
@@ -173,6 +224,10 @@ const Footer: React.FC = () => {
                 width: "max(15px,15px)",
                 height: "max(15px,15px)",
               },
+              "@media(max-width:475px)": {
+                width: "max(20px,20px)",
+                height: "max(20px,20px)",
+              },
             }}
           />
           <StyledContactText>(555) 555-5555</StyledContactText>
@@ -188,6 +243,10 @@ const Footer: React.FC = () => {
                 width: "max(15px,15px)",
                 height: "max(15px,15px)",
               },
+              "@media(max-width:475px)": {
+                width: "max(20px,20px)",
+                height: "max(20px,20px)",
+              },
             }}
           />
           <StyledContactText>France ?</StyledContactText>
@@ -202,6 +261,10 @@ const Footer: React.FC = () => {
               "@media (max-width:880px)": {
                 width: "max(15px,15px)",
                 height: "max(15px,15px)",
+              },
+              "@media(max-width:475px)": {
+                width: "max(20px,20px)",
+                height: "max(20px,20px)",
               },
             }}
           />

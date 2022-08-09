@@ -1,4 +1,5 @@
 import { AppBar, Typography } from "@mui/material";
+import { useState } from "react";
 import {
   StyledToolBar,
   LogoContainer,
@@ -7,6 +8,9 @@ import {
   MenuButtonsContainer,
   StyledActiveNavButton,
   StyledInactiveNavButton,
+  MobileMenuButton,
+  MobileNavMenuDropDown,
+  StyledMenuIcon,
 } from "./nav-bar-styled-components";
 import { useBeforeunload } from "react-beforeunload";
 
@@ -14,8 +18,15 @@ import logo from "../../images/logo.png";
 
 import { mainStoreSliceActions } from "../../store/store";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 const NavBar: React.FC = () => {
   const activePage = useAppSelector((state) => state.mainStore.activePage);
+  const [mobileButtonClicked, setMobileButtonClicked] = useState(false);
+  const mobileButtonHandler = () => {
+    setMobileButtonClicked(!mobileButtonClicked);
+  };
+
   const acceptableHomeReturnValues = [
     "Home",
     "Flashcards",
@@ -23,6 +34,7 @@ const NavBar: React.FC = () => {
     "Quiz",
     "Grammar Test",
   ];
+  const mobileNavMenuActive = useMediaQuery("(max-width:1300px)");
 
   let localStorageActivePage: string = localStorage.getItem("activePage") ?? "";
   // when retruend it's a string of "thing" parthesis included to get around this we need to remove the ""'s
@@ -87,11 +99,11 @@ const NavBar: React.FC = () => {
   };
   let quizPointer: () => void;
   quizPointer = quizButtonHandler;
-  const grammarTestHandler = (): void => {
+  const scenariosTestHandler = (): void => {
     navButtonHandler("Grammar Test");
   };
-  let grammarTestPointer: () => void;
-  grammarTestPointer = grammarTestHandler;
+  let scenariosTestPointer: () => void;
+  scenariosTestPointer = scenariosTestHandler;
 
   const navLinkDatabase: NavLinkDatabase[] = [
     { title: "Home", link: "/home", function: homePointer },
@@ -107,9 +119,9 @@ const NavBar: React.FC = () => {
     },
     { title: "Quiz", link: "/quiz", function: quizPointer },
     {
-      title: "Grammar Test",
-      link: "/grammar-test",
-      function: grammarTestPointer,
+      title: "Scenarios",
+      link: "/scenarios",
+      function: scenariosTestPointer,
     },
   ];
   const renderReadyNavButtons = navLinkDatabase.map(
@@ -120,6 +132,12 @@ const NavBar: React.FC = () => {
             key={index}
             to={buttonData.link}
             onClick={buttonData.function}
+            sx={{
+              "@media(max-width:600px)": {
+                fontSize: "16px",
+              },
+              "@media(max-width:470px)": { fontSize: "12px" },
+            }}
           >
             &nbsp;{buttonData.title}&nbsp;
           </StyledActiveNavButton>
@@ -130,6 +148,12 @@ const NavBar: React.FC = () => {
             key={index}
             to={buttonData.link}
             onClick={buttonData.function}
+            sx={{
+              "@media(max-width:600px)": {
+                fontSize: "16px",
+              },
+              "@media(max-width:470px)": { fontSize: "12px" },
+            }}
           >
             &nbsp;{buttonData.title}&nbsp;
           </StyledInactiveNavButton>
@@ -146,12 +170,7 @@ const NavBar: React.FC = () => {
         position: `${activePage === "Home" ? "absolute" : "relative"}`,
         top: "0",
         left: "0",
-        "@media (max-width:1050px)": {
-          minHeight: "80px",
-        },
-        "@media (max-width:880px)": {
-          minHeight: "60px",
-        },
+
         backgroundColor: `${
           activePage === "Home" ? "transparent" : "primary.dark"
         }`,
@@ -162,11 +181,28 @@ const NavBar: React.FC = () => {
           <LogoContainer>
             <LogoImage src={logo} alt="Logo" />
           </LogoContainer>
-          <Typography variant="h4" color="white">
+          <Typography
+            variant="h4"
+            color="white"
+            sx={{
+              "@media(max-width:560px)": { fontSize: "28px" },
+              "@media(max-width:470px)": { fontSize: "22px" },
+            }}
+          >
             French Quiz
           </Typography>
         </LogoTitleContainer>
-        <MenuButtonsContainer>{renderReadyNavButtons}</MenuButtonsContainer>
+        {!mobileNavMenuActive && (
+          <MenuButtonsContainer>{renderReadyNavButtons}</MenuButtonsContainer>
+        )}
+        {mobileNavMenuActive && (
+          <MobileMenuButton onClick={mobileButtonHandler}>
+            <StyledMenuIcon />
+          </MobileMenuButton>
+        )}
+        {mobileButtonClicked && (
+          <MobileNavMenuDropDown>{renderReadyNavButtons}</MobileNavMenuDropDown>
+        )}
       </StyledToolBar>
     </AppBar>
   );

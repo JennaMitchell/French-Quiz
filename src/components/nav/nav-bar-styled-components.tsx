@@ -2,6 +2,8 @@ import { styled } from "@mui/material/styles";
 import { Toolbar } from "@mui/material";
 
 import { NavLinkButton } from "../generic-components/generic-components";
+import MenuIcon from "@mui/icons-material/Menu";
+
 const LogoContainer = styled("div", {
   name: "LogoContainer",
   slot: "Wrapper",
@@ -17,17 +19,13 @@ const LogoContainer = styled("div", {
   borderRadius: "50%",
 
   backgroundColor: theme.palette.secondary.light,
-  "@media (max-width:895px)": {
+  "@media(max-width:560px)": {
     width: "max(60px,60px)",
     height: "max(60px,60px)",
   },
-  "@media (max-width:700px)": {
+  "@media(max-width:470px)": {
     width: "max(50px,50px)",
     height: "max(50px,50px)",
-  },
-  "@media(max-width:405px)": {
-    width: "max(45px,45px)",
-    height: "max(45px,45px)",
   },
 }));
 const LogoImage = styled("img", {
@@ -49,7 +47,7 @@ const LogoTitleContainer = styled("div", {
   justifyContent: "space-between",
   position: "relative",
   gap: "15px",
-  "@media(max-width:650px)": {
+  "@media(max-width:470px)": {
     gap: "5px",
   },
 });
@@ -59,7 +57,7 @@ const StyledToolBar = styled(Toolbar, {
   slot: "Wrapper",
 })({
   display: "grid",
-  padding: "0",
+  padding: "5px !important",
 
   gridTemplateColumns: "max-content max-content",
   alignItems: "center",
@@ -82,6 +80,9 @@ const MenuButtonsContainer = styled("div", {
   position: "relative",
   zIndex: "2",
   transition: "all 0.5s",
+  "@media(max-width:470px)": {
+    gap: "5px",
+  },
 }));
 
 const StyledInactiveNavButton = styled(NavLinkButton, {
@@ -99,9 +100,92 @@ const StyledInactiveNavButton = styled(NavLinkButton, {
 const StyledActiveNavButton = styled(StyledInactiveNavButton, {
   name: "StyledInactiveNavButton",
   slot: "Wrapper",
-})(({ theme }) => ({
+})(() => ({
   textDecoration: "underline",
 }));
+
+const MobileMenuButton = styled("div", {
+  name: "MobileMenuButton ",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  backgroundColor: "transparent",
+  width: "max(50px,50px)",
+  height: "max(50px,50px)",
+  borderRadius: "50%",
+  display: "grid",
+  alignItems: "center",
+  justifyContent: "center",
+  color: theme.palette.secondary.light,
+  transition: "all 0.5s",
+  marginRight: "20px",
+  padding: "10px",
+  "&:hover": {
+    color: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.secondary.light,
+    boxShadow: "0 5px 10px white",
+  },
+  position: "relative",
+  zIndex: 4,
+  "@media(max-width:600px)": {
+    width: "max(40px,40px)",
+    height: "max(40px,40px)",
+    padding: "5px",
+    marginRight: "5px",
+  },
+  "@media(max-width:470px)": {
+    width: "max(30px,30px)",
+    height: "max(30px,30px)",
+    padding: "5px",
+    marginRight: "5px",
+  },
+}));
+const StyledMenuIcon = styled(MenuIcon, {
+  name: "StyledMenuIcon",
+  slot: "Wrapper",
+})(() => ({
+  backgroundColor: "transparent",
+  width: "max(100%,100%)",
+  height: "max(100%,100%)",
+  borderRadius: "50%",
+  zIndex: 3,
+  color: "inherit",
+}));
+
+const MobileNavMenuDropDown = styled("div", {
+  name: "MobileNavMenuDropDown",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  position: "absolute",
+  top: "15px",
+  right: "15px",
+  zIndex: 2,
+  width: "max(300px,300px)",
+  height: "max-content",
+  minHeight: "max-content",
+  maxHeight: "max-content",
+  padding: "60px 10px 10px 10px",
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.secondary.light,
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  borderRadius: "10px",
+  "@media(max-width:670px)": {
+    width: "max(200px,200px)",
+  },
+  "@media(max-width:600px)": {
+    padding: "40px 10px 10px 10px",
+    right: "0px",
+    top: "15px",
+  },
+  "@media(max-width:470px)": {
+    width: "max(150px,150px)",
+  },
+  "@media(max-width:400px)": {
+    width: "max(125px,125px)",
+  },
+}));
+
 export {
   LogoContainer,
   LogoImage,
@@ -110,4 +194,7 @@ export {
   MenuButtonsContainer,
   StyledActiveNavButton,
   StyledInactiveNavButton,
+  MobileMenuButton,
+  MobileNavMenuDropDown,
+  StyledMenuIcon,
 };
