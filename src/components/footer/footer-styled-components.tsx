@@ -7,47 +7,56 @@ const TopContainer = styled("div", {
   slot: "Wrapper",
 })(({ theme }) => ({
   width: "max(100%,100%)",
-  height: "max(max-content,max-content)",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
   backgroundColor: theme.palette.primary.dark,
   border: "none",
   display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
+  gridTemplateColumns: "repeat(4, max-content)",
   alignContent: "flex-start",
-  justifyContent: "space-evenly",
+  justifyContent: "space-around",
   position: "relative",
   "@media(max-width:475px)": {
     gridTemplateColumns: "325px",
     justifyContent: "center",
   },
+  overflow: "hidden",
 }));
 
 const ColumnOne = styled("div", { name: "ColumnOne", slot: "Wrapper" })(() => ({
-  width: "max(max-content,max-content)",
-  height: "max(max-content,max-content)",
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
   display: "grid",
   gridTemplateRows: "repeat(3,max-content)",
   alignItems: "center",
   justifyContent: "center",
   position: "relative",
   marginTop: "40px",
-  marginLeft: "40px",
-  "@media (max-width:880px)": {
-    marginLeft: "20px",
-  },
-  "@media (max-width:760px)": {
+  "@media(max-width:475px)": {
     marginLeft: "10px",
   },
 }));
 
 const ColumnTwo = styled("div", { name: "ColumnTwo", slot: "Wrapper" })(() => ({
-  width: "max(max-content,max-content)",
-  height: "max(max-content,max-content)",
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
   display: "grid",
   gridTemplateRows: "repeat(4,max-content)",
   alignItems: "center",
   justifyItems: "center",
   position: "relative",
   marginTop: "40px",
+  marginBottom: "40px",
+  gap: "20px",
 }));
 
 const SocialIcons = styled("div", {
@@ -84,19 +93,38 @@ const ContactInfoContainer = styled("div", {
   alignItems: "center",
   justifyContent: "space-between",
   fontSize: "22px",
-  marginBottom: "30px",
+  paddingBottom: "13px",
+
   gap: "10px",
   color: theme.palette.secondary.light,
-  "@media (max-width:1050px)": {
-    fontSize: "18px",
-    gridTemplateColumns: "20px max-content",
-  },
-  "@media (max-width:880px)": {
+  "@media (max-width:1150px)": {
     fontSize: "16px",
     gridTemplateColumns: "20px max-content",
   },
-  "@media (max-width:375px)": {
-    width: "280px",
+  "@media (max-width:1000px)": {
+    paddingTop: "2.5px",
+  },
+  "@media (max-width:980px)": {
+    fontSize: "14px",
+  },
+
+  "@media (max-width:880px)": {
+    fontSize: "12px",
+    gridTemplateColumns: "20px max-content",
+    paddingBottom: "11px",
+  },
+  "@media (max-width:760px)": {
+    paddingBottom: "19.5px",
+  },
+  "@media (max-width:730px)": {
+    paddingBottom: "5px",
+  },
+  "@media (max-width:660px)": {
+    paddingBottom: "0px",
+  },
+  "@media(max-width:475px)": {
+    paddingBottom: "10px",
+    width: "max(250px,250px)",
   },
 }));
 
@@ -112,7 +140,6 @@ const StyledFooterNavLink = styled(NavLink, {
   boxSizing: "content-box",
   color: theme.palette.secondary.light,
   fontSize: "21px",
-  marginBottom: "15px",
   textAlign: "center",
   minWidth: "max-content",
   width: "max-content",
@@ -131,7 +158,6 @@ const StyledFooterNavLink = styled(NavLink, {
   },
   "@media (max-width:880px)": {
     fontSize: "12px",
-    padding: "5px",
   },
   "@media (max-width:740px)": {
     fontSize: "10px",
@@ -139,7 +165,7 @@ const StyledFooterNavLink = styled(NavLink, {
   },
   "@media (max-width:680px)": {
     fontSize: "8px",
-    padding: "5px",
+    padding: "5px 10px",
   },
   "@media(max-width:475px)": {
     fontSize: "22px",
@@ -152,23 +178,23 @@ const StyledContactText = styled(Typography, {
 })(() => ({
   color: "secondary.light",
   fontSize: "18px",
-  "@media (max-width:1050px)": {
+  "@media (max-width:1150px)": {
     fontSize: "16px",
   },
-  "@media (max-width:880px)": {
+  "@media (max-width:980px)": {
     fontSize: "14px",
   },
-  "@media (max-width:760px)": {
+  "@media (max-width:880px)": {
     fontSize: "12px",
   },
-  "@media (max-width:780px)": {
+  "@media (max-width:740px)": {
     fontSize: "10px",
   },
-  "@media (max-width:560px)": {
+  "@media (max-width:680px)": {
     fontSize: "8px",
   },
   "@media(max-width:475px)": {
-    fontSize: "18px",
+    fontSize: "22px",
   },
 }));
 
@@ -178,7 +204,7 @@ const StyledFooterHeading = styled(Typography, {
 })(({ theme }) => ({
   color: theme.palette.secondary.light,
   fontSize: "22px",
-  marginBottom: "20px",
+
   textAlign: "center",
   "@media (max-width:1050px)": {
     fontSize: "16px",
@@ -201,7 +227,7 @@ const StyledLink = styled(Link, {
 })(({ theme }) => ({
   color: theme.palette.secondary.light,
   fontSize: "21px",
-  marginBottom: "15px",
+
   textAlign: "center",
   textDecoration: "none",
   textTransform: "uppercase",
@@ -224,7 +250,6 @@ const StyledLink = styled(Link, {
   },
   "@media (max-width:880px)": {
     fontSize: "12px",
-    padding: "5px",
   },
   "@media (max-width:740px)": {
     fontSize: "10px",
@@ -232,7 +257,7 @@ const StyledLink = styled(Link, {
   },
   "@media (max-width:680px)": {
     fontSize: "8px",
-    padding: "5px",
+    padding: "5px 10px",
   },
   "@media(max-width:475px)": {
     fontSize: "22px",

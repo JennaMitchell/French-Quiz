@@ -1,8 +1,5 @@
 import { styled } from "@mui/material/styles";
-import {
-  PopupActionButton,
-  PopupDisabledActionButton,
-} from "../../../../components/generic-components/generic-popup-components";
+
 import { Typography } from "@mui/material";
 const StyledSelect = styled("select", {
   name: "StyledSelect",
@@ -28,28 +25,6 @@ const StyledOption = styled("option", {
   fontSize: "20px",
   border: "none",
 }));
-
-const ActionButton = styled(PopupActionButton, {
-  name: "ActionButton",
-  slot: "Wrapper",
-})({
-  fontSize: "20px",
-  width: "max(90px,90px)",
-  height: "max(60px,60px)",
-  textAlign: "center",
-  borderRadius: "10px",
-});
-
-const DisabledActionButton = styled(PopupDisabledActionButton, {
-  name: "DisabledActionButton",
-  slot: "Wrapper",
-})({
-  fontSize: "20px",
-  width: "max(90px,90px)",
-  height: "max(60px,60px)",
-  textAlign: "center",
-  borderRadius: "10px",
-});
 
 const ButtonsContainer = styled("div", {
   name: "ButtonsContainer",
@@ -91,8 +66,6 @@ const StyledTitleTypography = styled(Typography, {
   fontSize: "20px",
 }));
 export {
-  ActionButton,
-  DisabledActionButton,
   ButtonsContainer,
   StyledSelect,
   StyledOption,

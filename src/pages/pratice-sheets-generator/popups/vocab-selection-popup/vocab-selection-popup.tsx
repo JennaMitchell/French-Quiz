@@ -4,20 +4,24 @@ import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
-} from "../../../../components/generic-components/generic-popup-components";
-
-import {
+  StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
-  VocabContainer,
-  DropDownButton,
-  DropDownSelectionMenu,
+  StyledStepTitleText,
+  StyledWarningText,
+  QuestionsRemainingTest,
+  SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
+  DropDownSelectionMenu,
+  DropDownButton,
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
-  SelectionContainer,
+} from "../../../../components/generic-components/generic-popup-components";
+
+import {
+  VocabContainer,
   ButtonsContainer,
 } from "./vocab-selection-popup-styled-components";
 import { useState, useEffect } from "react";
@@ -136,15 +140,16 @@ const VocabSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <Typography
-            sx={{ fontSize: "inherit", color: "inherit", paddingLeft: "5px" }}
+          <StyledPopupTypography
+            variant="h6"
+            sx={{ color: "inherit", paddingLeft: "5px" }}
           >
             {object.french}
-          </Typography>
+          </StyledPopupTypography>
           <EndSelectionBox>
-            <Typography sx={{ fontSize: "inherit", color: "inherit" }}>
+            <StyledPopupTypography sx={{ color: "inherit" }}>
               {object.english}
-            </Typography>
+            </StyledPopupTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
           </EndSelectionBox>
@@ -232,18 +237,17 @@ const VocabSelectionPopup = () => {
       open={vocabSelectPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-        },
-        "&.PaperProps": {
+      PaperProps={{
+        sx: {
           borderRadius: "20px",
           border: "none",
           margin: "0",
 
-          "@media(maxWidth:475px)": {
+          "@media(max-width:475px)": {
             width: "max(325px,325px)",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
           },
         },
       }}
@@ -254,16 +258,27 @@ const VocabSelectionPopup = () => {
           color: "secondary.light",
           overflowX: "hidden",
           borderRadius: "20px",
-          padding: "10px 40px 20px 40px",
+          padding: "10px 40px 10px 40px",
           overflowY: "scroll",
           height: "max-content",
-          "@media(maxWidth:475px)": {
+          "@media(max-width:475px)": {
             width: "max(325px,325px)",
+            padding: "10px 20px 10px 20px",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
           },
         }}
       >
         <ClosingIconContainer
-          sx={{ top: "10px", right: "30px" }}
+          sx={{
+            top: "10px",
+            right: "30px",
+            "@media(max-width:460px)": {
+              top: "5px",
+              right: "20px",
+            },
+          }}
           onClick={onCloseFunction}
         >
           <ClosingIcon onClick={onCloseFunction} />
@@ -271,47 +286,21 @@ const VocabSelectionPopup = () => {
         <Grid
           container
           columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
+          sx={{
+            flexDirection: "column",
+            placeItems: "center",
+            width: "max(100%,)",
+          }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 2 of 6
-          </Typography>
+          <StyledStepTitleText variant="h6">Step 2 of 6</StyledStepTitleText>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "28px",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
+          <StyledPopupTypography variant="h4">
             Vocab Selection
-          </Typography>
+          </StyledPopupTypography>
           <SelectionContainer>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
+            <QuestionsRemainingTest variant="h6">
               Minimum Selection Remaining: &nbsp;
-            </Typography>
+            </QuestionsRemainingTest>
             <Typography
               variant="h6"
               sx={{
@@ -319,7 +308,6 @@ const VocabSelectionPopup = () => {
                 "@media(max-width:520px)": { fontSize: "16px" },
                 "@media(max-width:475px)": {
                   fontSize: "12px",
-                  textAlign: "center",
                 },
               }}
             >
@@ -336,32 +324,13 @@ const VocabSelectionPopup = () => {
           {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
             selectedItems.length <=
             0 && (
-            <Typography
-              sx={{
-                color: "red",
-                fontSize: "16px",
-                width: "max(300px,300px)",
-                textAlign: "center",
-              }}
-            >
+            <StyledWarningText>
               Warning: Picking more than the selected number of questions will
               randomize the selection
-            </Typography>
+            </StyledWarningText>
           )}
           <DropDownButton onClick={verbsHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Verbs
-            </Typography>
+            <StyledPopupTypography variant="h5">Verbs</StyledPopupTypography>
             {!verbsDropDownMenuActive && <DropDownDownArrow />}
             {verbsDropDownMenuActive && <DropDownUpArrow />}
           </DropDownButton>
@@ -371,19 +340,7 @@ const VocabSelectionPopup = () => {
             </DropDownSelectionMenu>
           )}
           <DropDownButton onClick={nounHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Nouns
-            </Typography>
+            <StyledPopupTypography variant="h5">Nouns</StyledPopupTypography>
             {!nounDropDownMenuActive && <DropDownDownArrow />}
             {nounDropDownMenuActive && <DropDownUpArrow />}
           </DropDownButton>
@@ -393,19 +350,9 @@ const VocabSelectionPopup = () => {
             </DropDownSelectionMenu>
           )}
           <DropDownButton onClick={adjectiveHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
+            <StyledPopupTypography variant="h5">
               Adjectives
-            </Typography>
+            </StyledPopupTypography>
             {!adjectiveDropDownMenuActive && <DropDownDownArrow />}
             {adjectiveDropDownMenuActive && <DropDownUpArrow />}
           </DropDownButton>

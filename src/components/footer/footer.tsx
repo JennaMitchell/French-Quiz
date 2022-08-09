@@ -29,13 +29,11 @@ const Footer: React.FC = () => {
             fontSize: "22px",
             marginBottom: "15px",
             textAlign: "left",
-            "@media (max-width:1050px)": {
+
+            "@media (max-width:740px)": {
               fontSize: "16px",
             },
-            "@media (max-width:880px)": {
-              fontSize: "14px",
-            },
-            "@media (max-width:740px)": {
+            "@media (max-width:758px)": {
               fontSize: "12px",
             },
             "@media(max-width:475px)": {
@@ -53,21 +51,26 @@ const Footer: React.FC = () => {
             marginBottom: "15px",
             textAlign: "left",
             width: "250px",
-            "@media (max-width:1050px)": {
+            "@media (max-width:1150px)": {
               fontSize: "16px",
+            },
+            "@media (max-width:1050px)": {
               width: "200px",
             },
-            "@media (max-width:880px)": {
+            "@media (max-width:980px)": {
               fontSize: "14px",
+            },
+            "@media (max-width:880px)": {
+              fontSize: "12px",
               width: "175px",
             },
-            "@media (max-width:740px)": {
+            "@media (max-width:800px)": {
               fontSize: "10px",
               width: "150px",
             },
             "@media (max-width:680px)": {
-              fontSize: "10px",
               width: "97.5px",
+              fontSize: "8px",
             },
             "@media(max-width:600px)": {
               fontSize: "8px",
@@ -92,7 +95,7 @@ const Footer: React.FC = () => {
             width: "175px",
             gap: "10px",
             "@media (max-width:740px)": {
-              width: "100px",
+              width: "120px",
             },
             "@media (max-width:680px)": {
               width: "97.5px",

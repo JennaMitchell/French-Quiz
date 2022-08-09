@@ -201,7 +201,17 @@ const NavBar: React.FC = () => {
           </MobileMenuButton>
         )}
         {mobileButtonClicked && (
-          <MobileNavMenuDropDown>{renderReadyNavButtons}</MobileNavMenuDropDown>
+          <MobileNavMenuDropDown
+            sx={{
+              top: `${activePage !== "Home" && "100px"}`,
+              right: `${activePage !== "Home" && "0px"}`,
+              borderTopLeftRadius: `${activePage !== "Home" && "0px"}`,
+              borderTopRightRadius: `${activePage !== "Home" && "0px"}`,
+              padding: `${activePage !== "Home" && "10px"}`,
+            }}
+          >
+            {renderReadyNavButtons}
+          </MobileNavMenuDropDown>
         )}
       </StyledToolBar>
     </AppBar>

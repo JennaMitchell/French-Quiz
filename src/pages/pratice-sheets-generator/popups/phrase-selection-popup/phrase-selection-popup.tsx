@@ -1,23 +1,27 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
+import { Dialog, DialogContent, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
-} from "../../../../components/generic-components/generic-popup-components";
-
-import {
-  SelectionContainer,
+  StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
-  VocabContainer,
-  DropDownButton,
-  DropDownSelectionMenu,
+  StyledStepTitleText,
+  StyledWarningText,
+  QuestionsRemainingTest,
+  SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
+  DropDownSelectionMenu,
+  DropDownButton,
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
+} from "../../../../components/generic-components/generic-popup-components";
+
+import {
+  VocabContainer,
   ButtonsContainer,
 } from "./phrase-selection-popup-styled-components";
 import { useState, useEffect } from "react";
@@ -146,29 +150,26 @@ const PhraseSelectionPopup = () => {
           sx={{
             backgroundColor: `${matchFound && "secondary.light"}`,
             color: `${matchFound && "secondary.dark"}`,
-            fontSize: "16px",
           }}
         >
-          <Typography
+          <StyledPopupTypography
             sx={{
-              fontSize: "inherit",
               color: "inherit",
               paddingLeft: "5px",
               width: "max(100px,100px)",
             }}
           >
             {object.french}
-          </Typography>
+          </StyledPopupTypography>
           <EndSelectionBox>
-            <Typography
+            <StyledPopupTypography
               sx={{
-                fontSize: "inherit",
                 color: "inherit",
-                width: "max(100px,100px)",
+                width: "max(80px,80px)",
               }}
             >
               {object.english}
-            </Typography>
+            </StyledPopupTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
           </EndSelectionBox>
@@ -227,20 +228,28 @@ const PhraseSelectionPopup = () => {
       open={phrasesSelectionPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
+      PaperProps={{
+        sx: {
+          borderRadius: "20px",
+          border: "none",
+          margin: "0",
+          minHeight: "max-content",
+          height: "max-content",
+          maxHeight: "100vh",
+          width: "450px",
+          "@media(max-width:475px)": {
+            width: "max(325px,325px)",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
+          },
+        },
+      }}
       sx={{
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
           overflowY: "scroll",
-        },
-        "&.PaperProps": {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
         },
       }}
     >
@@ -248,13 +257,14 @@ const PhraseSelectionPopup = () => {
         sx={{
           backgroundColor: "primary.main",
           color: "secondary.light",
-          overflowX: "hidden",
+          display: "grid",
+
+          gridTemplateColumns: "100%",
+          alignItems: "center",
+          justifyContent: "center",
           borderRadius: "20px",
-          padding: "10px 40px 20px 40px",
+
           height: "max-content",
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
         }}
       >
         <ClosingIconContainer
@@ -263,109 +273,46 @@ const PhraseSelectionPopup = () => {
         >
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 6 of 6
-          </Typography>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "28px",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
-            Phrase Selection
-          </Typography>
-          <SelectionContainer>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Minimum Selection Remaining: &nbsp;
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
-                selectedItems.length >
-                0 &&
-                practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
-                  selectedItems.length}
-              {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
-                selectedItems.length <
-                0 && 0}
-            </Typography>
-          </SelectionContainer>
-          {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
-            selectedItems.length <=
-            0 && (
-            <Typography
-              sx={{
-                color: "red",
-                fontSize: "16px",
-                width: "max(300px,300px)",
-                textAlign: "center",
-              }}
-            >
-              Warning: Picking more than the selected number of questions will
-              randomize the selection
-            </Typography>
-          )}
-          <DropDownButton onClick={verbsHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Phrases
-            </Typography>
-            {!verbsDropDownMenuActive && <DropDownDownArrow />}
-            {verbsDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {verbsDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyVerbItems}
-            </DropDownSelectionMenu>
-          )}
-        </Grid>
+        <StyledStepTitleText variant="h6">Step 6 of 6</StyledStepTitleText>
+
+        <StyledPopupTypography variant="h4" sx={{ textAlign: "center" }}>
+          Phrase Selection
+        </StyledPopupTypography>
+        <SelectionContainer>
+          <QuestionsRemainingTest variant="h6">
+            Minimum Selection Remaining: &nbsp;
+          </QuestionsRemainingTest>
+          <StyledPopupTypography variant="h6">
+            {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+              selectedItems.length >
+              0 &&
+              practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+                selectedItems.length}
+            {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+              selectedItems.length <
+              0 && 0}
+          </StyledPopupTypography>
+        </SelectionContainer>
+        {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
+          selectedItems.length <=
+          0 && (
+          <StyledWarningText>
+            Warning: Picking more than the selected number of questions will
+            randomize the selection
+          </StyledWarningText>
+        )}
+        <DropDownButton
+          onClick={verbsHeadingHandler}
+          sx={{ marginBottom: "15px" }}
+        >
+          <StyledPopupTypography variant="h5">Phrases</StyledPopupTypography>
+          {!verbsDropDownMenuActive && <DropDownDownArrow />}
+          {verbsDropDownMenuActive && <DropDownUpArrow />}
+        </DropDownButton>
+        {verbsDropDownMenuActive && (
+          <DropDownSelectionMenu>{renderReadyVerbItems}</DropDownSelectionMenu>
+        )}
 
         <ButtonsContainer>
           {submitButtonEnabled && (

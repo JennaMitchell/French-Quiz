@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import RedoIcon from "@mui/icons-material/Redo";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Typography } from "@mui/material";
 const TopContainer = styled("div", {
   name: "TopContainer",
   slot: "Wrapper",
@@ -16,6 +17,37 @@ const TopContainer = styled("div", {
   placeItems: "center",
   perspective: "1000px",
   position: "relative",
+  "@media(max-width:1050px)": {
+    minHeight: "calc(100vh - 344px)",
+  },
+  "@media(max-width:880px)": {
+    minHeight: "calc(100vh - 334px)",
+  },
+  "@media(max-width:780px)": {
+    minHeight: "calc(100vh - 316px)",
+  },
+  "@media(max-width:760px)": {
+    minHeight: "calc(100vh - 313px)",
+  },
+  "@media(max-width:750px)": {
+    minHeight: "calc(100vh - 313px)",
+  },
+  "@media(max-width:560px)": {
+    minHeight: "calc(100vh - 303px)",
+  },
+}));
+
+const StyledTypography = styled(Typography, {
+  name: "StyledTypography",
+  slot: "Wrapper",
+})(() => ({
+  fontSize: "32px",
+  "@media(max-width:880px)": {
+    fontSize: "26px",
+  },
+  "@media(max-width:600px)": {
+    fontSize: "22px",
+  },
 }));
 
 const FrontFlashCardContainer = styled("div", {
@@ -41,6 +73,17 @@ const FrontFlashCardContainer = styled("div", {
   backfaceVisibility: "hidden",
   "&:hover": {
     boxShadow: "0 0 60px black",
+  },
+  "@media(max-width:1050px)": {
+    width: "max(80%,80%)",
+    height: "max(500px,500px)",
+  },
+  "@media(max-width:600px)": {
+    height: "max(400px,400px)",
+    width: "max(95%,95%)",
+  },
+  "@media(max-width:400px)": {
+    height: "max(325px,325px)",
   },
 }));
 
@@ -89,6 +132,25 @@ const NextIconButton = styled(ArrowForwardIosIcon, {
     backgroundColor: theme.palette.primary.light,
     boxShadow: "0 0 10px black",
   },
+  "@media(max-width:1250px)": {
+    right: "1.5%",
+  },
+  "@media(max-width:800px)": {
+    width: "max(40px,40px)",
+    height: "max(40px,40px)",
+    right: "2%",
+  },
+  "@media(max-width:700px)": {
+    top: "17.5%",
+    right: "12.5%",
+  },
+  "@media(max-width:600px)": {
+    top: "23.5%",
+    right: "7.5%",
+  },
+  "@media(max-width:400px)": {
+    top: "27.5%",
+  },
 }));
 
 const PreviousIconButton = styled(ArrowBackIosNewIcon, {
@@ -111,6 +173,25 @@ const PreviousIconButton = styled(ArrowBackIosNewIcon, {
     backgroundColor: theme.palette.primary.light,
     boxShadow: "0 0 10px black",
   },
+  "@media(max-width:1250px)": {
+    left: "1.5%",
+  },
+  "@media(max-width:800px)": {
+    width: "max(40px,40px)",
+    height: "max(40px,40px)",
+    left: "2%",
+  },
+  "@media(max-width:700px)": {
+    top: "17.5%",
+    left: "12.5%",
+  },
+  "@media(max-width:600px)": {
+    top: "23.5%",
+    left: "7.5%",
+  },
+  "@media(max-width:400px)": {
+    top: "27.5%",
+  },
 }));
 
 export {
@@ -120,4 +201,5 @@ export {
   RotateIcon,
   NextIconButton,
   PreviousIconButton,
+  StyledTypography,
 };

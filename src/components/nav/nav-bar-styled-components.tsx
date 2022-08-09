@@ -170,6 +170,7 @@ const MobileNavMenuDropDown = styled("div", {
   flexDirection: "column",
   gap: "10px",
   borderRadius: "10px",
+  boxShadow: "-5px 8px 10px black",
   "@media(max-width:670px)": {
     width: "max(200px,200px)",
   },

@@ -1,28 +1,21 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogActions, Grid } from "@mui/material";
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 
 import { useState } from "react";
 import { ChangeEventHandler } from "react";
 
-import {
-  StyledOption,
-  StyledTitleTypography,
-  StyledSelect,
-  ActionButton,
-  OptionContainer,
-  DisabledActionButton,
-  SelectionContainer,
-} from "./number-of-phrase-question-popup-styled-components";
+import { OptionContainer } from "./number-of-phrase-question-popup-styled-components";
 import {
   ClosingIconContainer,
   ClosingIcon,
+  StyledPopupTypography,
+  ActionButton,
+  DisabledActionButton,
+  StyledPopupSelect,
+  StyledPopupOption,
+  StyledStepTitleText,
+  SelectionContainer,
 } from "../../../../components/generic-components/generic-popup-components";
 import { useEffect } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
@@ -103,7 +96,9 @@ const NumberOfPhraseQuestionsPopup = () => {
   const maxNumberOfQuestions = phrasesDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
-    let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
+    let renderQuestionOption = (
+      <StyledPopupOption key={j}>{j}</StyledPopupOption>
+    );
     overallQuestionNumbersArray.push(renderQuestionOption);
   }
 
@@ -140,7 +135,9 @@ const NumberOfPhraseQuestionsPopup = () => {
     numberOfMultipleChoiceQuestions;
 
   for (let i = 0; i < numberOfAvaiableQuestions + 1; i++) {
-    let renderQuestionOptions = <StyledOption key={i}>{i}</StyledOption>;
+    let renderQuestionOptions = (
+      <StyledPopupOption key={i}>{i}</StyledPopupOption>
+    );
     numberOfQuestionsOptions.push(renderQuestionOptions);
   }
 
@@ -162,7 +159,9 @@ const NumberOfPhraseQuestionsPopup = () => {
       y < numberOfMultipleChoiceQuestions + numberOfAvaiableQuestions + 1;
       y++
     ) {
-      let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
+      let renderQuestionOptions = (
+        <StyledPopupOption key={y}>{y}</StyledPopupOption>
+      );
       multipleChoiceQuestionsArray.push(renderQuestionOptions);
     }
   }
@@ -180,7 +179,9 @@ const NumberOfPhraseQuestionsPopup = () => {
       y < numberOfMatchingQuestions + numberOfAvaiableQuestions + 1;
       y++
     ) {
-      let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
+      let renderQuestionOptions = (
+        <StyledPopupOption key={y}>{y}</StyledPopupOption>
+      );
       matchingQuestionsArray.push(renderQuestionOptions);
     }
   }
@@ -201,7 +202,9 @@ const NumberOfPhraseQuestionsPopup = () => {
       y < numberOfFillInTheBlankQuestions + numberOfAvaiableQuestions + 1;
       y++
     ) {
-      let renderQuestionOptions = <StyledOption key={y}>{y}</StyledOption>;
+      let renderQuestionOptions = (
+        <StyledPopupOption key={y}>{y}</StyledPopupOption>
+      );
       fillInTheBlankQuestionsArray.push(renderQuestionOptions);
     }
   }
@@ -278,6 +281,9 @@ const NumberOfPhraseQuestionsPopup = () => {
           borderRadius: "20px",
           border: "none",
           margin: "0",
+          minHeight: "max-content",
+          height: "max-content",
+          maxHeight: "100vh",
           "@media(maxWidth:475px)": {
             width: "max(325px,325px)",
           },
@@ -305,31 +311,11 @@ const NumberOfPhraseQuestionsPopup = () => {
           columns={1}
           sx={{ flexDirection: "column", placeItems: "center" }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 5 of 6
-          </Typography>
+          <StyledStepTitleText variant="h6">Step 5 of 6</StyledStepTitleText>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "28px",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
+          <StyledPopupTypography variant="h4">
             Number of Phrase Questions
-          </Typography>
+          </StyledPopupTypography>
         </Grid>
       </DialogContent>
       <DialogActions
@@ -342,27 +328,17 @@ const NumberOfPhraseQuestionsPopup = () => {
           placeItems: "center",
           backgroundColor: "primary.main",
           padding: "0px 20px 20px 20px",
-          "div:not(:first-of-type)": {
-            marginLeft: "0px",
-          },
-          "@media(max-width:475px)": {},
         }}
       >
         <OptionContainer>
-          <StyledTitleTypography>Number of Questions:</StyledTitleTypography>
-          <StyledSelect onChange={numberOfQuestionsHandler}>
+          <StyledPopupTypography>Number of Questions:</StyledPopupTypography>
+          <StyledPopupSelect onChange={numberOfQuestionsHandler}>
             {overallQuestionNumbersArray}
-          </StyledSelect>
+          </StyledPopupSelect>
         </OptionContainer>
         <OptionContainer>
-          <StyledTitleTypography
-            sx={{
-              color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
-            }}
-          >
-            Multiple Choice:
-          </StyledTitleTypography>
-          <StyledSelect
+          <StyledPopupTypography>Multiple Choice:</StyledPopupTypography>
+          <StyledPopupSelect
             disabled={numberOfQuestions === 0 ? true : false}
             value={numberOfMultipleChoiceQuestions}
             onChange={multipleQuestionsHandler}
@@ -370,17 +346,17 @@ const NumberOfPhraseQuestionsPopup = () => {
             {numberOfMultipleChoiceQuestions === 0
               ? numberOfQuestionsOptions
               : multipleChoiceQuestionsArray}
-          </StyledSelect>
+          </StyledPopupSelect>
         </OptionContainer>
         <OptionContainer>
-          <StyledTitleTypography
+          <StyledPopupTypography
             sx={{
               color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
             }}
           >
             Matching:
-          </StyledTitleTypography>
-          <StyledSelect
+          </StyledPopupTypography>
+          <StyledPopupSelect
             value={numberOfMatchingQuestions}
             onChange={matchingQuestionsHandler}
             disabled={numberOfQuestions === 0 ? true : false}
@@ -388,17 +364,17 @@ const NumberOfPhraseQuestionsPopup = () => {
             {numberOfMatchingQuestions === 0
               ? numberOfQuestionsOptions
               : matchingQuestionsArray}
-          </StyledSelect>
+          </StyledPopupSelect>
         </OptionContainer>
         <OptionContainer sx={{ marginBottom: "5px" }}>
-          <StyledTitleTypography
+          <StyledPopupTypography
             sx={{
               color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
             }}
           >
             Fill in the Blank:
-          </StyledTitleTypography>
-          <StyledSelect
+          </StyledPopupTypography>
+          <StyledPopupSelect
             value={numberOfFillInTheBlankQuestions}
             onChange={fillInBlankQuestionsHandler}
             disabled={numberOfQuestions === 0 ? true : false}
@@ -406,31 +382,19 @@ const NumberOfPhraseQuestionsPopup = () => {
             {numberOfFillInTheBlankQuestions === 0
               ? numberOfQuestionsOptions
               : fillInTheBlankQuestionsArray}
-          </StyledSelect>
+          </StyledPopupSelect>
         </OptionContainer>
         <SelectionContainer sx={{ marginTop: "0px" }}>
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Test my:
-          </Typography>
-          <StyledSelect
+          <StyledPopupTypography>Test my:</StyledPopupTypography>
+          <StyledPopupSelect
             onChange={testTypeHandler}
             sx={{ width: "max(170px,170px)" }}
           >
-            <StyledOption>&nbsp;</StyledOption>
-            <StyledOption>English</StyledOption>
-            <StyledOption>French</StyledOption>
-            <StyledOption>French/English</StyledOption>
-          </StyledSelect>
+            <StyledPopupOption>&nbsp;</StyledPopupOption>
+            <StyledPopupOption>English</StyledPopupOption>
+            <StyledPopupOption>French</StyledPopupOption>
+            <StyledPopupOption>French/English</StyledPopupOption>
+          </StyledPopupSelect>
         </SelectionContainer>
         <OptionContainer>
           {submitButtonEnabled && (

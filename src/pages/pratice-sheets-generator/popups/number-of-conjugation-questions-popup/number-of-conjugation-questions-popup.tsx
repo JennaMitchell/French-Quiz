@@ -4,21 +4,22 @@ import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
+  StyledPopupTypography,
+  ActionButton,
+  DisabledActionButton,
+  StyledPopupSelect,
+  StyledPopupOption,
+  StyledStepTitleText,
 } from "../../../../components/generic-components/generic-popup-components";
 
 import {
-  ActionButton,
-  DisabledActionButton,
   ButtonsContainer,
-  StyledSelect,
-  StyledOption,
   OptionContainer,
-  StyledTitleTypography,
 } from "./number-of-conjugation-questions-popup-styled-components";
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
-import { totalNumberOfQuizQuestionCalculator } from "../../../../components/functions/generic-functions";
+
 const NumberOfConjugationQuestionsPopup = () => {
   const dispatch = useAppDispatch();
 
@@ -33,7 +34,9 @@ const NumberOfConjugationQuestionsPopup = () => {
   const maxNumberOfQuestions = verbsDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
-    let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
+    let renderQuestionOption = (
+      <StyledPopupOption key={j}>{j}</StyledPopupOption>
+    );
     overallQuestionNumbersArray.push(renderQuestionOption);
   }
 
@@ -94,6 +97,23 @@ const NumberOfConjugationQuestionsPopup = () => {
       open={numberOfConjugationPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
+      PaperProps={{
+        sx: {
+          borderRadius: "20px",
+          border: "none",
+          margin: "0",
+          minHeight: "max-content",
+          height: "max-content",
+          maxHeight: "100vh",
+
+          "@media(max-width:475px)": {
+            width: "max(325px,325px)",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
+          },
+        },
+      }}
       sx={{
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
@@ -103,10 +123,6 @@ const NumberOfConjugationQuestionsPopup = () => {
           borderRadius: "20px",
           border: "none",
           margin: "0",
-
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
         },
       }}
     >
@@ -116,56 +132,57 @@ const NumberOfConjugationQuestionsPopup = () => {
           color: "secondary.light",
           overflowX: "hidden",
           borderRadius: "20px",
-          padding: "10px 40px 20px 40px",
+          padding: "20px 40px 20px 40px",
+          display: "grid",
+          gridTemplateColumns: "450px",
+          gridTemplateRows: "max-content",
+          alignItems: "center",
+          justifyContent: "center",
 
           height: "max-content",
-          "@media(maxWidth:475px)": {
+          "@media(max-width:550px)": {
+            gridTemplateColumns: "350px",
+          },
+          "@media(max-width:475px)": {
             width: "max(325px,325px)",
+            gridTemplateColumns: "300px",
+            padding: "10px 20px 10px 20px",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
+            gridTemplateColumns: "275px",
           },
         }}
       >
         <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 3 of 6
-          </Typography>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "32px",
-              width: "max(400px,400px)",
-              textAlign: "center",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
-            Select the Number of Conjugation Questions
-          </Typography>
-          <OptionContainer sx={{ marginTop: "20px" }}>
-            <StyledTitleTypography>Number of Questions:</StyledTitleTypography>
-            <StyledSelect onChange={numberOfQuestionsHandler}>
-              {overallQuestionNumbersArray}
-            </StyledSelect>
-          </OptionContainer>
-        </Grid>
+        <StyledStepTitleText variant="h6" sx={{ paddingLeft: "7.5px" }}>
+          Step 3 of 6
+        </StyledStepTitleText>
+
+        <StyledPopupTypography
+          variant="h4"
+          sx={{
+            fontSize: "32px",
+            textAlign: "center",
+
+            "@media(max-width:475px)": {
+              width: "max(90%,90%)",
+              paddingLeft: "15px",
+            },
+          }}
+        >
+          Select the Number of Conjugation Questions
+        </StyledPopupTypography>
+        <OptionContainer sx={{ marginTop: "20px" }}>
+          <StyledPopupTypography>Number of Questions:</StyledPopupTypography>
+          <StyledPopupSelect onChange={numberOfQuestionsHandler}>
+            {overallQuestionNumbersArray}
+          </StyledPopupSelect>
+        </OptionContainer>
+
         <ButtonsContainer>
           {numberOfQuestions !== 0 && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>

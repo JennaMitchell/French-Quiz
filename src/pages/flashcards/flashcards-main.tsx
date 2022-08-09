@@ -5,10 +5,11 @@ import {
   RotateIcon,
   NextIconButton,
   PreviousIconButton,
+  StyledTypography,
 } from "./flashcards-main-styled-components";
 
 import { useAppSelector } from "../../store/hooks";
-import { Typography } from "@mui/material";
+
 import { useState } from "react";
 
 const FlashcardsMain: React.FC = () => {
@@ -74,15 +75,15 @@ const FlashcardsMain: React.FC = () => {
         }}
       >
         <ClickToFlipContainer sx={{ opacity: `${flashcardHover && 1}` }}>
-          <Typography variant="h6" color="secondary.light">
+          <StyledTypography variant="h6" color="secondary.light">
             click to flip
-          </Typography>
+          </StyledTypography>
           <RotateIcon />
         </ClickToFlipContainer>
 
-        <Typography variant="h4" color="secondary.light">
+        <StyledTypography variant="h4" color="secondary.light">
           {question}
-        </Typography>
+        </StyledTypography>
       </FrontFlashCardContainer>
       <FrontFlashCardContainer
         onMouseEnter={flashcardHoverHandler}
@@ -95,14 +96,14 @@ const FlashcardsMain: React.FC = () => {
         }}
       >
         <ClickToFlipContainer sx={{ opacity: `${flashcardHover && 1}` }}>
-          <Typography variant="h6" color="secondary.light">
+          <StyledTypography variant="h6" color="secondary.light">
             click to flip
-          </Typography>
+          </StyledTypography>
           <RotateIcon />
         </ClickToFlipContainer>
-        <Typography variant="h4" color="secondary.light">
+        <StyledTypography variant="h4" color="secondary.light">
           {answer}
-        </Typography>
+        </StyledTypography>
       </FrontFlashCardContainer>
       <NextIconButton onClick={nextButtonHandler} />
       <PreviousIconButton onClick={previousButtonHandler} />

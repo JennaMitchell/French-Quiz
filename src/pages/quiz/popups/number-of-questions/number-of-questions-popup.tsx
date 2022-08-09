@@ -15,15 +15,14 @@ import {
   StyledOption,
   StyledTitleTypography,
   StyledSelect,
-  ActionButton,
   OptionContainer,
-  DisabledActionButton,
   SelectionContainer,
-
 } from "./number-of-questions-popup-styled-components";
 import {
   ClosingIconContainer,
   ClosingIcon,
+  DisabledActionButton,
+  ActionButton,
 } from "../../../../components/generic-components/generic-popup-components";
 
 import { useEffect } from "react";

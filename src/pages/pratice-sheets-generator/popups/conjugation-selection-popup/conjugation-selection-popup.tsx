@@ -1,26 +1,29 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
+import { Dialog, DialogContent, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
-} from "../../../../components/generic-components/generic-popup-components";
-
-import {
-  SelectionContainer,
+  StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
-  VocabContainer,
-  DropDownButton,
-  DropDownSelectionMenu,
+  StyledStepTitleText,
+  QuestionsRemainingTest,
+  SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
+  DropDownSelectionMenu,
+  DropDownButton,
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
+  StyledPopupSelect,
+  StyledPopupOption,
+} from "../../../../components/generic-components/generic-popup-components";
+
+import {
+  VocabContainer,
   ButtonsContainer,
-  StyledSelect,
-  StyledOption,
 } from "./conjugation-selection-popup-styled-components";
 import { useState, useEffect, ChangeEventHandler } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
@@ -122,15 +125,13 @@ const ConjugationSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <Typography
-            sx={{ fontSize: "inherit", color: "inherit", paddingLeft: "5px" }}
-          >
+          <StyledPopupTypography sx={{ color: "inherit", paddingLeft: "5px" }}>
             {object.french}
-          </Typography>
+          </StyledPopupTypography>
           <EndSelectionBox>
-            <Typography sx={{ fontSize: "inherit", color: "inherit" }}>
+            <StyledPopupTypography sx={{ color: "inherit" }}>
               {object.english}
-            </Typography>
+            </StyledPopupTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
           </EndSelectionBox>
@@ -209,19 +210,27 @@ const ConjugationSelectionPopup = () => {
       open={conjugationVerbChoicePopup}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
+      PaperProps={{
+        sx: {
+          borderRadius: "20px",
+          border: "none",
+          margin: "0",
+          minHeight: "max-content",
+          height: "max-content",
+          maxHeight: "100vh",
+
+          "@media(max-width:475px)": {
+            width: "max(325px,325px)",
+          },
+          "@media(max-width:400px)": {
+            width: "max(300px,300px)",
+          },
+        },
+      }}
       sx={{
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
-        },
-        "&.PaperProps": {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
         },
       }}
     >
@@ -233,6 +242,10 @@ const ConjugationSelectionPopup = () => {
           borderRadius: "20px",
           padding: "10px 40px 20px 40px",
           height: "max-content",
+          display: "grid",
+          gridTemplateColumns: "max-content",
+          alignItems: "center",
+          justifyContent: "center",
           "@media(maxWidth:475px)": {
             width: "max(325px,325px)",
           },
@@ -244,107 +257,37 @@ const ConjugationSelectionPopup = () => {
         >
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 4 of 4
-          </Typography>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "26px",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
-            Vocab Conjugation Selection
-          </Typography>
-          <SelectionContainer>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Selection Remaining :
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              {numberOfConjugationQuestions - selectedItems.length}
-            </Typography>
-          </SelectionContainer>
-          <DropDownButton onClick={verbsHeadingHandler}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Verbs
-            </Typography>
-            {!verbsDropDownMenuActive && <DropDownDownArrow />}
-            {verbsDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {verbsDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyVerbItems}
-            </DropDownSelectionMenu>
-          )}
-          <SelectionContainer sx={{ marginTop: "20px" }}>
-            <Typography
-              variant="h5"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                  textAlign: "center",
-                },
-              }}
-            >
-              Grouping:
-            </Typography>
-            <StyledSelect onChange={groupByHandler}>
-              <StyledOption>&nbsp;</StyledOption>
-              <StyledOption>By Verb</StyledOption>
-              <StyledOption>Random</StyledOption>
-            </StyledSelect>
-          </SelectionContainer>
-        </Grid>
+        <StyledStepTitleText variant="h6">Step 4 of 6</StyledStepTitleText>
+
+        <StyledPopupTypography variant="h4" sx={{ textAlign: "center" }}>
+          Vocab Conjugation Selection
+        </StyledPopupTypography>
+        <SelectionContainer>
+          <QuestionsRemainingTest variant="h6">
+            Selection Remaining :
+          </QuestionsRemainingTest>
+          <QuestionsRemainingTest variant="h6">
+            {numberOfConjugationQuestions - selectedItems.length}
+          </QuestionsRemainingTest>
+        </SelectionContainer>
+        <DropDownButton onClick={verbsHeadingHandler}>
+          <StyledPopupTypography variant="h5">Verbs</StyledPopupTypography>
+          {!verbsDropDownMenuActive && <DropDownDownArrow />}
+          {verbsDropDownMenuActive && <DropDownUpArrow />}
+        </DropDownButton>
+        {verbsDropDownMenuActive && (
+          <DropDownSelectionMenu>{renderReadyVerbItems}</DropDownSelectionMenu>
+        )}
+        <SelectionContainer sx={{ marginTop: "20px" }}>
+          <StyledPopupTypography variant="h5">Grouping:</StyledPopupTypography>
+          <StyledPopupSelect onChange={groupByHandler}>
+            <StyledPopupOption>&nbsp;</StyledPopupOption>
+            <StyledPopupOption>By Verb</StyledPopupOption>
+            <StyledPopupOption>Random</StyledPopupOption>
+          </StyledPopupSelect>
+        </SelectionContainer>
+
         <ButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
