@@ -4,7 +4,7 @@ interface UserSelectedData {
   english: string;
 }
 
-// Random NUmber generaor with Min Max, and a Number to Exclude
+// Random Number generaor with Min Max, and a Number to Exclude
 export const randomNumberGenerator = (
   min: number,
   max: number,
@@ -253,10 +253,10 @@ export const arrayComparer = (
   return arrayOfComparisons;
 };
 
-  /// Handeling Scroll to button Presses 
+/// Handeling Scroll to button Presses
 
-  export const scrollToHandler = (idToScrollTo:string) =>{
-    const ref = document.getElementById(idToScrollTo);
-    console.log(ref);
-    ref?.scrollIntoView();
-  }
+export const scrollToHandler = (idToScrollTo: string) => {
+  const ref = document.getElementById(idToScrollTo);
+  console.log(ref);
+  ref?.scrollIntoView();
+};

@@ -5,7 +5,9 @@ import {
   SingleItemRowContainer,
   TwoItemRowContainer,
 } from "../../../../components/generic-components/generic-components";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useMediaQuery } from "@mui/material";
+import { randomNumberGeneratorWithNumberArrayRestriction } from "../../../../components/functions/generic-functions";
 interface UserSelectedData {
   [french: string]: string;
   english: string;
@@ -18,15 +20,16 @@ type Props = {
 const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   let overallDatabase: UserSelectedData[] = [];
 
+  const doubleColumnActivate = useMediaQuery("(max-width:1280px)");
+  const singleColumnActivate = useMediaQuery("(max-width:880px)");
+
   const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
   const overAllVocabDB = useAppSelector(
     (state) => state.mainStore.overAllVocabDB
   );
 
   const dispatch = useAppDispatch();
-  const [multipleChoiceQuestionAnswerKey, setMultipleChoiceQuestionAnswerKey] =
-    useState<string[] | []>([]);
-  const [answerKeyUpdated, setAnswerKeyUpdated] = useState(false);
+
   switch (databaseType) {
     case "Vocab":
       overallDatabase = overAllVocabDB;
@@ -88,15 +91,15 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
       indexOfUserSelectedItem
     );
 
-    const randomNumberTwo = randomNumberGenerator(
+    const randomNumberTwo = randomNumberGeneratorWithNumberArrayRestriction(
       0,
       databaseLength - 1,
-      indexOfUserSelectedItem
+      [indexOfUserSelectedItem, randomNumberOne]
     );
-    const randomNumberThree = randomNumberGenerator(
+    const randomNumberThree = randomNumberGeneratorWithNumberArrayRestriction(
       0,
       databaseLength - 1,
-      indexOfUserSelectedItem
+      [indexOfUserSelectedItem, randomNumberOne, randomNumberTwo]
     );
 
     return [
@@ -168,6 +171,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
       }
       const questionTitle = word[questionTitleType];
       /// Pushing the Correct Answer to the answser key
+
       switch (correctAnswerPosition) {
         case 0:
           answerKey.push("A");
@@ -197,40 +201,28 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
     }
   );
 
-  if (
-    renderReadyMultipleChoiceQuestions.length !== 0 &&
-    multipleChoiceQuestionAnswerKey.length === 0
-  ) {
-    setMultipleChoiceQuestionAnswerKey(answerKey);
-  }
   useEffect(() => {
-    if (!answerKeyUpdated) {
-      if (multipleChoiceQuestionAnswerKey.length !== 0) {
-        if (databaseType === "Vocab") {
-          dispatch(
-            sheetGeneratorStoreSliceActions.setVocabMultipleChoiceAnswerKey(
-              multipleChoiceQuestionAnswerKey
-            )
-          );
-        } else if (databaseType === "Phrases") {
-          dispatch(
-            sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
-              multipleChoiceQuestionAnswerKey
-            )
-          );
-        }
+    if (answerKey.length === inputArray.length) {
+      if (databaseType === "Vocab") {
+        dispatch(
+          sheetGeneratorStoreSliceActions.setVocabMultipleChoiceAnswerKey(
+            answerKey
+          )
+        );
+      } else if (databaseType === "Phrases") {
+        dispatch(
+          sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
+            answerKey
+          )
+        );
       }
-      setAnswerKeyUpdated(true);
     }
-  }, [
-    databaseType,
-    dispatch,
-    multipleChoiceQuestionAnswerKey.length,
-    answerKeyUpdated,
-    multipleChoiceQuestionAnswerKey,
-  ]);
+  }, [databaseType, dispatch, answerKey.length, answerKey]);
 
-  if (renderReadyMultipleChoiceQuestions.length % 3 === 1) {
+  if (
+    renderReadyMultipleChoiceQuestions.length % 3 === 1 &&
+    !singleColumnActivate
+  ) {
     const lastEntry =
       renderReadyMultipleChoiceQuestions[
         renderReadyMultipleChoiceQuestions.length - 1
@@ -244,10 +236,35 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
       </SingleItemRowContainer>
     );
   }
+  // handeling media centering at two rows
+
+  if (
+    renderReadyMultipleChoiceQuestions.length % 2 === 1 &&
+    !singleColumnActivate &&
+    doubleColumnActivate &&
+    databaseType !== "Phrase"
+  ) {
+    const lastEntry =
+      renderReadyMultipleChoiceQuestions[
+        renderReadyMultipleChoiceQuestions.length - 1
+      ];
+
+    renderReadyMultipleChoiceQuestions[
+      renderReadyMultipleChoiceQuestions.length - 1
+    ] = (
+      <SingleItemRowContainer
+        sx={{ paddingLeft: "80px", gridColumn: "1/span 2" }}
+        key="one row"
+      >
+        {lastEntry}
+      </SingleItemRowContainer>
+    );
+  }
 
   if (
     renderReadyMultipleChoiceQuestions.length % 3 === 2 &&
-    databaseType !== "Phrases"
+    databaseType !== "Phrases" &&
+    !doubleColumnActivate
   ) {
     const lastEntrys = renderReadyMultipleChoiceQuestions.splice(
       renderReadyMultipleChoiceQuestions.length - 2,
@@ -262,21 +279,28 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   }
 
   if (
-    renderReadyMultipleChoiceQuestions.length % 3 === 2 &&
-    databaseType === "Phrases"
+    renderReadyMultipleChoiceQuestions.length % 2 === 1 &&
+    databaseType === "Phrases" &&
+    !singleColumnActivate
   ) {
     const lastEntrys = renderReadyMultipleChoiceQuestions.splice(
-      renderReadyMultipleChoiceQuestions.length - 2,
+      renderReadyMultipleChoiceQuestions.length - 1,
       2
     );
 
     renderReadyMultipleChoiceQuestions.push(
-      <TwoItemRowContainer
+      <SingleItemRowContainer
         key="two row"
-        sx={{ marginLeft: "0px", columnGap: "60px" }}
+        sx={{
+          marginLeft: "0px",
+          marginTop: "20px",
+          paddingLeft: "0px",
+
+          gridColumn: "1/span 2",
+        }}
       >
         {lastEntrys[0]} {lastEntrys[1]}
-      </TwoItemRowContainer>
+      </SingleItemRowContainer>
     );
   }
 

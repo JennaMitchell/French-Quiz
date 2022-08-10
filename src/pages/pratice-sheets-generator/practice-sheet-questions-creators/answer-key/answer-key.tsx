@@ -10,6 +10,7 @@ import { useAppSelector } from "../../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { SingleItemRowContainer } from "../../../../components/generic-components/generic-components";
+import { useMediaQuery } from "@mui/material";
 const AnswerOverAllContainer = styled("div", {
   name: "AnswerOverAllContainer",
   slot: "Wrapper",
@@ -27,12 +28,21 @@ const AnswerOverAllContainer = styled("div", {
   justifyContent: "space-evenly",
   marginTop: "20px",
   marginBottom: "20px",
+  "@media(max-width:1280px)": {
+    gridColumn: "1 / span 2",
+  },
+  "@media(max-width:880px)": {
+    gridTemplateColumns: "max-content",
+    gridColumn: "1 / span 1",
+  },
 }));
 const AnswerSectionTitle = styled(Typography, {
   name: "AnswerSectionTitle",
   slot: "Wrapper",
 })(() => ({
-  width: "max(100%,100%)",
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
@@ -41,6 +51,17 @@ const AnswerSectionTitle = styled(Typography, {
   marginTop: "20px",
   textAlign: "center",
   fontSize: "48px",
+  justifySelf: "center",
+  "@media(max-width:1280px)": {
+    gridColumn: "1 /span 2",
+  },
+  "@media(max-width:880px)": {
+    gridColumn: "1 /span 1",
+    fontSize: "32px",
+  },
+  "@media(max-width:560px)": {
+    fontSize: "28px",
+  },
 }));
 
 const AnswerBlock = styled("div", {
@@ -56,6 +77,15 @@ const AnswerBlock = styled("div", {
   alignItems: "center",
   justifyContent: "center",
   gap: "20px",
+  "@media(max-width:1280px)": {
+    gridColumn: "1 / span 2",
+  },
+  "@media(max-width:880px)": {
+    gridTemplateColumns: "max-content",
+    gridColumn: "1 / span 1",
+    alignSelf: "center",
+    justifySelf: "center",
+  },
 }));
 
 const StyledAnswerTypography = styled("p", {
@@ -68,6 +98,14 @@ const StyledAnswerTypography = styled("p", {
   fontFamily: "Montserrat, sans-serif",
   textAlign: "center",
   width: "max(100%,100%)",
+  "@media(max-width:1280px)": {
+    gridColumn: "1 /span 2",
+  },
+  "@media(max-width:880px)": {
+    gridColumn: "1 /span 1",
+    fontSize: "18px",
+    justifySelf: "center",
+  },
 }));
 const StyledTitleTypography = styled(Typography, {
   name: "StyledTitleTypography",
@@ -81,6 +119,29 @@ const StyledTitleTypography = styled(Typography, {
   gridColumn: "1/span 2",
   gridRow: "1 / span 1",
   fontWeight: "400",
+  "@media(max-width:1280px)": {
+    gridColumn: "1 /span 2",
+  },
+  "@media(max-width:880px)": {
+    gridColumn: "1 /span 1",
+    fontSize: "18px",
+    justifySelf: "center",
+  },
+  "@media(max-width:560px)": {
+    fontSize: "14px",
+  },
+}));
+
+const ConjugationAnswerContainer = styled("div", {
+  name: "ConjugationAnswerContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  color: theme.palette.secondary.dark,
+  display: "grid",
+  gridTemplateColumns: "max-content max-content",
+  gridTemplateRows: "max-content",
+  justifyContent: "space-between",
+  width: "max(100px,100px)",
 }));
 const AnswerKey = () => {
   const vocabMultipleChoiceAnswerKey = useAppSelector(
@@ -111,6 +172,7 @@ const AnswerKey = () => {
   const phrasesFillInTheBlankAnswerKey = useAppSelector(
     (state) => state.sheetGenerator.phrasesFillInTheBlankAnswerKey
   );
+  const singleColumnActivate = useMediaQuery("(max-width:880px)");
 
   // calculating the total number of active elements to know if we need centering or not
   let totalNumberOfActiveItems = 0;
@@ -162,6 +224,11 @@ const AnswerKey = () => {
               gridColumn: "1 /span 3",
               justifySelf: "center",
               alignSelf: "center",
+              "@media(max-width:880px)": {
+                gridColumn: "1 /span 1",
+                fontSize: "18px",
+                justifySelf: "center",
+              },
             }}
           >
             {index + 1}. {answer}
@@ -173,8 +240,12 @@ const AnswerKey = () => {
             key={index}
             sx={{
               gridColumn: "1 /span 3",
-              justifySelf: "center",
-              alignSelf: "center",
+
+              "@media(max-width:880px)": {
+                gridColumn: "1 /span 1",
+                fontSize: "18px",
+                justifySelf: "center",
+              },
             }}
           >
             {index + 1}. {answer}
@@ -220,7 +291,10 @@ const AnswerKey = () => {
     <AnswerBlock
       sx={{
         gridColumn: `${
-          lastActiveAnswerKey === "vocabMatchingAnswerKey" ? "1/span 2" : "auto"
+          lastActiveAnswerKey === "vocabMatchingAnswerKey" &&
+          !singleColumnActivate
+            ? "1/span 2"
+            : "auto"
         }`,
       }}
     >
@@ -234,7 +308,8 @@ const AnswerKey = () => {
     <AnswerBlock
       sx={{
         gridColumn: `${
-          lastActiveAnswerKey === "vocabFillInTheBlankAnswerKey"
+          lastActiveAnswerKey === "vocabFillInTheBlankAnswerKey" &&
+          !singleColumnActivate
             ? "1/span 2"
             : "auto"
         }`,
@@ -261,17 +336,59 @@ const AnswerKey = () => {
         const renderReadyAnswers = answersArray.map(
           (answer: string, index: number) => {
             return (
-              <StyledAnswerTypography key={index} sx={{ textAlign: "left" }}>
-                {index + 1 + parentIndex * 8}. {answer}
-              </StyledAnswerTypography>
+              <ConjugationAnswerContainer>
+                <StyledAnswerTypography
+                  key={index}
+                  sx={{
+                    textAlign: "left",
+                    padding: "0px",
+                    gridColumn: "1/span 1",
+                    gridRow: "1 / span 1",
+                  }}
+                >
+                  {index + 1 + parentIndex * 8}.
+                </StyledAnswerTypography>
+                <StyledAnswerTypography
+                  key={index}
+                  sx={{
+                    textAlign: "left",
+                    padding: "0px",
+                    gridColumn: "2/span 1 !important",
+                    gridRow: "1 / span 1",
+                  }}
+                >
+                  {answer}
+                </StyledAnswerTypography>
+              </ConjugationAnswerContainer>
             );
           }
         );
 
         if (userSelectedConjugationGrouping === "By Verb") {
           return (
-            <AnswerBlock key={parentIndex} sx={{ columnGap: "80px" }}>
-              <StyledTitleTypography variant="h4" sx={{ textAlign: "center" }}>
+            <AnswerBlock
+              key={parentIndex}
+              sx={{
+                alignItems: "center",
+                justifyItems: "space-between",
+                gap: "30px",
+                "@media(max-width:880px)": {
+                  justifyItems: "center !important",
+                  gap: "15px",
+                  paddingRight: "40px",
+                },
+              }}
+            >
+              <StyledTitleTypography
+                variant="h4"
+                sx={{
+                  textAlign: "center",
+                  "@media(max-width:880px)": {
+                    textAlign: "center",
+                    fontSize: "22px",
+                  },
+                }}
+              >
                 {key}
               </StyledTitleTypography>
               {renderReadyAnswers}
@@ -279,7 +396,7 @@ const AnswerKey = () => {
           );
         } else {
           return (
-            <AnswerBlock key={parentIndex} sx={{ columnGap: "80px" }}>
+            <AnswerBlock key={parentIndex} sx={{ gap: "30px" }}>
               {renderReadyAnswers}
             </AnswerBlock>
           );
@@ -287,20 +404,45 @@ const AnswerKey = () => {
       }
     );
   }
-  if (renderReadyConjugationAnswers.length % 2 === 1) {
+  if (renderReadyConjugationAnswers.length % 2 === 1 && !singleColumnActivate) {
     const lastEntry =
       renderReadyConjugationAnswers[renderReadyConjugationAnswers.length - 1];
 
     renderReadyConjugationAnswers[renderReadyConjugationAnswers.length - 1] = (
-      <SingleItemRowContainer sx={{ gridColumn: "1/span 2" }} key="last entry">
+      <SingleItemRowContainer
+        sx={{
+          gridColumn: "1/span 2",
+        }}
+        key="last entry"
+      >
         {lastEntry}
       </SingleItemRowContainer>
     );
   }
 
   const renderReadyConjugationAnswersBlock = (
-    <AnswerBlock sx={{ gridColumn: "1/span 2", columnGap: "100px" }}>
-      <StyledTitleTypography variant="h4" sx={{ textAlign: "center" }}>
+    <AnswerBlock
+      sx={{
+        paddingLeft: "40px",
+        gridColumn: "1 /span 2",
+        justifySelf: "center",
+        "@media(max-width:1280px)": {
+          gridColumn: "1 / span 2",
+        },
+        "@media(max-width:880px)": {
+          gridTemplateColumns: "max-content",
+          gridColumn: "1 / span 1",
+        },
+      }}
+    >
+      <StyledTitleTypography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          justifySelf: "center",
+          paddingRight: "20px",
+        }}
+      >
         Conjugation Answers
       </StyledTitleTypography>
       {renderReadyConjugationAnswers}
@@ -324,7 +466,8 @@ const AnswerKey = () => {
     <AnswerBlock
       sx={{
         gridColumn: `${
-          lastActiveAnswerKey === "phrasesMultipleChoiceAnswerKey"
+          lastActiveAnswerKey === "phrasesMultipleChoiceAnswerKey" &&
+          !singleColumnActivate
             ? "1/span 2"
             : "auto"
         }`,
@@ -340,7 +483,8 @@ const AnswerKey = () => {
     <AnswerBlock
       sx={{
         gridColumn: `${
-          lastActiveAnswerKey === "phrasesMatchingAnswerKey"
+          lastActiveAnswerKey === "phrasesMatchingAnswerKey" &&
+          !singleColumnActivate
             ? "1/span 2"
             : "auto"
         }`,
@@ -356,7 +500,8 @@ const AnswerKey = () => {
     <AnswerBlock
       sx={{
         gridColumn: `${
-          lastActiveAnswerKey === "phrasesFillInTheBlankAnswerKey"
+          lastActiveAnswerKey === "phrasesFillInTheBlankAnswerKey" &&
+          !singleColumnActivate
             ? "1/span 2"
             : "auto"
         }`,

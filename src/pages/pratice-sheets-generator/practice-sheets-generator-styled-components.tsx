@@ -19,6 +19,9 @@ const TopContainer = styled("div", {
   alignItems: "center",
   backgroundColor: theme.palette.secondary.light,
   position: "relative",
+  "@media(max-width:1690px)": {
+    marginTop: "60px",
+  },
 }));
 
 const AddIconButton = styled("div", {
@@ -65,9 +68,33 @@ const ResetButton = styled("div", {
   padding: "10px 20px 10px 20px",
   position: "absolute",
   top: "25px",
-  right: "100px",
+  right: "calc((100vw - 1255px)/4)",
+  translate: "50% 0",
+  fontFamily: "Montserrat, sans-serif",
+
   borderRadius: "10px",
-  fontSize: "26px",
+  fontSize: "22px",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.dark,
+    boxShadow: "0 0 10px black",
+  },
+  "@media(max-width:1690px)": {
+    top: "-45px",
+    translate: "0% 0",
+    right: "calc((100vw - 1255px)/2)",
+  },
+  "@media(max-width:1280px)": {
+    right: "calc((100vw - 883px)/2)",
+  },
+  "@media(max-width:880px)": {
+    right: "calc((100vw - 561px)/2)",
+  },
+  "@media(max-width:560px)": {
+    right: "calc((100vw - 320px)/2)",
+    fontSize: "16px",
+    top: "-40px",
+  },
 }));
 
 export { TopContainer, AddIconButton, ResetButton, AddIconHolder };

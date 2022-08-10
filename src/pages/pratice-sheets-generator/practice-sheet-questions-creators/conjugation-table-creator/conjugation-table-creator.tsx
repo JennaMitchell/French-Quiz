@@ -8,6 +8,7 @@ import {
 } from "../../../../components/functions/generic-functions";
 import { SingleItemRowContainer } from "../../../../components/generic-components/generic-components";
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "@mui/material";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
@@ -44,9 +45,16 @@ const TableContainer = styled("div", {
   justifyContent: "center",
   alignItems: "center",
   fontFamily: "Montserrat, sans-serif",
-  marginTop: "20px",
+  marginTop: "10px",
   ":nth-child(n+5)": {
     marginTop: "40px",
+  },
+  "@media(max-width:880px)": {
+    gridColumn: "1 /span 1",
+    fontSize: "24px",
+  },
+  "@media(max-width:560px)": {
+    width: "max(240px,240px)",
   },
 }));
 const RowContainer = styled("div", {
@@ -61,6 +69,10 @@ const RowContainer = styled("div", {
   justifyContent: "center",
   alignItems: "center",
   fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:560px)": {
+    width: "max(220px,220px)",
+    gridTemplateColumns: "160px 60px",
+  },
 }));
 const UnderlineContainer = styled("div", {
   name: "UnderlineContainer",
@@ -78,11 +90,15 @@ const StyledTypography = styled(Typography, {
   backgroundColor: "inherit",
   fontSize: "26px",
   textAlign: "left",
+  "@media(max-width:560px)": {
+    fontSize: "12px",
+  },
 }));
 const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+  const singleColumnActivate = useMediaQuery("(max-width:880px)");
 
   const conjugationTableDB: any = useAppSelector(
     (state) => state.mainStore.conjugationTableDB
@@ -142,7 +158,14 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
       });
       answerKeyObject[frenchTitle] = arrayOfAnswers;
 
-      renderReadyData[j] = <TableContainer key={j}>{rowData}</TableContainer>;
+      renderReadyData[j] = (
+        <TableContainer
+          sx={{ marginTop: `${j !== 0 && singleColumnActivate && "30px"}` }}
+          key={j}
+        >
+          {rowData}
+        </TableContainer>
+      );
     }
   } else {
     // Step One creating an overall array of all the conjugations
@@ -239,7 +262,10 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
     const lastEntry = renderReadyData[renderReadyData.length - 1];
 
     renderReadyData[renderReadyData.length - 1] = (
-      <SingleItemRowContainer sx={{ gridColumn: "1/span 2" }} key="last entry">
+      <SingleItemRowContainer
+        sx={{ gridColumn: "1/span 2", marginTop: "20px" }}
+        key="last entry"
+      >
         {lastEntry}
       </SingleItemRowContainer>
     );

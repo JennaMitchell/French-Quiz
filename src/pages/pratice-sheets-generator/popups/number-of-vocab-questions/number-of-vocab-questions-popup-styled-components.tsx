@@ -7,7 +7,6 @@ const OptionContainer = styled("div", {
   width: "max(100%,100%)",
   display: "grid",
   justifyContent: "space-between",
-
   height: "max(max-content,max-content)",
   backgroundColor: "inherit",
   gridTemplateColumns: "max-content max-content",

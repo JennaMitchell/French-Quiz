@@ -18,20 +18,43 @@ const StyledTypography = styled(Typography, {
   backgroundColor: "inherit",
   fontSize: "26px",
   textAlign: "left",
+  width: "100%",
+  "@media(max-width:1280px)": {
+    fontSize: "22px",
+  },
+  "@media(max-width:880px)": {
+    fontSize: "16px",
+  },
+  "@media(max-width:560px)": {
+    fontSize: "14px",
+  },
 }));
 
 const RowContainer = styled("div", {
   name: "RowContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(100%,100%)",
+  width: "max(80%,80%)",
   height: "max-content",
   display: "grid",
   gridTemplateColumns: "1fr max-content 1fr",
   gap: "20px",
+
   justifyContent: "center",
   alignItems: "center",
   gridColumn: "1/span 3",
+
+  "@media(max-width:1280px)": {
+    gridColumn: "1/span 1",
+  },
+  "@media(max-width:880px)": {
+    gridColumn: "1/span 1",
+    width: "max(400px,400px)",
+  },
+  "@media(max-width:560px)": {
+    gridColumn: "1/span 1",
+    width: "max(250px,250px)",
+  },
 }));
 const UnderlineContainer = styled("div", {
   name: "UnderlineContainer",
@@ -40,6 +63,18 @@ const UnderlineContainer = styled("div", {
   width: "max(60px,60px)",
   height: "max(60px,60px)",
   borderBottom: "2px solid black",
+  "@media(max-width:1280px)": {
+    width: "max(50px,50px)",
+    height: "max(50px,50px)",
+  },
+  "@media(max-width:880px)": {
+    width: "max(40px,40px)",
+    height: "max(40px,40px)",
+  },
+  "@media(max-width:560px)": {
+    width: "max(25px,25px)",
+    height: "max(25px,25px)",
+  },
 }));
 interface UserSelectedData {
   [french: string]: string;

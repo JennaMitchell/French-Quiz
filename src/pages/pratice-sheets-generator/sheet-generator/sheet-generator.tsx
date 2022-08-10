@@ -2,11 +2,12 @@ import {
   TopContainer,
   MainContentContainer,
   TestContainer,
+  TestSectionTitle,
+  TestSectionDescription,
 } from "./sheet-generator-styled-components";
 
 import { useAppSelector } from "../../../store/hooks";
 import MultipleChoiceCreator from "../practice-sheet-questions-creators/multiple-choice-creator/multiple-choice-creator";
-import { Typography } from "@mui/material";
 import { useRef } from "react";
 import MatchingCreator from "../practice-sheet-questions-creators/matching-creator/matching-creator";
 import FillInBlankCreator from "../practice-sheet-questions-creators/fill-in-blank-creator/fill-in-blank-creator";
@@ -128,24 +129,17 @@ const SheetGenerator = () => {
           {/* Vocab Multiple Choice */}
 
           {vocabMultipleChoiceQuestionsActive && practiceSheetSetupComplete && (
-            <TestContainer ref={testContainerRef}>
-              <Typography
-                variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
-              >
+            <TestContainer
+              ref={testContainerRef}
+              sx={{ justifyContent: "space-evenly" }}
+            >
+              <TestSectionTitle variant="h4">
                 Vocab Multiple Choice Questions
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  gridColumn: "1 /span 3",
-                }}
-              >
+              </TestSectionTitle>
+              <TestSectionDescription variant="h6">
                 Select the correct {selectedVocabTestType.toLowerCase()}{" "}
                 translation
-              </Typography>
+              </TestSectionDescription>
 
               <MultipleChoiceCreator
                 inputArray={
@@ -160,23 +154,23 @@ const SheetGenerator = () => {
         {/* Vocab Matching Choice */}
 
         {vocabMatchingQuestionsActive && practiceSheetSetupComplete && (
-          <TestContainer ref={testContainerRef} sx={{ marginTop: "10px" }}>
-            <Typography
-              variant="h4"
-              sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
-            >
+          <TestContainer
+            ref={testContainerRef}
+            sx={{
+              marginTop: "10px",
+              gridTemplateColumn: "100%",
+              justifyContent: "center",
+            }}
+          >
+            <TestSectionTitle variant="h4" sx={{ gridColumn: "1/span 1" }}>
               Vocab Matching Questions
-            </Typography>
-            <Typography
+            </TestSectionTitle>
+            <TestSectionDescription
               variant="h6"
-              sx={{
-                marginTop: "10px",
-                marginBottom: "10px",
-                gridColumn: "1 /span 3",
-              }}
+              sx={{ gridColumn: "1/span 1" }}
             >
               Match the correct {selectedVocabTestType.toLowerCase()} term
-            </Typography>
+            </TestSectionDescription>
             <MatchingCreator
               inputArray={
                 practiceSheetGeneratorVocabQuestions.vocabMatchingQuestions
@@ -194,24 +188,15 @@ const SheetGenerator = () => {
               marginTop: "10px",
               gridTemplateColumns: "max-content",
               justifyContent: "center",
+              rowGap: "10px",
             }}
           >
-            <Typography
-              variant="h4"
-              sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
-            >
+            <TestSectionTitle variant="h4">
               Vocab Fill in the Blank
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                marginTop: "10px",
-                marginBottom: "10px",
-                gridColumn: "1 /span 3",
-              }}
-            >
+            </TestSectionTitle>
+            <TestSectionDescription variant="h6" sx={{ marginTop: "0px" }}>
               Translate the terms into {selectedVocabTestType.toLowerCase()}
-            </Typography>
+            </TestSectionDescription>
             <FillInBlankCreator
               inputArray={
                 practiceSheetGeneratorVocabQuestions.vocabFillInTheBlankQuestions
@@ -228,29 +213,18 @@ const SheetGenerator = () => {
             <TestContainer
               ref={testContainerRef}
               sx={{
-                marginTop: "10px",
-                gridTemplateColumns: "max-content",
-                justifyContent: "space-evenly",
-
-                gridTemplateRows: "max-content max-content",
+                gridTemplateColumns: "repeat(2,max-content)",
+                justifyContent: "center",
+                columnGap: "20px",
+                paddingLeft: "20px",
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 2" }}
-              >
+              <TestSectionTitle variant="h4">
                 Conjugation Practice
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  gridColumn: "1 /span 2",
-                }}
-              >
+              </TestSectionTitle>
+              <TestSectionDescription variant="h6">
                 Conjugation the following verbs
-              </Typography>
+              </TestSectionDescription>
               <ConjugationTableCreator
                 inputArray={userSelectedConjugations}
                 groupBy={userSelectedConjugationGrouping}
@@ -267,26 +241,17 @@ const SheetGenerator = () => {
               ref={testContainerRef}
               sx={{
                 marginTop: "10px",
-                gridTemplateColumns: "max-content max-content",
+                gridTemplateColumn: "100%",
+                justifyContent: "center",
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
-              >
+              <TestSectionTitle variant="h4">
                 Phrases Multiple Choice
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  gridColumn: "1 /span 3",
-                }}
-              >
+              </TestSectionTitle>
+              <TestSectionDescription variant="h6">
                 Select the correct {userSelectedPhrasesTestType.toLowerCase()}{" "}
                 translation
-              </Typography>
+              </TestSectionDescription>
               <MultipleChoiceCreator
                 inputArray={
                   practiceSheetGeneratorPhraseQuestions.phraseMultipleChoiceQuestions
@@ -306,25 +271,26 @@ const SheetGenerator = () => {
               ref={testContainerRef}
               sx={{
                 marginTop: "10px",
+                justifyContent: "center",
               }}
             >
-              <Typography
+              <TestSectionTitle
                 variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
+                sx={{ gridColumn: "1/span 1", width: "max-content" }}
               >
                 Phrases Matching Questions
-              </Typography>
-              <Typography
+              </TestSectionTitle>
+              <TestSectionDescription
                 variant="h6"
                 sx={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  gridColumn: "1 /span 3",
+                  gridColumn: "1/span 1",
+                  width: "max-content",
+                  justifySelf: "center",
                 }}
               >
                 Match the correct {userSelectedPhrasesTestType.toLowerCase()}{" "}
                 term
-              </Typography>
+              </TestSectionDescription>
               <MatchingCreator
                 inputArray={
                   practiceSheetGeneratorPhraseQuestions.phraseMatchingQuestions
@@ -346,25 +312,27 @@ const SheetGenerator = () => {
               sx={{
                 marginTop: "10px",
                 gridTemplateColumns: "max-content max-content",
+                rowGap: "10px",
+                "media(max-width:560)": {
+                  width: "max(max-content,max-content)",
+                  gridTemplateColumns: "max-content",
+                  justifySelf: "center",
+                },
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{ marginTop: "10px", gridColumn: "1 /span 3" }}
-              >
+              <TestSectionTitle variant="h4">
                 Fill in the Blank Phrase Questions
-              </Typography>
-              <Typography
+              </TestSectionTitle>
+              <TestSectionDescription
                 variant="h6"
                 sx={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  gridColumn: "1 /span 3",
+                  marginTop: "0px",
+                  "media(max-width:560)": { width: "max(300px,300px)" },
                 }}
               >
                 Translate the terms into{" "}
                 {userSelectedPhrasesTestType.toLowerCase()}
-              </Typography>
+              </TestSectionDescription>
               <FillInBlankCreator
                 inputArray={
                   practiceSheetGeneratorPhraseQuestions.phraseFillInTheBlankQuestions

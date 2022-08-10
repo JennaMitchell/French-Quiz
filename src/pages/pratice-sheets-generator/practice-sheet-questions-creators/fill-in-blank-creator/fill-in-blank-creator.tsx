@@ -7,6 +7,7 @@ import {
   SingleItemRowContainer,
   TwoItemRowContainer,
 } from "../../../../components/generic-components/generic-components";
+import { useMediaQuery } from "@mui/material";
 const StyledTypography = styled("p", {
   name: "StyledTypography",
   slot: "Wrapper",
@@ -14,56 +15,81 @@ const StyledTypography = styled("p", {
   color: theme.palette.secondary.dark,
   backgroundColor: "inherit",
   fontSize: "26px",
-  textAlign: "left",
+  textAlign: "center",
   fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:560px)": {
+    fontSize: "12px",
+    display: "inline-grid",
+  },
 }));
 
 const RowContainer = styled("div", {
   name: "RowContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(360px,360px)",
+  width: "max(380px,380px)",
   height: "max-content",
   display: "grid",
-  gridTemplateColumns: "160px max-content",
-  gap: "40px",
+
+  rowGap: "40px",
   justifyContent: "center",
-  alignItems: "flex-start",
+  alignItems: "space-between",
+  gridTemplateColumns: "100%",
+  gridTemplateRows: "max-content max-content",
   overflow: "hidden",
   fontFamily: "Montserrat, sans-serif",
   marginBottom: "10px",
+  "@media(max-width:1280px)": {
+    justifySelf: "center",
+    width: "max(340px,340px)",
+  },
+  "@media(max-width:560px)": {
+    gridTemplateColumns: "230px",
+    width: "max(230px,230px)",
+  },
 }));
 const UnderlineContainer = styled("div", {
   name: "UnderlineContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(100px,100px)",
-  height: "max(100%,100%)",
+  width: "max(70%,70%)",
+  height: "max(70%,70%)",
   borderBottom: "2px solid black",
+  justifySelf: "center",
 }));
 const PhrasesRowContainer = styled("div", {
   name: "PhrasesRowContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(480px,480px)",
+  width: "max(380px,380px)",
   height: "max-content",
   display: "grid",
-  gridTemplateColumns: "300px 150px",
-  gridTemplateRows: "max-content",
-  gap: "20px",
+  gridTemplateColumns: "100%",
+  gridTemplateRows: "max-content max-content",
+  rowGap: "40px",
   justifyContent: "center",
   alignItems: "flex-start",
   overflow: "hidden",
   fontFamily: "Montserrat, sans-serif",
   marginBottom: "10px",
+  justifySelf: "center",
+  "@media(max-width:560px)": {
+    width: "max(230px,230px)",
+    gridTemplateColumns: "230px",
+  },
 }));
 const PhraseUnderlineContainer = styled("div", {
   name: "PhraseUnderlineContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(150px,150px)",
+  width: "max(90%,90%)",
   height: "max(100%,100%)",
   borderBottom: "2px solid black",
+  justifySelf: "center",
+  "@media(max-content:560px)": {
+    width: "max(300px,300px)",
+    gridTemplateColumns: "300px",
+  },
 }));
 interface UserSelectedData {
   [french: string]: string;
@@ -81,6 +107,8 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const answerKey: string[] = [];
   const [pushedAnswerKey, setPushedAnswerKey] = useState<string[]>([]);
   const [answerKeyDispatched, setAnswerKeyDispatched] = useState(false);
+  const doubleColumnActivate = useMediaQuery("(max-width:1280px)");
+  const singleColumnActivate = useMediaQuery("(max-width:880px)");
 
   const dispatch = useAppDispatch();
 
@@ -107,17 +135,46 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
     if (databaseType !== "Phrases") {
       return (
         <RowContainer key={index}>
-          <StyledTypography>{item}</StyledTypography>
+          <StyledTypography
+            sx={{
+              "media(max-width:560px)": {
+                width: "max(300px,300px)",
+              },
+            }}
+          >
+            {item}
+          </StyledTypography>
           <UnderlineContainer />
         </RowContainer>
       );
     } else {
       return (
-        <PhrasesRowContainer key={index}>
-          <StyledTypography sx={{ width: "max(100%,100%)" }}>
+        <PhrasesRowContainer
+          key={index}
+          sx={{
+            "media(max-width:560px)": {
+              width: "max(240px,240px) !important",
+              gridTemplateColumns: "240px !important",
+            },
+          }}
+        >
+          <StyledTypography
+            sx={{
+              width: "max(100%,100%)",
+              "media(max-width:560px)": {
+                width: "max(240px,240px) !important",
+              },
+            }}
+          >
             {item}
           </StyledTypography>
-          <PhraseUnderlineContainer />
+          <PhraseUnderlineContainer
+            sx={{
+              "media(max-width:560px)": {
+                width: "max(240px,240px) !important",
+              },
+            }}
+          />
         </PhrasesRowContainer>
       );
     }
@@ -151,7 +208,7 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
     }
   }, [pushedAnswerKey, databaseType, dispatch, answerKeyDispatched]);
 
-  if (renderReadyData.length % 3 === 1) {
+  if (renderReadyData.length % 3 === 1 && !singleColumnActivate) {
     const lastEntry = renderReadyData[renderReadyData.length - 1];
 
     renderReadyData[renderReadyData.length - 1] = (
@@ -161,7 +218,24 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
     );
   }
 
-  if (renderReadyData.length % 3 === 2) {
+  if (
+    renderReadyData.length % 2 === 1 &&
+    doubleColumnActivate &&
+    !singleColumnActivate
+  ) {
+    const lastEntry = renderReadyData[renderReadyData.length - 1];
+
+    renderReadyData[renderReadyData.length - 1] = (
+      <SingleItemRowContainer
+        key="last entry"
+        sx={{ marginTop: "10px", gridColumn: "1/span 2" }}
+      >
+        {lastEntry}
+      </SingleItemRowContainer>
+    );
+  }
+
+  if (renderReadyData.length % 3 === 2 && !doubleColumnActivate) {
     const lastEntrys = renderReadyData.splice(renderReadyData.length - 2, 2);
 
     renderReadyData.push(
