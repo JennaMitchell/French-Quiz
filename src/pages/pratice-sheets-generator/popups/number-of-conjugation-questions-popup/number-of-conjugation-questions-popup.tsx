@@ -105,12 +105,14 @@ const NumberOfConjugationQuestionsPopup = () => {
           minHeight: "max-content",
           height: "max-content",
           maxHeight: "100vh",
+          width: "max(410px,410px)",
 
-          "@media(max-width:475px)": {
+          "@media(maxWidth:500px)": {
+            padding: "10px 5px 20px 5px",
             width: "max(325px,325px)",
           },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
+          "@media(max-width:470px)": {
+            width: "max(280px,280px)",
           },
         },
       }}
@@ -118,11 +120,6 @@ const NumberOfConjugationQuestionsPopup = () => {
         "& .MuiPaper-root": {
           backgroundColor: "primary.main",
           borderRadius: "20px",
-        },
-        "&.PaperProps": {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
         },
       }}
     >
@@ -132,25 +129,19 @@ const NumberOfConjugationQuestionsPopup = () => {
           color: "secondary.light",
           overflowX: "hidden",
           borderRadius: "20px",
-          padding: "20px 40px 20px 40px",
+          padding: "10px 25px 20px 25px",
+          height: "max-content",
           display: "grid",
-          gridTemplateColumns: "450px",
-          gridTemplateRows: "max-content",
+          gridTemplateColumns: "100%",
           alignItems: "center",
           justifyContent: "center",
-
-          height: "max-content",
-          "@media(max-width:550px)": {
-            gridTemplateColumns: "350px",
-          },
-          "@media(max-width:475px)": {
+          "@media(maxWidth:500px)": {
+            padding: "10px 5px 10px 5px",
             width: "max(325px,325px)",
-            gridTemplateColumns: "300px",
-            padding: "10px 20px 10px 20px",
           },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
-            gridTemplateColumns: "275px",
+          "@media(max-width:470px)": {
+            width: "max(280px,280px)",
+            padding: "10px 20px 10px 20px",
           },
         }}
       >
@@ -158,14 +149,17 @@ const NumberOfConjugationQuestionsPopup = () => {
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
 
-        <StyledStepTitleText variant="h6" sx={{ paddingLeft: "7.5px" }}>
+        <StyledStepTitleText
+          variant="h6"
+          sx={{ paddingLeft: "7.5px", width: "max(100%,100%)" }}
+        >
           Step 3 of 6
         </StyledStepTitleText>
 
         <StyledPopupTypography
           variant="h4"
           sx={{
-            fontSize: "32px",
+            fontSize: "28px",
             textAlign: "center",
 
             "@media(max-width:475px)": {

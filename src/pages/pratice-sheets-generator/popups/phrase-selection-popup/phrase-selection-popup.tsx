@@ -1,6 +1,6 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import { Dialog, DialogContent } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
@@ -17,12 +17,13 @@ import {
   DropDownButton,
   AddWordIcon,
   RemoveWordIcon,
-  EndSelectionBox,
 } from "../../../../components/generic-components/generic-popup-components";
 
 import {
   VocabContainer,
   ButtonsContainer,
+  PhraseSelectionDropDownText,
+  PhrasesEndSelectionBox,
 } from "./phrase-selection-popup-styled-components";
 import { useState, useEffect } from "react";
 import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
@@ -152,27 +153,25 @@ const PhraseSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <StyledPopupTypography
+          <PhraseSelectionDropDownText
             sx={{
-              color: "inherit",
               paddingLeft: "5px",
               width: "max(100px,100px)",
             }}
           >
             {object.french}
-          </StyledPopupTypography>
-          <EndSelectionBox>
-            <StyledPopupTypography
+          </PhraseSelectionDropDownText>
+          <PhrasesEndSelectionBox>
+            <PhraseSelectionDropDownText
               sx={{
-                color: "inherit",
-                width: "max(80px,80px)",
+                textAlign: "right",
               }}
             >
               {object.english}
-            </StyledPopupTypography>
+            </PhraseSelectionDropDownText>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
-          </EndSelectionBox>
+          </PhrasesEndSelectionBox>
         </VocabContainer>
       );
     });
@@ -236,7 +235,7 @@ const PhraseSelectionPopup = () => {
           minHeight: "max-content",
           height: "max-content",
           maxHeight: "100vh",
-          width: "450px",
+          width: "400px",
           "@media(max-width:475px)": {
             width: "max(325px,325px)",
           },
@@ -267,10 +266,7 @@ const PhraseSelectionPopup = () => {
           height: "max-content",
         }}
       >
-        <ClosingIconContainer
-          sx={{ top: "10px", right: "30px" }}
-          onClick={onCloseFunction}
-        >
+        <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
 
@@ -283,7 +279,7 @@ const PhraseSelectionPopup = () => {
           <QuestionsRemainingTest variant="h6">
             Minimum Selection Remaining: &nbsp;
           </QuestionsRemainingTest>
-          <StyledPopupTypography variant="h6">
+          <QuestionsRemainingTest variant="h6">
             {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
               selectedItems.length >
               0 &&
@@ -292,7 +288,7 @@ const PhraseSelectionPopup = () => {
             {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
               selectedItems.length <
               0 && 0}
-          </StyledPopupTypography>
+          </QuestionsRemainingTest>
         </SelectionContainer>
         {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
           selectedItems.length <=
@@ -302,10 +298,7 @@ const PhraseSelectionPopup = () => {
             randomize the selection
           </StyledWarningText>
         )}
-        <DropDownButton
-          onClick={verbsHeadingHandler}
-          sx={{ marginBottom: "15px" }}
-        >
+        <DropDownButton onClick={verbsHeadingHandler}>
           <StyledPopupTypography variant="h5">Phrases</StyledPopupTypography>
           {!verbsDropDownMenuActive && <DropDownDownArrow />}
           {verbsDropDownMenuActive && <DropDownUpArrow />}

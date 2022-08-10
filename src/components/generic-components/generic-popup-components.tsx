@@ -51,6 +51,7 @@ const ClosingIcon = styled(CloseIcon, {
   color: theme.palette.secondary.light,
   transition: "all 1s",
   padding: "0px",
+  display: "inline-block",
   "&:hover": {
     color: theme.palette.secondary.dark,
   },
@@ -243,7 +244,10 @@ const DropDownButton = styled("button", {
   "@media(max-width:550px)": {
     width: "max(300px,300px)",
   },
-  "@media(max-width:380px)": {
+  "@media(max-width:475px)": {
+    width: "max(280px,280px)",
+  },
+  "@media(max-width:390px)": {
     width: "max(235px,235px)",
   },
 }));
@@ -268,7 +272,10 @@ const DropDownSelectionMenu = styled("div", {
   "@media(max-width:550px)": {
     width: "max(290px,290px)",
   },
-  "@media(max-width:380px)": {
+  "@media(max-width:475px)": {
+    width: "max(270px,270px)",
+  },
+  "@media(max-width:390px)": {
     width: "max(225px,225px)",
   },
 }));
@@ -282,7 +289,7 @@ const DropDownDownArrow = styled(ArrowDropDownIcon, {
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
   position: "absolute",
-  top: "1px",
+  top: "6px",
   right: "5px",
   "@media(max-width:475px)": {
     width: "max(20px,20px)",
@@ -300,7 +307,7 @@ const DropDownUpArrow = styled(ArrowDropUpIcon, {
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
   position: "absolute",
-  top: "1px",
+  top: "6px",
   right: "5px",
   "@media(max-width:475px)": {
     width: "max(20px,20px)",
@@ -322,6 +329,13 @@ const AddWordIcon = styled(AddIcon, {
   paddingRight: "5px",
   paddingBottom: "5px",
   paddingTop: "5px",
+  "@media(max-width:475px)": {
+    width: "max(20px,20px)",
+    height: "max(20px,20px)",
+    paddingRight: "2.5px",
+    paddingBottom: "2.5px",
+    paddingTop: "2.5px",
+  },
 }));
 
 const RemoveWordIcon = styled(RemoveIcon, {
@@ -336,6 +350,13 @@ const RemoveWordIcon = styled(RemoveIcon, {
   paddingRight: "5px",
   paddingBottom: "5px",
   paddingTop: "5px",
+  "@media(max-width:475px)": {
+    width: "max(20px,20px)",
+    height: "max(20px,20px)",
+    paddingRight: "2.5px",
+    paddingBottom: "2.5px",
+    paddingTop: "2.5px",
+  },
 }));
 const EndSelectionBox = styled("div", {
   name: "EndSelectionBox",
