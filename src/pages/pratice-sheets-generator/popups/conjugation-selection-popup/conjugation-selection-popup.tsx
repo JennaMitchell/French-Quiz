@@ -1,6 +1,5 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
@@ -8,7 +7,7 @@ import {
   ActionButton,
   DisabledActionButton,
   StyledStepTitleText,
-  QuestionsRemainingTest,
+  QuestionsRemainingText,
   SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
@@ -17,14 +16,15 @@ import {
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
-  StyledPopupSelect,
+  StyledDialog,
+  StyledDialogContent,
+  ActionButtonsContainer,
+  StyledSelectionRowContainer,
   StyledPopupOption,
+  StyledPopupSelect,
+  DropDownTermTypography,
 } from "../../../../components/generic-components/generic-popup-components";
 
-import {
-  VocabContainer,
-  ButtonsContainer,
-} from "./conjugation-selection-popup-styled-components";
 import { useState, useEffect, ChangeEventHandler } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 
@@ -117,7 +117,7 @@ const ConjugationSelectionPopup = () => {
       }
 
       return (
-        <VocabContainer
+        <StyledSelectionRowContainer
           key={index}
           onClick={vocabHandler}
           sx={{
@@ -125,17 +125,19 @@ const ConjugationSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <StyledPopupTypography sx={{ color: "inherit", paddingLeft: "5px" }}>
+          <DropDownTermTypography sx={{ paddingLeft: "5px" }}>
             {object.french}
-          </StyledPopupTypography>
+          </DropDownTermTypography>
           <EndSelectionBox>
-            <StyledPopupTypography sx={{ color: "inherit" }}>
+            <DropDownTermTypography
+              sx={{ textAlign: "right", justifySelf: "flex-end" }}
+            >
               {object.english}
-            </StyledPopupTypography>
+            </DropDownTermTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
           </EndSelectionBox>
-        </VocabContainer>
+        </StyledSelectionRowContainer>
       );
     });
     return renderReadyItem;
@@ -206,51 +208,12 @@ const ConjugationSelectionPopup = () => {
   };
 
   return (
-    <Dialog
+    <StyledDialog
       open={conjugationVerbChoicePopup}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      PaperProps={{
-        sx: {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-          minHeight: "max-content",
-          height: "max-content",
-          maxHeight: "100vh",
-
-          "@media(max-width:475px)": {
-            width: "max(325px,325px)",
-          },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
-          },
-        },
-      }}
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-        },
-      }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          overflowX: "hidden",
-          borderRadius: "20px",
-          padding: "10px 40px 20px 40px",
-          height: "max-content",
-          display: "grid",
-          gridTemplateColumns: "max-content",
-          alignItems: "center",
-          justifyContent: "center",
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
-        }}
-      >
+      <StyledDialogContent sx={{ gap: "0px" }}>
         <ClosingIconContainer
           sx={{ top: "10px", right: "30px" }}
           onClick={onCloseFunction}
@@ -260,18 +223,31 @@ const ConjugationSelectionPopup = () => {
 
         <StyledStepTitleText variant="h6">Step 4 of 6</StyledStepTitleText>
 
-        <StyledPopupTypography variant="h4" sx={{ textAlign: "center" }}>
+        <StyledPopupTypography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            paddingLeft: "10px",
+            margin: "10px 0 10px 0",
+          }}
+        >
           Vocab Conjugation Selection
         </StyledPopupTypography>
         <SelectionContainer>
-          <QuestionsRemainingTest variant="h6">
+          <QuestionsRemainingText variant="h6">
             Selection Remaining :
-          </QuestionsRemainingTest>
-          <QuestionsRemainingTest variant="h6">
+          </QuestionsRemainingText>
+          <QuestionsRemainingText variant="h6">
             {numberOfConjugationQuestions - selectedItems.length}
-          </QuestionsRemainingTest>
+          </QuestionsRemainingText>
         </SelectionContainer>
-        <DropDownButton onClick={verbsHeadingHandler}>
+        <DropDownButton
+          onClick={verbsHeadingHandler}
+          sx={{
+            marginBottom: `${verbsDropDownMenuActive && "0px"}`,
+            marginTop: "15px",
+          }}
+        >
           <StyledPopupTypography variant="h5">Verbs</StyledPopupTypography>
           {!verbsDropDownMenuActive && <DropDownDownArrow />}
           {verbsDropDownMenuActive && <DropDownUpArrow />}
@@ -279,7 +255,9 @@ const ConjugationSelectionPopup = () => {
         {verbsDropDownMenuActive && (
           <DropDownSelectionMenu>{renderReadyVerbItems}</DropDownSelectionMenu>
         )}
-        <SelectionContainer sx={{ marginTop: "20px" }}>
+        <SelectionContainer
+          sx={{ marginTop: "10px", marginBottom: "5px", width: "100%" }}
+        >
           <StyledPopupTypography variant="h5">Grouping:</StyledPopupTypography>
           <StyledPopupSelect onChange={groupByHandler}>
             <StyledPopupOption>&nbsp;</StyledPopupOption>
@@ -288,7 +266,7 @@ const ConjugationSelectionPopup = () => {
           </StyledPopupSelect>
         </SelectionContainer>
 
-        <ButtonsContainer>
+        <ActionButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -296,9 +274,9 @@ const ConjugationSelectionPopup = () => {
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </ButtonsContainer>
-      </DialogContent>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default ConjugationSelectionPopup;

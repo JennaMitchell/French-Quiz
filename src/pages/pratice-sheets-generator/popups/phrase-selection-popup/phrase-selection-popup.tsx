@@ -1,6 +1,6 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent } from "@mui/material";
+
 import {
   ClosingIconContainer,
   ClosingIcon,
@@ -9,7 +9,7 @@ import {
   DisabledActionButton,
   StyledStepTitleText,
   StyledWarningText,
-  QuestionsRemainingTest,
+  QuestionsRemainingText,
   SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
@@ -17,14 +17,14 @@ import {
   DropDownButton,
   AddWordIcon,
   RemoveWordIcon,
+  EndSelectionBox,
+  StyledDialog,
+  StyledDialogContent,
+  ActionButtonsContainer,
+  StyledSelectionRowContainer,
+  DropDownTermTypography,
 } from "../../../../components/generic-components/generic-popup-components";
 
-import {
-  VocabContainer,
-  ButtonsContainer,
-  PhraseSelectionDropDownText,
-  PhrasesEndSelectionBox,
-} from "./phrase-selection-popup-styled-components";
 import { useState, useEffect } from "react";
 import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
@@ -145,7 +145,7 @@ const PhraseSelectionPopup = () => {
       }
 
       return (
-        <VocabContainer
+        <StyledSelectionRowContainer
           key={index}
           onClick={vocabHandler}
           sx={{
@@ -153,26 +153,25 @@ const PhraseSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <PhraseSelectionDropDownText
-            sx={{
-              paddingLeft: "5px",
-              width: "max(100px,100px)",
-            }}
+          <DropDownTermTypography
+            variant="h6"
+            sx={{ color: "inherit", paddingLeft: "5px" }}
           >
             {object.french}
-          </PhraseSelectionDropDownText>
-          <PhrasesEndSelectionBox>
-            <PhraseSelectionDropDownText
+          </DropDownTermTypography>
+          <EndSelectionBox>
+            <DropDownTermTypography
               sx={{
                 textAlign: "right",
+                justifySelf: "flex-end",
               }}
             >
               {object.english}
-            </PhraseSelectionDropDownText>
+            </DropDownTermTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
-          </PhrasesEndSelectionBox>
-        </VocabContainer>
+          </EndSelectionBox>
+        </StyledSelectionRowContainer>
       );
     });
     return renderReadyItem;
@@ -223,72 +222,44 @@ const PhraseSelectionPopup = () => {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       open={phrasesSelectionPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      PaperProps={{
-        sx: {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-          minHeight: "max-content",
-          height: "max-content",
-          maxHeight: "100vh",
-          width: "400px",
-          "@media(max-width:475px)": {
-            width: "max(325px,325px)",
-          },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
-          },
-        },
-      }}
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-          overflowY: "scroll",
-        },
-      }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          display: "grid",
-
-          gridTemplateColumns: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: "20px",
-
-          height: "max-content",
-        }}
-      >
+      <StyledDialogContent sx={{ gap: "0px" }}>
         <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
 
-        <StyledStepTitleText variant="h6">Step 6 of 6</StyledStepTitleText>
+        <StyledStepTitleText variant="h6" sx={{ margin: "0px 0 10px 0" }}>
+          Step 6 of 6
+        </StyledStepTitleText>
 
-        <StyledPopupTypography variant="h4" sx={{ textAlign: "center" }}>
+        <StyledPopupTypography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            paddingLeft: "10px",
+            marginBottom: "10px",
+          }}
+        >
           Phrase Selection
         </StyledPopupTypography>
         <SelectionContainer>
-          <QuestionsRemainingTest variant="h6">
+          <QuestionsRemainingText variant="h6">
             Minimum Selection Remaining: &nbsp;
-          </QuestionsRemainingTest>
-          <QuestionsRemainingTest variant="h6">
+          </QuestionsRemainingText>
+          <QuestionsRemainingText variant="h6">
             {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
               selectedItems.length >
               0 &&
               practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
                 selectedItems.length}
             {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
-              selectedItems.length <
-              0 && 0}
-          </QuestionsRemainingTest>
+              selectedItems.length <=
+              0 && "0"}
+          </QuestionsRemainingText>
         </SelectionContainer>
         {practiceSheetGeneratorPhrasesQuestionSetup.numberOfTotalPhraseQuestions -
           selectedItems.length <=
@@ -298,7 +269,13 @@ const PhraseSelectionPopup = () => {
             randomize the selection
           </StyledWarningText>
         )}
-        <DropDownButton onClick={verbsHeadingHandler}>
+        <DropDownButton
+          onClick={verbsHeadingHandler}
+          sx={{
+            marginBottom: `${verbsDropDownMenuActive && "0px"}`,
+            marginTop: "15px",
+          }}
+        >
           <StyledPopupTypography variant="h5">Phrases</StyledPopupTypography>
           {!verbsDropDownMenuActive && <DropDownDownArrow />}
           {verbsDropDownMenuActive && <DropDownUpArrow />}
@@ -307,7 +284,7 @@ const PhraseSelectionPopup = () => {
           <DropDownSelectionMenu>{renderReadyVerbItems}</DropDownSelectionMenu>
         )}
 
-        <ButtonsContainer>
+        <ActionButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -315,9 +292,9 @@ const PhraseSelectionPopup = () => {
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </ButtonsContainer>
-      </DialogContent>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default PhraseSelectionPopup;

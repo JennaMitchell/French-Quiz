@@ -1,6 +1,6 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
@@ -9,7 +9,7 @@ import {
   DisabledActionButton,
   StyledStepTitleText,
   StyledWarningText,
-  QuestionsRemainingTest,
+  QuestionsRemainingText,
   SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
@@ -18,12 +18,13 @@ import {
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
+  StyledDialog,
+  StyledDialogContent,
+  ActionButtonsContainer,
+  StyledSelectionRowContainer,
+  DropDownTermTypography,
 } from "../../../../components/generic-components/generic-popup-components";
 
-import {
-  VocabContainer,
-  ButtonsContainer,
-} from "./vocab-selection-popup-styled-components";
 import { useState, useEffect } from "react";
 import { questionAnswerCreator } from "../../../../components/functions/generic-functions";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
@@ -132,7 +133,7 @@ const VocabSelectionPopup = () => {
       }
 
       return (
-        <VocabContainer
+        <StyledSelectionRowContainer
           key={index}
           onClick={vocabHandler}
           sx={{
@@ -140,20 +141,27 @@ const VocabSelectionPopup = () => {
             color: `${matchFound && "secondary.dark"}`,
           }}
         >
-          <StyledPopupTypography
+          <DropDownTermTypography
             variant="h6"
             sx={{ color: "inherit", paddingLeft: "5px" }}
           >
             {object.french}
-          </StyledPopupTypography>
+          </DropDownTermTypography>
           <EndSelectionBox>
-            <StyledPopupTypography sx={{ color: "inherit" }}>
+            <DropDownTermTypography
+              variant="h6"
+              sx={{
+                textAlign: "right",
+                justifyContent: "right",
+                display: "flex",
+              }}
+            >
               {object.english}
-            </StyledPopupTypography>
+            </DropDownTermTypography>
             {!matchFound && <AddWordIcon />}
             {matchFound && <RemoveWordIcon />}
           </EndSelectionBox>
-        </VocabContainer>
+        </StyledSelectionRowContainer>
       );
     });
     return renderReadyItem;
@@ -233,137 +241,91 @@ const VocabSelectionPopup = () => {
     );
   };
   return (
-    <Dialog
+    <StyledDialog
       open={vocabSelectPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      PaperProps={{
-        sx: {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-
-          "@media(max-width:475px)": {
-            width: "max(325px,325px)",
-          },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
-          },
-        },
-      }}
+      sx={{ gap: "0" }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          overflowX: "hidden",
-          borderRadius: "20px",
-          padding: "10px 40px 10px 40px",
-          overflowY: "scroll",
-          height: "max-content",
-          "@media(max-width:475px)": {
-            width: "max(325px,325px)",
-            padding: "10px 20px 10px 20px",
-          },
-          "@media(max-width:400px)": {
-            width: "max(300px,300px)",
-          },
-        }}
-      >
+      <StyledDialogContent sx={{ gap: "0" }}>
         <ClosingIconContainer
-          sx={{
-            top: "10px",
-            right: "30px",
-            "@media(max-width:460px)": {
-              top: "5px",
-              right: "20px",
-            },
-          }}
           onClick={onCloseFunction}
+          sx={{ marginTop: "10px" }}
         >
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
+
+        <StyledStepTitleText variant="h6">Step 2 of 6</StyledStepTitleText>
+
+        <StyledPopupTypography
+          sx={{ marginTop: "10px", marginBottom: "10px" }}
+          variant="h4"
+        >
+          Vocab Selection
+        </StyledPopupTypography>
+        <SelectionContainer>
+          <QuestionsRemainingText variant="h6">
+            Minimum Selection Remaining: &nbsp;
+          </QuestionsRemainingText>
+          <QuestionsRemainingText variant="h6">
+            {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+              selectedItems.length >
+              0 &&
+              practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+                selectedItems.length}
+            {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+              selectedItems.length <=
+              0 && 0}
+          </QuestionsRemainingText>
+        </SelectionContainer>
+        {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
+          selectedItems.length <=
+          0 && (
+          <StyledWarningText>
+            Warning: Picking more than the selected number of questions will
+            randomize the selection
+          </StyledWarningText>
+        )}
+        <DropDownButton
+          onClick={verbsHeadingHandler}
           sx={{
-            flexDirection: "column",
-            placeItems: "center",
-            width: "max(100%,)",
+            marginBottom: `${verbsDropDownMenuActive && "0px"}`,
+            marginTop: "15px",
           }}
         >
-          <StyledStepTitleText variant="h6">Step 2 of 6</StyledStepTitleText>
+          <StyledPopupTypography variant="h5">Verbs</StyledPopupTypography>
+          {!verbsDropDownMenuActive && <DropDownDownArrow />}
+          {verbsDropDownMenuActive && <DropDownUpArrow />}
+        </DropDownButton>
+        {verbsDropDownMenuActive && (
+          <DropDownSelectionMenu>{renderReadyVerbItems}</DropDownSelectionMenu>
+        )}
+        <DropDownButton
+          onClick={nounHeadingHandler}
+          sx={{ marginBottom: `${nounDropDownMenuActive && "0px"}` }}
+        >
+          <StyledPopupTypography variant="h5">Nouns</StyledPopupTypography>
+          {!nounDropDownMenuActive && <DropDownDownArrow />}
+          {nounDropDownMenuActive && <DropDownUpArrow />}
+        </DropDownButton>
+        {nounDropDownMenuActive && (
+          <DropDownSelectionMenu>{renderReadyNounItems}</DropDownSelectionMenu>
+        )}
+        <DropDownButton
+          onClick={adjectiveHeadingHandler}
+          sx={{ marginBottom: `${adjectiveDropDownMenuActive && "0px"}` }}
+        >
+          <StyledPopupTypography variant="h5">Adjectives</StyledPopupTypography>
+          {!adjectiveDropDownMenuActive && <DropDownDownArrow />}
+          {adjectiveDropDownMenuActive && <DropDownUpArrow />}
+        </DropDownButton>
+        {adjectiveDropDownMenuActive && (
+          <DropDownSelectionMenu>
+            {renderReadyAdjectiveItems}
+          </DropDownSelectionMenu>
+        )}
 
-          <StyledPopupTypography variant="h4">
-            Vocab Selection
-          </StyledPopupTypography>
-          <SelectionContainer>
-            <QuestionsRemainingTest variant="h6">
-              Minimum Selection Remaining: &nbsp;
-            </QuestionsRemainingTest>
-            <Typography
-              variant="h6"
-              sx={{
-                "@media(max-width:580px)": { fontSize: "18px" },
-                "@media(max-width:520px)": { fontSize: "16px" },
-                "@media(max-width:475px)": {
-                  fontSize: "12px",
-                },
-              }}
-            >
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length >
-                0 &&
-                practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                  selectedItems.length}
-              {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-                selectedItems.length <=
-                0 && 0}
-            </Typography>
-          </SelectionContainer>
-          {practiceSheetGeneratorVocabQuestionSetup.numberOfTotalVocabQuestions -
-            selectedItems.length <=
-            0 && (
-            <StyledWarningText>
-              Warning: Picking more than the selected number of questions will
-              randomize the selection
-            </StyledWarningText>
-          )}
-          <DropDownButton onClick={verbsHeadingHandler}>
-            <StyledPopupTypography variant="h5">Verbs</StyledPopupTypography>
-            {!verbsDropDownMenuActive && <DropDownDownArrow />}
-            {verbsDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {verbsDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyVerbItems}
-            </DropDownSelectionMenu>
-          )}
-          <DropDownButton onClick={nounHeadingHandler}>
-            <StyledPopupTypography variant="h5">Nouns</StyledPopupTypography>
-            {!nounDropDownMenuActive && <DropDownDownArrow />}
-            {nounDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {nounDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyNounItems}
-            </DropDownSelectionMenu>
-          )}
-          <DropDownButton onClick={adjectiveHeadingHandler}>
-            <StyledPopupTypography variant="h5">
-              Adjectives
-            </StyledPopupTypography>
-            {!adjectiveDropDownMenuActive && <DropDownDownArrow />}
-            {adjectiveDropDownMenuActive && <DropDownUpArrow />}
-          </DropDownButton>
-          {adjectiveDropDownMenuActive && (
-            <DropDownSelectionMenu>
-              {renderReadyAdjectiveItems}
-            </DropDownSelectionMenu>
-          )}
-        </Grid>
-
-        <ButtonsContainer>
+        <ActionButtonsContainer sx={{ marginTop: "10px" }}>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -371,9 +333,9 @@ const VocabSelectionPopup = () => {
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </ButtonsContainer>
-      </DialogContent>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default VocabSelectionPopup;

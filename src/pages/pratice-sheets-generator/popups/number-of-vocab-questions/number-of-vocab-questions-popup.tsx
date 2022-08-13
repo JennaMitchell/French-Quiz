@@ -1,4 +1,3 @@
-import { Dialog, DialogContent, DialogActions, Grid } from "@mui/material";
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 
@@ -6,18 +5,19 @@ import { useState } from "react";
 import { ChangeEventHandler } from "react";
 
 import {
-  OptionContainer,
-  SelectionContainer,
-} from "./number-of-vocab-questions-popup-styled-components";
-import {
   ClosingIconContainer,
   ClosingIcon,
   StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
-  StyledPopupSelect,
-  StyledPopupOption,
   StyledStepTitleText,
+  StyledDialog,
+  StyledDialogContent,
+  QuestionOptionContainer,
+  StyledPopupOption,
+  StyledPopupSelect,
+  ActionButtonsContainer,
+  PopupTitle,
 } from "../../../../components/generic-components/generic-popup-components";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
 import { useEffect } from "react";
@@ -261,78 +261,29 @@ const NumberOfVocabQuestionsPopup = () => {
   };
 
   return (
-    <Dialog
+    <StyledDialog
       open={newPracticeSheetsPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-        },
-        "&.PaperProps": {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-          minHeight: "max-content",
-          height: "max-content",
-          maxHeight: "100vh",
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
-        },
-      }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          overflowX: "hidden",
-          borderRadius: "20px",
-          paddingTop: "10px",
-          paddingBottom: "10px",
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
-        }}
-      >
+      <StyledDialogContent>
         <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
-        >
-          <StyledStepTitleText variant="h6">Step 1 of 6</StyledStepTitleText>
 
-          <StyledPopupTypography variant="h4">
-            Number of Vocab Questions
-          </StyledPopupTypography>
-        </Grid>
-      </DialogContent>
-      <DialogActions
-        sx={{
-          width: "max(100%,100%)",
-          height: "max(max-content,max-content)",
-          display: "grid",
-          gridTemplateColumns: "100%",
-          gap: "10px",
-          placeItems: "center",
-          backgroundColor: "primary.main",
-          padding: "0px 20px 20px 20px",
-          "div:not(:first-of-type)": {
-            marginLeft: "0px",
-          },
-        }}
-      >
-        <OptionContainer>
+        <StyledStepTitleText variant="h6">Step 1 of 6</StyledStepTitleText>
+
+        <PopupTitle sx={{}} variant="h4">
+          Number of Vocab Questions
+        </PopupTitle>
+
+        <QuestionOptionContainer>
           <StyledPopupTypography>Number of Questions:</StyledPopupTypography>
           <StyledPopupSelect onChange={numberOfQuestionsHandler}>
             {overallQuestionNumbersArray}
           </StyledPopupSelect>
-        </OptionContainer>
-        <OptionContainer>
+        </QuestionOptionContainer>
+        <QuestionOptionContainer>
           <StyledPopupTypography
             sx={{
               color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
@@ -349,8 +300,8 @@ const NumberOfVocabQuestionsPopup = () => {
               ? numberOfQuestionsOptions
               : multipleChoiceQuestionsArray}
           </StyledPopupSelect>
-        </OptionContainer>
-        <OptionContainer>
+        </QuestionOptionContainer>
+        <QuestionOptionContainer>
           <StyledPopupTypography
             sx={{
               color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
@@ -367,8 +318,8 @@ const NumberOfVocabQuestionsPopup = () => {
               ? numberOfQuestionsOptions
               : matchingQuestionsArray}
           </StyledPopupSelect>
-        </OptionContainer>
-        <OptionContainer sx={{ marginBottom: "5px" }}>
+        </QuestionOptionContainer>
+        <QuestionOptionContainer>
           <StyledPopupTypography
             sx={{
               color: `${numberOfQuestions === 0 ? "grey" : "inherit"}`,
@@ -385,8 +336,8 @@ const NumberOfVocabQuestionsPopup = () => {
               ? numberOfQuestionsOptions
               : fillInTheBlankQuestionsArray}
           </StyledPopupSelect>
-        </OptionContainer>
-        <SelectionContainer sx={{ marginTop: "0px" }}>
+        </QuestionOptionContainer>
+        <QuestionOptionContainer sx={{ marginTop: "0px" }}>
           <StyledPopupTypography variant="h6">Test my:</StyledPopupTypography>
           <StyledPopupSelect
             onChange={testTypeHandler}
@@ -397,8 +348,8 @@ const NumberOfVocabQuestionsPopup = () => {
             <StyledPopupOption> French</StyledPopupOption>
             <StyledPopupOption>French/English</StyledPopupOption>
           </StyledPopupSelect>
-        </SelectionContainer>
-        <OptionContainer>
+        </QuestionOptionContainer>
+        <ActionButtonsContainer>
           {submitButtonEnabled && (
             <ActionButton onClick={submitButtonHandler}>Submit</ActionButton>
           )}
@@ -406,9 +357,9 @@ const NumberOfVocabQuestionsPopup = () => {
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </OptionContainer>
-      </DialogActions>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default NumberOfVocabQuestionsPopup;

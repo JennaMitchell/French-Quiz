@@ -9,7 +9,7 @@ import QuizMatchingCreator from "./quiz-question-creators/matching-choice-creato
 import QuizConjugationTableCreator from "./quiz-question-creators/quiz-conjugation-table-creator/quiz-conjugation-table-creator";
 import QuizQuestionsDropDown from "./questions-drop-down/quiz-questions-drop-down";
 import QuizAnswerKeyMain from "./quiz-answer-key/quiz-answer-key";
-import QuizQuestionAnsweredDropDown from "./questions-drop-down/quiz-question-answered-drop-down/quiz-question-answered-drop-down"
+import QuizQuestionAnsweredDropDown from "./questions-drop-down/quiz-question-answered-drop-down/quiz-question-answered-drop-down";
 
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { quizReset } from "../../components/functions/quiz-reset-function";
@@ -246,23 +246,23 @@ const QuizMainPage = () => {
     userSelectedFillInBlankAnswers.length,
   ]);
 
-
-
-
-
   return (
     <TopContainer>
       {userAnswerRetrieved && <QuizAnswerKeyMain />}
       {initialPopupActive && <NumberOfQuestionsPopup />}
       {quizVocabSelectionPopupActive && <QuizVocabSelectionPopup />}
-      {userAnswerRetrieved && questionListActive && <QuizQuestionAnsweredDropDown />}
+      {userAnswerRetrieved && questionListActive && (
+        <QuizQuestionAnsweredDropDown />
+      )}
       {quizConjugationNumberOfQuestionsPopup && (
         <NumberOfConjugationQuizQuestionsPopup />
       )}
       {quizConjugationVerbSelectionPopupActive && (
         <QuizConjugationSelectionPopup />
       )}
-      {!userAnswerRetrieved && quizSetupComplete && questionListActive && <QuizQuestionsDropDown />}
+      {!userAnswerRetrieved && quizSetupComplete && questionListActive && (
+        <QuizQuestionsDropDown />
+      )}
       <StyledButton
         sx={{ top: "40px", right: "60px" }}
         onClick={newQuizHandler}
@@ -312,6 +312,15 @@ const QuizMainPage = () => {
             },
             padding: "10px",
             borderRadius: "50%",
+            "@media(max-width:1280px)": {
+              padding: "10px !important",
+            },
+            "@media(max-width:880px)": {
+              padding: "10px !important",
+            },
+            "@media(max-width:560px)": {
+              padding: "10px !important",
+            },
           }}
         >
           <MenuIcon />
@@ -322,9 +331,17 @@ const QuizMainPage = () => {
           sx={{
             top: "40px",
             left: "60px",
-
             padding: "10px",
             borderRadius: "50%",
+            "@media(max-width:1280px)": {
+              padding: "10px !important",
+            },
+            "@media(max-width:880px)": {
+              padding: "10px !important",
+            },
+            "@media(max-width:560px)": {
+              padding: "10px !important",
+            },
           }}
           onClick={questionMenuHandler}
         >

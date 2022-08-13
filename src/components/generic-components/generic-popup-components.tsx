@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { Typography } from "@mui/material";
+import { Typography, Dialog, DialogContent } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import AddIcon from "@mui/icons-material/Add";
@@ -20,9 +20,11 @@ const ClosingIconContainer = styled("div", {
   color: theme.palette.secondary.dark,
   position: "absolute",
   top: "10px",
-  right: "10px",
+  right: "20px",
   borderRadius: "50%",
   transition: "all 1s",
+  paddingLeft: "1px",
+  paddingTop: "1px",
   "&:hover": {
     backgroundColor: theme.palette.secondary.light,
   },
@@ -33,7 +35,6 @@ const ClosingIconContainer = styled("div", {
 
   "@media(max-width:460px)": {
     top: "5px",
-    right: "5px",
   },
   "@media(max-width:375px)": {
     width: "max(20px,20px)",
@@ -69,13 +70,30 @@ const ClosingIcon = styled(CloseIcon, {
 const StyledPopupTypography = styled(Typography, {
   slot: "Wrapper",
   name: "StyledPopupTypography",
-})(({ theme }) => ({
+})(() => ({
   fontSize: "24px",
+  height: "max-content",
   "@media(max-width:550px)": { fontSize: "20px" },
   "@media(max-width:480px)": { fontSize: "18px" },
   "@media(max-width:390px)": { fontSize: "16px" },
   "@media(max-width:350px)": { fontSize: "14px" },
 }));
+
+const DropDownTermTypography = styled(Typography, {
+  slot: "Wrapper",
+  name: "DropDownTermTypography ",
+})(() => ({
+  fontSize: "24px",
+  height: "max(100%,100%)",
+  alignSelf: "center",
+  display: "flex",
+  alignItems: "center",
+  "@media(max-width:620px)": { fontSize: "20px" },
+  "@media(max-width:480px)": { fontSize: "18px" },
+  "@media(max-width:390px)": { fontSize: "14px" },
+  "@media(max-width:350px)": { fontSize: "12px" },
+}));
+
 const ActionButton = styled("button", {
   name: "ActionButton",
   slot: "Wrapper",
@@ -138,13 +156,15 @@ const StyledPopupSelect = styled("select", {
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
   textAlign: "right",
-  fontSize: "20px",
+  fontSize: "22px",
+  lineHeight: "22px",
   border: "none",
-  "@media(max-width:580px)": { fontSize: "20px" },
-  "@media(max-width:520px)": { fontSize: "20px" },
-  "@media(max-width:475px)": { fontSize: "18px" },
-  "@media(max-width:375px)": { fontSize: "16px" },
-  "@media(max-width:350px)": { fontSize: "14px" },
+  "@media(max-width:580px)": { fontSize: "18px", lineHeight: "18px" },
+  "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
+  "@media(max-width:475px)": {
+    fontSize: "12px",
+    lineHeight: "12px",
+  },
 }));
 const StyledPopupOption = styled("option", {
   name: "StyledOption",
@@ -155,26 +175,49 @@ const StyledPopupOption = styled("option", {
   height: "max(max-content,max-content)",
   backgroundColor: theme.palette.secondary.dark,
   color: theme.palette.secondary.light,
-  fontSize: "26px",
+  fontSize: "22px",
+  lineHeight: "22px",
   border: "none",
-  "@media(max-width:580px)": { fontSize: "24px" },
-  "@media(max-width:520px)": { fontSize: "22px" },
-  "@media(max-width:475px)": { fontSize: "18px" },
-  "@media(max-width:375px)": { fontSize: "16px" },
-  "@media(max-width:350px)": { fontSize: "14px" },
+  "@media(max-width:580px)": { fontSize: "1x", lineHeight: "18px" },
+  "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
+  "@media(max-width:475px)": {
+    fontSize: "12px",
+    lineHeight: "12px",
+  },
 }));
 
 const StyledStepTitleText = styled(Typography, {
   name: "StyledStepTitleText",
   slot: "Wrapper",
 })(() => ({
-  marginBottom: "5px",
   textAlign: "center",
+  fontSize: "22px",
+  lineHeight: "22px",
 
-  "@media(max-width:580px)": { fontSize: "18px" },
-  "@media(max-width:520px)": { fontSize: "16px" },
+  "@media(max-width:580px)": { fontSize: "18px", lineHeight: "18px" },
+  "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
   "@media(max-width:475px)": {
     fontSize: "12px",
+    lineHeight: "12px",
+  },
+}));
+
+const PopupTitle = styled(Typography, {
+  name: "PopupTitle",
+  slot: "Wrapper",
+})(() => ({
+  paddingLeft: "10px",
+  textAlign: "center",
+  fontSize: "22px",
+  lineHeight: "22px",
+  marginLeft: "15px",
+  width: "max(100%,100%)",
+
+  "@media(max-width:580px)": { fontSize: "18px", lineHeight: "18px" },
+  "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
+  "@media(max-width:475px)": {
+    fontSize: "12px",
+    lineHeight: "12px",
   },
 }));
 
@@ -186,6 +229,8 @@ const StyledWarningText = styled(Typography, {
   fontSize: "16px",
   width: "max(300px,300px)",
   textAlign: "center",
+  display: "flex",
+  placeItems: "center",
   "@media(max-width:475px)": {
     width: "max(250px,250px)",
     fontSize: "12px",
@@ -195,41 +240,46 @@ const StyledWarningText = styled(Typography, {
   },
 }));
 
-const QuestionsRemainingTest = styled(Typography, {
-  name: "QuestionsRemainingTest",
+const QuestionsRemainingText = styled(Typography, {
+  name: "QuestionsRemainingText ",
   slot: "Wrapper",
 })(() => ({
-  "@media(max-width:580px)": { fontSize: "18px" },
-  "@media(max-width:520px)": { fontSize: "16px" },
+  fontSize: "22px",
+  lineHeight: "22px",
+  "@media(max-width:580px)": { fontSize: "18px", lineHeight: "18px" },
+  "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
   "@media(max-width:475px)": {
     fontSize: "12px",
     textAlign: "center",
+    lineHeight: "12px",
   },
 }));
 const SelectionContainer = styled("div", {
   name: "SelectionContainer",
   slot: "Wrapper",
 })(({ theme }) => ({
-  width: "max(100%,100%)",
+  width: "max(max-content,max-content)",
   display: "grid",
   gridTemplateRows: "max-content",
   gridTemplateColumns: "max-content max-content",
   justifyContent: "space-between",
   alignItems: "center",
-  height: "max(max-content,max-content)",
+  height: "max(100%,100%)",
   backgroundColor: "inherit",
   color: theme.palette.secondary.light,
-  marginTop: "2.5px",
-  marginBottom: "2.5px",
+
   borderRadius: "2px",
+  gap: "10px",
 }));
 
 const DropDownButton = styled("button", {
   name: "DropDownButton",
   slot: "Wrapper",
 })(({ theme }) => ({
-  width: "max(340px,340px)",
-  height: "max(max-content,max-content)",
+  width: "max(490px,490px)",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "mnax-content",
   backgroundColor: theme.palette.primary.dark,
   border: "1px solid black",
   fontSize: "22px",
@@ -238,9 +288,12 @@ const DropDownButton = styled("button", {
   position: "relative",
   textAlign: "left",
   padding: "5px 0 5px 20px",
-  marginTop: "10px",
-  marginBottom: "0px",
+
   justifySelf: "center",
+  marginBottom: "10px",
+  "@media(max-width:620px)": {
+    width: "max(410px,410px)",
+  },
   "@media(max-width:550px)": {
     width: "max(300px,300px)",
   },
@@ -255,10 +308,13 @@ const DropDownSelectionMenu = styled("div", {
   name: "DropDownSelectionMenu",
   slot: "Wrapper",
 })(({ theme }) => ({
-  width: "max(330px,330px)",
+  width: "max(480px,480px)",
   display: "grid",
   justifyContent: "space-between",
+  gridAutoRows: "1fr",
+  gridTemplateRows: "1fr",
   gridTemplateColumns: "100%",
+  gap: "10px",
   height: "max(max-content,max-content)",
   padding: "5px 10px 5px 10px",
   backgroundColor: theme.palette.secondary.dark,
@@ -269,6 +325,10 @@ const DropDownSelectionMenu = styled("div", {
   borderEndEndRadius: "5px",
   borderEndStartRadius: "5px",
   justifySelf: "center",
+  marginBottom: "10px",
+  "@media(max-width:620px)": {
+    width: "max(400px,400px)",
+  },
   "@media(max-width:550px)": {
     width: "max(290px,290px)",
   },
@@ -362,14 +422,14 @@ const EndSelectionBox = styled("div", {
   name: "EndSelectionBox",
   slot: "Wrapper",
 })(() => ({
-  width: "max(130px,130px)",
+  width: "max(100%,100%)",
   justifyContent: "space-between",
   alignItems: "center",
   height: "max(max-content,max-content)",
   color: "inherit",
   position: "relative",
   display: "grid",
-  gridTemplateColumns: "100px max-content",
+  gridTemplateColumns: "200px max-content",
   gridTemplateRows: "max-content",
   gap: "5px",
   "@media(max-width:550px)": {
@@ -382,17 +442,130 @@ const EndSelectionBox = styled("div", {
   },
 }));
 
+const StyledDialog = styled(Dialog, {
+  slot: "Wrapper",
+  name: "StyledDialog",
+})(({ theme }) => ({
+  ".css-1t1j96h-MuiPaper-root-MuiDialog-paper ": {
+    borderRadius: "20px",
+    border: "none",
+    margin: "0",
+    width: "600px",
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.light,
+    minHeight: "max-content",
+    height: "max-content",
+    maxHeight: "90vh",
+    "@media(max-width:620px)": {
+      width: "max(475px,475px)",
+    },
+
+    "@media(max-width:475px)": {
+      width: "max(325px,325px)",
+    },
+    "@media(max-width:400px)": {
+      width: "max(300px,300px)",
+    },
+  },
+}));
+
+const QuestionOptionContainer = styled("div", {
+  name: "QuestionOptionContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  width: "max(95%,95%)",
+  display: "grid",
+  justifyContent: "space-between",
+  height: "max(max-content,max-content)",
+  backgroundColor: "inherit",
+  gridTemplateColumns: "max-content max-content",
+  color: theme.palette.secondary.light,
+}));
+
+const StyledDialogContent = styled(DialogContent, {
+  name: "StyledDialogContent",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.secondary.light,
+
+  borderRadius: "20px",
+  padding: "10px 40px 10px 40px",
+  overflowY: "scroll",
+  width: "600px",
+
+  display: "grid",
+  alignItems: "center",
+  justifyItems: "center",
+  rowGap: "10px",
+  flexDirection: "column",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "90vh",
+  "@media(max-width:620px)": {
+    width: "max(475px,475px)",
+    padding: "10px 20px 10px 20px",
+  },
+  "@media(max-width:475px)": {
+    width: "max(325px,325px)",
+  },
+  "@media(max-width:400px)": {
+    width: "max(300px,300px)",
+    padding: "10px 20px 10px 20px",
+  },
+}));
+
+const StyledSelectionRowContainer = styled("div", {
+  name: "StyledSelectionRowContainer",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  width: "max(100%,100%)",
+  display: "grid",
+  gridTemplateRows: "100%",
+  gridTemplateColumns: "1fr 1fr",
+  gap: "20px",
+  justifyContent: "space-between",
+  alignItems: "center",
+  height: "max(100%,100%)",
+  backgroundColor: "inherit",
+  color: theme.palette.secondary.light,
+  marginTop: "2.5px",
+  marginBottom: "2.5px",
+  borderRadius: "2px",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.dark,
+  },
+}));
+
+const ActionButtonsContainer = styled("div", {
+  name: "ActionButtonsContainer",
+  slot: "Wrapper",
+})(() => ({
+  width: "max(100%,100%)",
+  height: "max(max-content,max-content)",
+  display: "grid",
+  gridTemplateColumns: "max-content max-content",
+
+  alignItems: "center",
+  justifyContent: "space-between",
+  backgroundColor: "primary.main",
+  padding: "0px 0px 0px 0px",
+}));
+
 export {
   ClosingIconContainer,
   ClosingIcon,
   StyledPopupTypography,
+  DropDownTermTypography,
   ActionButton,
   DisabledActionButton,
   StyledPopupSelect,
   StyledPopupOption,
   StyledStepTitleText,
+  PopupTitle,
   StyledWarningText,
-  QuestionsRemainingTest,
+  QuestionsRemainingText,
   SelectionContainer,
   DropDownDownArrow,
   DropDownUpArrow,
@@ -401,4 +574,9 @@ export {
   AddWordIcon,
   RemoveWordIcon,
   EndSelectionBox,
+  StyledDialog,
+  StyledDialogContent,
+  ActionButtonsContainer,
+  StyledSelectionRowContainer,
+  QuestionOptionContainer,
 };

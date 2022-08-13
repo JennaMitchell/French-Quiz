@@ -1,21 +1,21 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
+
 import {
   ClosingIconContainer,
   ClosingIcon,
   StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
-  StyledPopupSelect,
-  StyledPopupOption,
   StyledStepTitleText,
+  StyledDialog,
+  StyledDialogContent,
+  QuestionOptionContainer,
+  StyledPopupOption,
+  StyledPopupSelect,
+  ActionButtonsContainer,
 } from "../../../../components/generic-components/generic-popup-components";
 
-import {
-  ButtonsContainer,
-  OptionContainer,
-} from "./number-of-conjugation-questions-popup-styled-components";
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
 import { practiceSheetReset } from "../../../../components/functions/practice-sheet-reset-function";
@@ -93,65 +93,22 @@ const NumberOfConjugationQuestionsPopup = () => {
   };
 
   return (
-    <Dialog
+    <StyledDialog
       open={numberOfConjugationPopupActive}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      PaperProps={{
-        sx: {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-          minHeight: "max-content",
-          height: "max-content",
-          maxHeight: "100vh",
-          width: "max(410px,410px)",
-
-          "@media(maxWidth:500px)": {
-            padding: "10px 5px 20px 5px",
-            width: "max(325px,325px)",
-          },
-          "@media(max-width:470px)": {
-            width: "max(280px,280px)",
-          },
-        },
-      }}
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-        },
-      }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          overflowX: "hidden",
-          borderRadius: "20px",
-          padding: "10px 25px 20px 25px",
-          height: "max-content",
-          display: "grid",
-          gridTemplateColumns: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          "@media(maxWidth:500px)": {
-            padding: "10px 5px 10px 5px",
-            width: "max(325px,325px)",
-          },
-          "@media(max-width:470px)": {
-            width: "max(280px,280px)",
-            padding: "10px 20px 10px 20px",
-          },
-        }}
-      >
+      <StyledDialogContent>
         <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
 
         <StyledStepTitleText
           variant="h6"
-          sx={{ paddingLeft: "7.5px", width: "max(100%,100%)" }}
+          sx={{
+            paddingLeft: "7.5px",
+            width: "max(100%,100%)",
+          }}
         >
           Step 3 of 6
         </StyledStepTitleText>
@@ -159,25 +116,21 @@ const NumberOfConjugationQuestionsPopup = () => {
         <StyledPopupTypography
           variant="h4"
           sx={{
-            fontSize: "28px",
             textAlign: "center",
-
-            "@media(max-width:475px)": {
-              width: "max(90%,90%)",
-              paddingLeft: "15px",
-            },
+            justifySelf: "center",
+            width: "90%",
           }}
         >
           Select the Number of Conjugation Questions
         </StyledPopupTypography>
-        <OptionContainer sx={{ marginTop: "20px" }}>
+        <QuestionOptionContainer>
           <StyledPopupTypography>Number of Questions:</StyledPopupTypography>
           <StyledPopupSelect onChange={numberOfQuestionsHandler}>
             {overallQuestionNumbersArray}
           </StyledPopupSelect>
-        </OptionContainer>
+        </QuestionOptionContainer>
 
-        <ButtonsContainer>
+        <ActionButtonsContainer>
           {numberOfQuestions !== 0 && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -187,9 +140,9 @@ const NumberOfConjugationQuestionsPopup = () => {
           )}
 
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </ButtonsContainer>
-      </DialogContent>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default NumberOfConjugationQuestionsPopup;

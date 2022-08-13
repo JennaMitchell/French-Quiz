@@ -20,7 +20,7 @@ const TopContainer = styled("div", {
   backgroundColor: theme.palette.secondary.light,
   position: "relative",
   "@media(max-width:1690px)": {
-    marginTop: "60px",
+    paddingTop: "60px",
   },
 }));
 
@@ -80,7 +80,7 @@ const ResetButton = styled("div", {
     boxShadow: "0 0 10px black",
   },
   "@media(max-width:1690px)": {
-    top: "-45px",
+    top: "15px",
     translate: "0% 0",
     right: "calc((100vw - 1255px)/2)",
   },
@@ -93,7 +93,6 @@ const ResetButton = styled("div", {
   "@media(max-width:560px)": {
     right: "calc((100vw - 320px)/2)",
     fontSize: "16px",
-    top: "-40px",
   },
 }));
 
