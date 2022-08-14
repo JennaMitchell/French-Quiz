@@ -206,11 +206,10 @@ const PopupTitle = styled(Typography, {
   name: "PopupTitle",
   slot: "Wrapper",
 })(() => ({
-  paddingLeft: "10px",
   textAlign: "center",
   fontSize: "22px",
   lineHeight: "22px",
-  marginLeft: "15px",
+
   width: "max(100%,100%)",
 
   "@media(max-width:580px)": { fontSize: "18px", lineHeight: "18px" },

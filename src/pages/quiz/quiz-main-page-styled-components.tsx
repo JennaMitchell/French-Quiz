@@ -18,10 +18,29 @@ const TopContainer = styled("div", {
   backgroundColor: theme.palette.secondary.light,
   position: "relative",
   paddingBottom: "20px",
-  "@media(max-width:735px)": {
-    minHeight: "calc(100vh - 343px)",
+  "@media(max-width:1150px)": {
+    minHeight: "calc(100vh - 387px)",
   },
-  "@media(max-width:721px)": {
+  "@media(max-width:1050px)": {
+    minHeight: "calc(100vh - 378px)",
+  },
+  "@media(max-width:1000px)": {
+    minHeight: "calc(100vh - 383px)",
+  },
+  "@media(max-width:980px)": {
+    minHeight: "calc(100vh - 375px)",
+  },
+  "@media(max-width:875px)": {
+    minHeight: "calc(100vh - 363px)",
+  },
+
+  "@media(max-width:765px)": {
+    minHeight: "calc(100vh - 378px)",
+  },
+  "@media(max-width:735px)": {
+    minHeight: "calc(100vh - 327px)",
+  },
+  "@media(max-width:670px)": {
     minHeight: "calc(100vh - 326px)",
   },
   "@media(max-width:660px)": {

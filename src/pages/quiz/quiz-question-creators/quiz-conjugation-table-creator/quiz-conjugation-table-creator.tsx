@@ -244,7 +244,10 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
+            <QuestionContainer
+              key={`Question ${index}`}
+              id={`question-${index + totalNumberOfVocabQuestions}`}
+            >
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -284,7 +287,10 @@ const QuizConjugationTableCreator = () => {
           };
 
           return (
-            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
+            <QuestionContainer
+              key={`Question ${index}`}
+              id={`question-${index + totalNumberOfVocabQuestions}`}
+            >
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -330,7 +336,10 @@ const QuizConjugationTableCreator = () => {
           const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
           finalRenderReadyItems = (
-            <TopContainer key={indexOfGrouping} id = {`grouping-${indexOfGrouping+1}`}>
+            <TopContainer
+              key={indexOfGrouping}
+              id={`grouping-${indexOfGrouping + 1}`}
+            >
               <TitleText>Conjugate {titleVerb}</TitleText>
               {tempJSXArray}
             </TopContainer>
@@ -367,7 +376,10 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
+            <QuestionContainer
+              key={`Question ${index}`}
+              id={`question-${index + totalNumberOfVocabQuestions}`}
+            >
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -406,7 +418,10 @@ const QuizConjugationTableCreator = () => {
             userEnteredDataChecker(copyOfUserTypedAnswers);
           };
           return (
-            <QuestionContainer key={`Question ${index}`} id ={`question-${index + totalNumberOfVocabQuestions}`}>
+            <QuestionContainer
+              key={`Question ${index}`}
+              id={`question-${index + totalNumberOfVocabQuestions}`}
+            >
               <QuestionTypography>
                 {capitalizeFirstLetter(inputobject.prefix)} "
                 {inputobject.verb.toLocaleLowerCase()}"
@@ -434,7 +449,7 @@ const QuizConjugationTableCreator = () => {
       );
     }
 
-    // Grouping By Verb if Group berb grouping is selected
+    // Grouping by verb if selected
 
     if (userSelectedQuizConjugationGrouping !== "Random") {
       const numberOfIterations = userSelectedQuizConjugations.length;
@@ -454,7 +469,26 @@ const QuizConjugationTableCreator = () => {
           const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
           finalRenderReadyItems.push(
-            <TopContainer key={`Top Container ${indexOfGrouping}`} id = {`grouping-${(indexOfGrouping+1)/8}`}>
+            <TopContainer
+              key={`Top Container ${indexOfGrouping}`}
+              id={`grouping-${(indexOfGrouping + 1) / 8}`}
+              sx={{
+                "@media(max-width:1450px)": {
+                  marginTop: `${
+                    totalNumberOfVocabQuestions === 0 &&
+                    indexOfGrouping === 0 &&
+                    "90px"
+                  }`,
+                  "@media(max-width:560px)": {
+                    marginTop: `${
+                      totalNumberOfVocabQuestions === 0 &&
+                      indexOfGrouping === 0 &&
+                      "50px"
+                    }`,
+                  },
+                },
+              }}
+            >
               <QuestionNumberBox>
                 {totalNumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
                 {totalNumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
@@ -471,7 +505,18 @@ const QuizConjugationTableCreator = () => {
       }
     } else {
       finalRenderReadyItems = (
-        <TopContainer key={`Top Container`} id = {`grouping-${1}`}>
+        <TopContainer
+          key={`Top Container`}
+          id={`grouping-${1}`}
+          sx={{
+            "@media(max-width:1450px)": {
+              marginTop: `${totalNumberOfVocabQuestions === 0 && "90px"}`,
+            },
+            "@media(max-width:560px)": {
+              marginTop: `${totalNumberOfVocabQuestions === 0 && "50px"}`,
+            },
+          }}
+        >
           <QuestionNumberBox>
             {totalNumberOfVocabQuestions + 1} -{"  "}
             {totalNumberOfVocabQuestions + numberOfQuestions * 8} of{"  "}

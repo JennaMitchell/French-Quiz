@@ -14,11 +14,26 @@ const QuestionContainer = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
+  justifySelf: "center",
   marginTop: "20px",
   boxShadow: "0 0 20px black",
   padding: "40px",
   borderRadius: "10px",
   position: "relative",
+  "@media(max-width:670px)": {
+    width: "max(550px,550px)",
+    padding: "20px",
+  },
+  "@media(max-width:585px)": {
+    width: "max(450px,450px)",
+  },
+  "@media(max-width:480px)": {
+    width: "max(350px,350px)",
+    padding: "10px 20px 10px 20px",
+  },
+  "@media(max-width:375px)": {
+    width: "max(300px,300px)",
+  },
 }));
 
 const QuestionTitle = styled("div", {
@@ -34,8 +49,16 @@ const QuestionTitle = styled("div", {
   textAlign: "center",
   fontSize: "36px",
   marginBottom: "40px",
-
   textTransform: "capitalize",
+  fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:670px)": { marginBottom: "20px" },
+  "@media(max-width:585px)": {
+    fontSize: "28px",
+  },
+  "@media(max-width:480px)": {
+    fontSize: "20px",
+    marginBottom: "10px",
+  },
 }));
 const QuestionAnswerBlock = styled("div", {
   name: "QuestionAnswerBlock",
@@ -97,6 +120,13 @@ const QuestionTypography = styled("p", {
   color: theme.palette.secondary.light,
   fontSize: "20px",
   textAlign: "left",
+  fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:585px)": {
+    fontSize: "16px",
+  },
+  "@media(max-width:480px)": {
+    fontSize: "12px",
+  },
 }));
 
 export {

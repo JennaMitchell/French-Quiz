@@ -20,6 +20,19 @@ const MatchingTopContainer = styled("div", {
   borderRadius: "10px",
   rowGap: "20px",
   position: "relative",
+  "@media(max-width:670px)": {
+    width: "max(550px,550px)",
+  },
+  "@media(max-width:585px)": {
+    width: "max(450px,450px)",
+  },
+  "@media(max-width:480px)": {
+    width: "max(350px,350px)",
+    padding: "30px 15px 20px 15px",
+  },
+  "@media(max-width:375px)": {
+    width: "max(300px,300px)",
+  },
 }));
 
 const MatchingRowContainer = styled("div", {
@@ -82,6 +95,13 @@ const StyledTypography = styled("p", {
   color: theme.palette.secondary.light,
   fontSize: "24px",
   position: "relative",
+  fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:585px)": {
+    fontSize: "20px",
+  },
+  "@media(max-width:480px)": {
+    fontSize: "16px",
+  },
 }));
 export {
   MatchingTopContainer,

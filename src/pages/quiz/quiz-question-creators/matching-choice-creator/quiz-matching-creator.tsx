@@ -294,7 +294,14 @@ const QuizMatchingCreator = () => {
       };
 
       tempRenderReadyItems[questionIndex] = (
-        <MatchingRowContainer key={`${questionIndex} Question Index`} id = {`question-${questionIndex+ numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`}>
+        <MatchingRowContainer
+          key={`${questionIndex} Question Index`}
+          id={`question-${
+            questionIndex +
+            numberOfMultipleChoiceQuestions +
+            numberOfFillInBlankQuestions
+          }`}
+        >
           <StyledTypography
             sx={{ textAlign: "left" }}
             key={`${questionIndex} A`}
@@ -358,7 +365,14 @@ const QuizMatchingCreator = () => {
       };
 
       tempRenderReadyItems[questionIndex] = (
-        <MatchingRowContainer key={`${questionIndex} Question Index`} id = {`question-${questionIndex+ numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`}>
+        <MatchingRowContainer
+          key={`${questionIndex} Question Index`}
+          id={`question-${
+            questionIndex +
+            numberOfMultipleChoiceQuestions +
+            numberOfFillInBlankQuestions
+          }`}
+        >
           <StyledTypography
             sx={{ textAlign: "left" }}
             key={`${questionIndex} A`}
@@ -396,7 +410,24 @@ const QuizMatchingCreator = () => {
   }
 
   return (
-    <MatchingTopContainer>
+    <MatchingTopContainer
+      sx={{
+        "@media(max-width:1450px)": {
+          marginTop: `${
+            numberOfMultipleChoiceQuestions === 0 &&
+            numberOfFillInBlankQuestions === 0 &&
+            "90px"
+          }`,
+          "@media(max-width:560px)": {
+            marginTop: `${
+              numberOfMultipleChoiceQuestions === 0 &&
+              numberOfFillInBlankQuestions === 0 &&
+              "50px"
+            }`,
+          },
+        },
+      }}
+    >
       <QuestionNumberBox>
         {startingQuestionValue}
         {"   "}-{"   "}

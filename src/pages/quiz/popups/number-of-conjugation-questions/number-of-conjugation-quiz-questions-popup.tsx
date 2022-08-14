@@ -1,20 +1,22 @@
 import { quizStoreSliceActions } from "../../../../store/quiz-store-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
+
 import {
   ClosingIconContainer,
   ClosingIcon,
+  StyledPopupTypography,
   ActionButton,
   DisabledActionButton,
+  StyledPopupSelect,
+  StyledPopupOption,
+  StyledStepTitleText,
+  PopupTitle,
+  StyledDialog,
+  StyledDialogContent,
+  ActionButtonsContainer,
+  QuestionOptionContainer,
 } from "../../../../components/generic-components/generic-popup-components";
 
-import {
-  ButtonsContainer,
-  StyledSelect,
-  StyledOption,
-  OptionContainer,
-  StyledTitleTypography,
-} from "./number-of-conjugation-quiz-questions-popup-styled-components";
 import { useState, useEffect } from "react";
 import { ChangeEventHandler } from "react";
 
@@ -37,7 +39,9 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
   const maxNumberOfQuestions = verbsDB.length;
   let overallQuestionNumbersArray = [];
   for (let j = 0; j < maxNumberOfQuestions + 1; j++) {
-    let renderQuestionOption = <StyledOption key={j}>{j}</StyledOption>;
+    let renderQuestionOption = (
+      <StyledPopupOption key={j}>{j}</StyledPopupOption>
+    );
     overallQuestionNumbersArray.push(renderQuestionOption);
   }
 
@@ -97,83 +101,35 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
   };
 
   return (
-    <Dialog
+    <StyledDialog
       open={quizConjugationNumberOfQuestionsPopup}
       onClose={onCloseFunction}
       aria-labelledby="new-practice-sheet"
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: "primary.main",
-          borderRadius: "20px",
-        },
-        "&.PaperProps": {
-          borderRadius: "20px",
-          border: "none",
-          margin: "0",
-
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
-        },
-      }}
     >
-      <DialogContent
-        sx={{
-          backgroundColor: "primary.main",
-          color: "secondary.light",
-          overflowX: "hidden",
-          borderRadius: "20px",
-          padding: "10px 40px 20px 40px",
-
-          height: "max-content",
-          "@media(maxWidth:475px)": {
-            width: "max(325px,325px)",
-          },
-        }}
-      >
+      <StyledDialogContent>
         <ClosingIconContainer onClick={onCloseFunction}>
           <ClosingIcon onClick={onCloseFunction} />
         </ClosingIconContainer>
-        <Grid
-          container
-          columns={1}
-          sx={{ flexDirection: "column", placeItems: "center" }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              "@media(max-width:580px)": { fontSize: "18px" },
-              "@media(max-width:520px)": { fontSize: "16px" },
-              "@media(max-width:475px)": {
-                fontSize: "12px",
-                textAlign: "center",
-              },
-            }}
-          >
-            Step 3 of 4
-          </Typography>
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: "32px",
-              width: "max(400px,400px)",
-              textAlign: "center",
-              "@media(max-width:580px)": { fontSize: "28px" },
-              "@media(max-width:520px)": { fontSize: "22px" },
-              "@media(max-width:475px)": { fontSize: "18px" },
-            }}
-          >
-            Select the Number of Conjugation Questions
-          </Typography>
-          <OptionContainer sx={{ marginTop: "20px" }}>
-            <StyledTitleTypography>Number of Questions:</StyledTitleTypography>
-            <StyledSelect onChange={numberOfQuestionsHandler}>
-              {overallQuestionNumbersArray}
-            </StyledSelect>
-          </OptionContainer>
-        </Grid>
-        <ButtonsContainer>
+        <StyledStepTitleText variant="h6">Step 3 of 4</StyledStepTitleText>
+
+        <PopupTitle
+          sx={{
+            textAlign: "center",
+            justifySelf: "center",
+            width: "90%",
+          }}
+        >
+          Select the Number of Conjugation Questions
+        </PopupTitle>
+        <QuestionOptionContainer>
+          <StyledPopupTypography>Number of Questions:</StyledPopupTypography>
+          <StyledPopupSelect onChange={numberOfQuestionsHandler}>
+            {overallQuestionNumbersArray}
+          </StyledPopupSelect>
+        </QuestionOptionContainer>
+
+        <ActionButtonsContainer>
           {numberOfQuestions !== 0 && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -183,9 +139,9 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
           )}
 
           <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
-        </ButtonsContainer>
-      </DialogContent>
-    </Dialog>
+        </ActionButtonsContainer>
+      </StyledDialogContent>
+    </StyledDialog>
   );
 };
 export default NumberOfConjugationQuizQuestionsPopup;

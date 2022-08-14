@@ -16,7 +16,6 @@ import {
   UserQuizQuestionSetup,
 } from "../../../../store/quiz-store-slice";
 import { QuestionNumberBox } from "../shared-styles/quiz-shared-styled-components";
-import { scrollToHandler } from "../../../../components/functions/generic-functions";
 
 const QuizFillInBlankCreator = () => {
   const [savedTestItems, setSavedTestItems] = useState<string[]>([]);
@@ -28,7 +27,8 @@ const QuizFillInBlankCreator = () => {
   );
   const numberOfFillInBlankQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
-  const numberOfMultipleChoiceQuestions = userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
+  const numberOfMultipleChoiceQuestions =
+    userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
 
   const totalNumberOfQuestions = useAppSelector(
     (state) => state.quizStore.totalNumberOfQuestions
@@ -191,7 +191,10 @@ const QuizFillInBlankCreator = () => {
         console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
-          <QuestionContainer key={questionIndex} id = {`question-${questionIndex + numberOfMultipleChoiceQuestions}`}>
+          <QuestionContainer
+            key={questionIndex}
+            id={`question-${questionIndex + numberOfMultipleChoiceQuestions}`}
+          >
             <QuestionTypography>{testItem}</QuestionTypography>
 
             <StyledTextField
@@ -233,7 +236,10 @@ const QuizFillInBlankCreator = () => {
         console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
-          <QuestionContainer key={questionIndex} id = {`question-${questionIndex + numberOfMultipleChoiceQuestions}`}>
+          <QuestionContainer
+            key={questionIndex}
+            id={`question-${questionIndex + numberOfMultipleChoiceQuestions}`}
+          >
             <QuestionTypography>{term}</QuestionTypography>
 
             <StyledTextField
@@ -270,7 +276,16 @@ const QuizFillInBlankCreator = () => {
   }
 
   return (
-    <TopContainer>
+    <TopContainer
+      sx={{
+        "@media(max-width:1450px)": {
+          marginTop: `${numberOfMultipleChoiceQuestions === 0 && "90px"}`,
+        },
+        "@media(max-width:560px)": {
+          marginTop: `${numberOfMultipleChoiceQuestions === 0 && "50px"}`,
+        },
+      }}
+    >
       <QuestionNumberBox>
         {startingQuestionValue} - {endingQuestionValue} of{"  "}
         {totalNumberOfQuestions}

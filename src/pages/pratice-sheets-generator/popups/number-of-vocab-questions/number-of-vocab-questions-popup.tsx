@@ -273,9 +273,7 @@ const NumberOfVocabQuestionsPopup = () => {
 
         <StyledStepTitleText variant="h6">Step 1 of 6</StyledStepTitleText>
 
-        <PopupTitle sx={{}} variant="h4">
-          Number of Vocab Questions
-        </PopupTitle>
+        <PopupTitle variant="h4">Number of Vocab Questions</PopupTitle>
 
         <QuestionOptionContainer>
           <StyledPopupTypography>Number of Questions:</StyledPopupTypography>

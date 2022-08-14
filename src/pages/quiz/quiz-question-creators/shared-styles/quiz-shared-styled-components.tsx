@@ -10,8 +10,10 @@ const TopContainer = styled("div", {
   maxHeight: "max-content",
   backgroundColor: theme.palette.primary.dark,
   color: theme.palette.secondary.light,
-  display: "flex",
-  flexDirection: "column",
+  display: "grid",
+  gridTemplateRows: "max-content",
+  gridTemplateColumns: "100%",
+
   alignItems: "center",
   justifyContent: "center",
   marginTop: "20px",
@@ -19,6 +21,22 @@ const TopContainer = styled("div", {
   padding: "40px",
   borderRadius: "10px",
   position: "relative",
+  justifySelf: "center",
+  "@media(max-width:670px)": {
+    width: "max(550px,550px)",
+  },
+  "@media(max-width:580px)": {
+    width: "max(450px,450px)",
+    padding: "20px",
+  },
+  "@media(max-width:480px)": {
+    width: "max(350px,350px)",
+    padding: "10px",
+  },
+  "@media(max-width:375px)": {
+    width: "max(300px,300px)",
+    padding: "10px",
+  },
 }));
 
 const QuestionContainer = styled("div", {
@@ -54,12 +72,21 @@ const QuestionTypography = styled("p", {
   color: theme.palette.secondary.light,
   fontSize: "24px",
   textAlign: "left",
+  fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:480px)": {
+    fontSize: "16px",
+    padding: "0 10px 0 10px",
+  },
+  "@media(max-width:375px)": {
+    fontSize: "12px",
+  },
 }));
 
 const StyledTextField = styled(TextField, {
   name: "StyledTextField",
   slot: "Wrapper",
 })(({ theme }) => ({
+  fontFamily: "Montserrat, sans-serif",
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: theme.palette.secondary.main,
@@ -76,10 +103,22 @@ const StyledTextField = styled(TextField, {
     fontSize: "20px",
     textAlign: "left",
     color: theme.palette.secondary.light,
+    "@media(max-width:480px)": {
+      fontSize: "16px",
+    },
+    "@media(max-width:375px)": {
+      fontSize: "12px",
+    },
   },
   "&.MuiTextField-root .MuiInputLabel-root": {
     color: theme.palette.secondary.light,
     paddingTop: "2px",
+    "@media(max-width:480px)": {
+      fontSize: "16px",
+    },
+    "@media(max-width:375px)": {
+      fontSize: "12px",
+    },
   },
 }));
 
@@ -95,13 +134,24 @@ const TitleText = styled("p", {
   color: theme.palette.secondary.light,
   fontSize: "36px",
   textAlign: "center",
-  gridColumn: "1/span 2",
+
   marginBottom: "20px",
+  fontFamily: "Montserrat, sans-serif",
+  "@media(max-width:585px)": {
+    fontSize: "28px",
+    marginTop: "20px",
+    marginBottom: "0px",
+  },
+  "@media(max-width:480px)": {
+    fontSize: "20px",
+    marginTop: "20px",
+  },
 }));
 const QuestionNumberBox = styled("div", {
   name: "QuestionNumberBox",
   slot: "Wrapper",
 })(({ theme }) => ({
+  fontFamily: "Montserrat, sans-serif",
   minWidth: "max-content",
   width: "max-content",
   maxWidth: "max-content",
@@ -115,6 +165,14 @@ const QuestionNumberBox = styled("div", {
   position: "absolute",
   top: "15px",
   right: "15px",
+  "@media(max-width:585px)": {
+    top: "10px",
+  },
+  "@media(max-width:480px)": {
+    fontSize: "12px",
+    top: "5px",
+    right: "10px",
+  },
 }));
 export {
   TopContainer,

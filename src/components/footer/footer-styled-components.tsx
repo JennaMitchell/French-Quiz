@@ -20,6 +20,12 @@ const TopContainer = styled("div", {
   "@media(max-width:475px)": {
     gridTemplateColumns: "325px",
     justifyContent: "center",
+    rowGap: "0px",
+  },
+  "@media(max-width:350px)": {
+    gridTemplateColumns: "300px",
+    justifyContent: "center",
+    rowGap: "0px",
   },
   overflow: "hidden",
 }));
@@ -57,6 +63,15 @@ const ColumnTwo = styled("div", { name: "ColumnTwo", slot: "Wrapper" })(() => ({
   marginTop: "40px",
   marginBottom: "40px",
   gap: "20px",
+  "@media(max-width:475px)": {
+    marginTop: "20px",
+    marginBottom: "10px",
+  },
+  "@media(max-width:350px)": {
+    minWidth: "100%",
+    width: "100%",
+    maxWidth: "100%",
+  },
 }));
 
 const SocialIcons = styled("div", {
@@ -218,6 +233,11 @@ const StyledFooterHeading = styled(Typography, {
   "@media(max-width:475px)": {
     fontSize: "32px",
     width: "325px",
+  },
+  "@media(max-width:350px)": {
+    minWidth: "100%",
+    width: "100%",
+    maxWidth: "100%",
   },
 }));
 

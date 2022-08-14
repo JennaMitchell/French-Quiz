@@ -264,7 +264,23 @@ const QuizMainPage = () => {
         <QuizQuestionsDropDown />
       )}
       <StyledButton
-        sx={{ top: "40px", right: "60px" }}
+        sx={{
+          top: "20px",
+          right: "40px",
+
+          "@media(max-width:1280px)": {
+            right: "20px",
+            borderRadius: "5px",
+          },
+          "@media(max-width:880px)": {
+            right: "10px",
+            top: "20px",
+          },
+          "@media(max-width:560px)": {
+            right: "5px",
+            top: "10px",
+          },
+        }}
         onClick={newQuizHandler}
       >
         New Quiz
@@ -272,7 +288,7 @@ const QuizMainPage = () => {
       {!userAnswerRetrieved && !submitButtonEnabled && (
         <StyledButton
           sx={{
-            top: "40px",
+            top: "20px",
             right: "240px",
             color: "#c0bebe",
             backgroundColor: "#878787",
@@ -280,6 +296,18 @@ const QuizMainPage = () => {
               color: "#c0bebe",
               backgroundColor: "#878787",
               boxShadow: "none",
+            },
+            "@media(max-width:1280px)": {
+              right: "180px",
+              borderRadius: "5px",
+            },
+            "@media(max-width:880px)": {
+              right: "140px",
+              top: "20px",
+            },
+            "@media(max-width:560px)": {
+              right: "95px",
+              top: "10px",
             },
           }}
         >
@@ -289,8 +317,21 @@ const QuizMainPage = () => {
       {!userAnswerRetrieved && submitButtonEnabled && !quizSubmitButtonClicked && (
         <StyledButton
           sx={{
-            top: "40px",
+            top: "20px",
             right: "240px",
+
+            "@media(max-width:1280px)": {
+              right: "180px",
+              borderRadius: "5px",
+            },
+            "@media(max-width:880px)": {
+              right: "140px",
+              top: "20px",
+            },
+            "@media(max-width:560px)": {
+              right: "95px",
+              top: "10px",
+            },
           }}
           onClick={questionSubmitHandler}
         >
@@ -301,7 +342,7 @@ const QuizMainPage = () => {
       {!userAnswerRetrieved && !quizSetupComplete && (
         <StyledButton
           sx={{
-            top: "40px",
+            top: "20px",
             left: "60px",
             color: "#c0bebe",
             backgroundColor: "#878787",
@@ -313,39 +354,79 @@ const QuizMainPage = () => {
             padding: "10px",
             borderRadius: "50%",
             "@media(max-width:1280px)": {
-              padding: "10px !important",
+              padding: "10px",
+              top: "20px",
+              left: "30px",
             },
             "@media(max-width:880px)": {
-              padding: "10px !important",
+              padding: "10px",
+              left: "10px",
+              top: "20px",
             },
             "@media(max-width:560px)": {
-              padding: "10px !important",
+              padding: "5px",
+              left: "10px",
+              top: "10px",
             },
           }}
         >
-          <MenuIcon />
+          <MenuIcon
+            sx={{
+              "@media(max-width:880px)": {
+                width: "max(20px,20px)",
+                height: "max(20px,20px)",
+              },
+              "@media(max-width:560px)": {
+                width: "max(17.5px,17.5px)",
+                height: "max(17.5px,17.5px)",
+              },
+            }}
+          />
         </StyledButton>
       )}
       {quizSetupComplete && !questionListActive && (
         <StyledButton
+          onClick={questionMenuHandler}
           sx={{
-            top: "40px",
+            top: "20px",
             left: "60px",
+
+            ":hover": {
+              color: "#c0bebe",
+              backgroundColor: "#878787",
+              boxShadow: "none",
+            },
             padding: "10px",
             borderRadius: "50%",
             "@media(max-width:1280px)": {
-              padding: "10px !important",
+              padding: "10px",
+              top: "20px",
+              left: "30px",
             },
             "@media(max-width:880px)": {
-              padding: "10px !important",
+              padding: "10px",
+              left: "10px",
+              top: "20px",
             },
             "@media(max-width:560px)": {
-              padding: "10px !important",
+              padding: "5px",
+              left: "10px",
+              top: "10px",
             },
           }}
-          onClick={questionMenuHandler}
         >
-          <MenuIcon />
+          <MenuIcon
+            sx={{
+              "@media(max-width:880px)": {
+                width: "max(20px,20px)",
+                height: "max(20px,20px)",
+              },
+              "@media(max-width:560px)": {
+                width: "max(17.5px,17.5px)",
+                height: "max(17.5px,17.5px)",
+              },
+            }}
+          />
         </StyledButton>
       )}
 
