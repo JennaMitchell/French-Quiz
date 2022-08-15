@@ -1,6 +1,7 @@
 import MultipleChoiceQuestion from "./child-components/multiple-choice-question";
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
+import { useState } from "react";
 import {
   SingleItemRowContainer,
   TwoItemRowContainer,
@@ -24,6 +25,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const singleColumnActivate = useMediaQuery("(max-width:880px)");
 
   const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
+  const [finalKeyPushArray, setFinalKeyPushArray] = useState<string[]>([]);
   const overAllVocabDB = useAppSelector(
     (state) => state.mainStore.overAllVocabDB
   );
@@ -189,6 +191,10 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
           break;
       }
 
+      if (index === inputArray.length - 1) {
+        setFinalKeyPushArray(answerKey);
+      }
+
       return (
         <MultipleChoiceQuestion
           key={index}
@@ -202,22 +208,28 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
   );
 
   useEffect(() => {
-    if (answerKey.length === inputArray.length) {
+    if (finalKeyPushArray.length === inputArray.length) {
       if (databaseType === "Vocab") {
         dispatch(
           sheetGeneratorStoreSliceActions.setVocabMultipleChoiceAnswerKey(
-            answerKey
+            finalKeyPushArray
           )
         );
       } else if (databaseType === "Phrases") {
         dispatch(
           sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
-            answerKey
+            finalKeyPushArray
           )
         );
       }
     }
-  }, [databaseType, dispatch, answerKey.length, answerKey, inputArray.length]);
+  }, [
+    databaseType,
+    dispatch,
+    finalKeyPushArray,
+    finalKeyPushArray.length,
+    inputArray.length,
+  ]);
 
   if (
     renderReadyMultipleChoiceQuestions.length % 3 === 1 &&

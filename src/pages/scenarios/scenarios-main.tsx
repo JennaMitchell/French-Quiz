@@ -4,7 +4,6 @@ import {
   StyledConstructionIcon,
   ConstructionTextContainer,
 } from "./scenarios-main-styled-components";
-import ConstructionIcon from "@mui/icons-material/Construction";
 
 const ScenariosMainPage = () => {
   return (
