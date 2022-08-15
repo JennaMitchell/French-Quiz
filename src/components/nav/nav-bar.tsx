@@ -1,5 +1,4 @@
 import { AppBar, Typography } from "@mui/material";
-import { useState } from "react";
 import {
   StyledToolBar,
   LogoContainer,
@@ -9,8 +8,9 @@ import {
   StyledActiveNavButton,
   StyledInactiveNavButton,
   MobileMenuButton,
-  MobileNavMenuDropDown,
+  HomepageMobileNavMenuDropDown,
   StyledMenuIcon,
+  NonHomepageDropDown,
 } from "./nav-bar-styled-components";
 import { useBeforeunload } from "react-beforeunload";
 
@@ -21,10 +21,18 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const NavBar: React.FC = () => {
+  const mobileNavMenuActive = useMediaQuery("(max-width:1300px)");
   const activePage = useAppSelector((state) => state.mainStore.activePage);
-  const [mobileButtonClicked, setMobileButtonClicked] = useState(false);
+  const mobileButtonClicked = useAppSelector(
+    (state) => state.mainStore.mobileButtonClicked
+  );
+  const dispatch = useAppDispatch();
+
   const mobileButtonHandler = () => {
-    setMobileButtonClicked(!mobileButtonClicked);
+    dispatch(
+      mainStoreSliceActions.setMobileButtonClicked(!mobileButtonClicked)
+    );
+    console.log(mobileButtonClicked);
   };
 
   const acceptableHomeReturnValues = [
@@ -34,7 +42,6 @@ const NavBar: React.FC = () => {
     "Quiz",
     "Grammar Test",
   ];
-  const mobileNavMenuActive = useMediaQuery("(max-width:1300px)");
 
   let localStorageActivePage: string = localStorage.getItem("activePage") ?? "";
   // when retruend it's a string of "thing" parthesis included to get around this we need to remove the ""'s
@@ -54,10 +61,13 @@ const NavBar: React.FC = () => {
     link: string;
     function: any;
   };
-  const dispatch = useAppDispatch();
+
   const navButtonHandler = (type: string) => {
     if (activePage !== type) {
       dispatch(mainStoreSliceActions.setActivePage(type));
+    }
+    if (mobileButtonClicked) {
+      dispatch(mainStoreSliceActions.setMobileButtonClicked(false));
     }
   };
   // console.log(activePage);
@@ -100,7 +110,7 @@ const NavBar: React.FC = () => {
   let quizPointer: () => void;
   quizPointer = quizButtonHandler;
   const scenariosTestHandler = (): void => {
-    navButtonHandler("Grammar Test");
+    navButtonHandler("Scenarios");
   };
   let scenariosTestPointer: () => void;
   scenariosTestPointer = scenariosTestHandler;
@@ -162,59 +172,81 @@ const NavBar: React.FC = () => {
     }
   );
   return (
-    <AppBar
-      sx={{
-        boxShadow: "0",
-        width: `100%`,
-        zIndex: "2",
-        position: `${activePage === "Home" ? "absolute" : "relative"}`,
-        top: "0",
-        left: "0",
+    <>
+      <AppBar
+        sx={{
+          boxShadow: "0",
+          width: `100%`,
+          zIndex: "3",
+          position: `${activePage === "Home" ? "absolute" : "relative"}`,
+          top: "0",
+          left: "0",
 
-        backgroundColor: `${
-          activePage === "Home" ? "transparent" : "primary.dark"
-        }`,
-      }}
-    >
-      <StyledToolBar>
-        <LogoTitleContainer>
-          <LogoContainer>
-            <LogoImage src={logo} alt="Logo" />
-          </LogoContainer>
-          <Typography
-            variant="h4"
-            color="white"
-            sx={{
-              "@media(max-width:560px)": { fontSize: "28px" },
-              "@media(max-width:470px)": { fontSize: "22px" },
-            }}
-          >
-            French Quiz
-          </Typography>
-        </LogoTitleContainer>
-        {!mobileNavMenuActive && (
-          <MenuButtonsContainer>{renderReadyNavButtons}</MenuButtonsContainer>
-        )}
-        {mobileNavMenuActive && (
-          <MobileMenuButton onClick={mobileButtonHandler}>
-            <StyledMenuIcon />
-          </MobileMenuButton>
-        )}
-        {mobileButtonClicked && (
-          <MobileNavMenuDropDown
-            sx={{
-              top: `${activePage !== "Home" && "100px"}`,
-              right: `${activePage !== "Home" && "0px"}`,
-              borderTopLeftRadius: `${activePage !== "Home" && "0px"}`,
-              borderTopRightRadius: `${activePage !== "Home" && "0px"}`,
-              padding: `${activePage !== "Home" && "10px"}`,
-            }}
-          >
-            {renderReadyNavButtons}
-          </MobileNavMenuDropDown>
-        )}
-      </StyledToolBar>
-    </AppBar>
+          backgroundColor: `${
+            activePage === "Home" ? "transparent" : "primary.dark"
+          }`,
+        }}
+      >
+        <StyledToolBar>
+          <LogoTitleContainer>
+            <LogoContainer>
+              <LogoImage src={logo} alt="Logo" />
+            </LogoContainer>
+            <Typography
+              variant="h4"
+              color="white"
+              sx={{
+                "@media(max-width:560px)": { fontSize: "28px" },
+                "@media(max-width:470px)": { fontSize: "22px" },
+              }}
+            >
+              French Quiz
+            </Typography>
+          </LogoTitleContainer>
+          {!mobileNavMenuActive && (
+            <MenuButtonsContainer>{renderReadyNavButtons}</MenuButtonsContainer>
+          )}
+          {mobileNavMenuActive && (
+            <MobileMenuButton onClick={mobileButtonHandler}>
+              <StyledMenuIcon />
+            </MobileMenuButton>
+          )}
+          {mobileNavMenuActive && activePage === "Home" && (
+            <HomepageMobileNavMenuDropDown
+              sx={{
+                transform: `${mobileButtonClicked ? "scale(1)" : "scale(0)"}`,
+                transition: `${
+                  mobileButtonClicked ? "all 0.5s ease-out" : "all 0.5s ease-in"
+                }`,
+              }}
+            >
+              {renderReadyNavButtons}
+            </HomepageMobileNavMenuDropDown>
+          )}
+        </StyledToolBar>
+      </AppBar>
+      {mobileNavMenuActive && activePage !== "Home" && (
+        <NonHomepageDropDown
+          sx={{
+            top: `${mobileButtonClicked ? "100px" : "-230px"}`,
+            transition: `${
+              mobileButtonClicked ? "all 0.5s ease-out" : "all 0.5s ease-in"
+            }`,
+            "@media(max-width:680px)": {
+              top: `${mobileButtonClicked ? "100px" : "-250px"}`,
+            },
+            "@media(max-width:560px)": {
+              top: `${mobileButtonClicked ? "90px" : "-250px"}`,
+            },
+            "@media(max-width:475px)": {
+              top: `${mobileButtonClicked ? "80px" : "-250px"}`,
+            },
+          }}
+        >
+          {renderReadyNavButtons}
+        </NonHomepageDropDown>
+      )}
+    </>
   );
 };
 export default NavBar;

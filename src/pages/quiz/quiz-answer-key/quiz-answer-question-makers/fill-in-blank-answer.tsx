@@ -28,15 +28,23 @@ const CorrectAnswerText = styled("p", {
   right: "20px",
   translate: "0% -50%",
   fontSize: "24px",
-
   zIndex: "2",
+  "@media(max-width:480px)": {
+    fontSize: "14px",
+    right: "5px",
+    padding: "2.5px",
+  },
+  "@media(max-width:375px)": {
+    fontSize: "12px",
+  },
 }));
 
 const FillInBlankAnswer = () => {
   const userQuizQuestionSetup: UserQuizQuestionSetup = useAppSelector(
     (state) => state.quizStore.userQuizQuestionSetup
   );
-  const numberOfMultipleChoiceQuestions = userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
+  const numberOfMultipleChoiceQuestions =
+    userQuizQuestionSetup.numberOfVocabNPhraseMultipleChoiceQuestions;
   const numberOfFillInBlankQuestions =
     userQuizQuestionSetup.numberOfVocabNPhraseFillInTheBlankQuestions;
 
@@ -72,7 +80,10 @@ const FillInBlankAnswer = () => {
   renderReadyItems = comparedResponsesArray.map(
     (correct: boolean, questionIndex: number) => {
       return (
-        <QuestionContainer key={questionIndex} id = {`question ${questionIndex + numberOfMultipleChoiceQuestions}`}>
+        <QuestionContainer
+          key={questionIndex}
+          id={`question ${questionIndex + numberOfMultipleChoiceQuestions}`}
+        >
           <QuestionTypography>
             {fillInTheBlankTestTerms[questionIndex]}
           </QuestionTypography>

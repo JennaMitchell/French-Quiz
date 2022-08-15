@@ -11,9 +11,11 @@ import {
   UserSelectedData,
 } from "../../../../store/quiz-store-slice";
 import {
+  StyledPopupSelect,
+  StyledPopupOption,
+} from "../../../../components/generic-components/generic-popup-components";
+import {
   MatchingTopContainer,
-  StyledSelect,
-  StyledOption,
   MatchingRowContainer,
   StyledTypography,
 } from "./quiz-matching-creator-styled-components";
@@ -168,13 +170,13 @@ const QuizMatchingCreator = () => {
     // select drop down handler
 
     renderReadyStyledOptions[letterIndex] = (
-      <StyledOption key={`${letterIndex} letterIndex`}>
+      <StyledPopupOption key={`${letterIndex} letterIndex`}>
         {answerLettersArray[letterIndex]}
-      </StyledOption>
+      </StyledPopupOption>
     );
   }
   renderReadyStyledOptions.unshift(
-    <StyledOption key={`${-1} letterIndex`}>{""}</StyledOption>
+    <StyledPopupOption key={`${-1} letterIndex`}>{""}</StyledPopupOption>
   );
 
   // Step 1. Handeling numberOfMatchingQuestions > userSelected Items and creating the two matching sides
@@ -308,7 +310,7 @@ const QuizMatchingCreator = () => {
           >
             {promptTerms[questionIndex]}
           </StyledTypography>
-          <StyledSelect
+          <StyledPopupSelect
             onChange={selectDropDownHandler}
             sx={{
               border: `${
@@ -323,7 +325,7 @@ const QuizMatchingCreator = () => {
             }}
           >
             {renderReadyStyledOptions}
-          </StyledSelect>
+          </StyledPopupSelect>
           <StyledTypography
             sx={{ textAlign: "right" }}
             key={`${questionIndex} B`}
@@ -379,7 +381,7 @@ const QuizMatchingCreator = () => {
           >
             {savedPromptTerms[questionIndex]}
           </StyledTypography>
-          <StyledSelect
+          <StyledPopupSelect
             onChange={selectDropDownHandler}
             sx={{
               border: `${
@@ -394,7 +396,7 @@ const QuizMatchingCreator = () => {
             }}
           >
             {renderReadyStyledOptions}
-          </StyledSelect>
+          </StyledPopupSelect>
           <StyledTypography
             sx={{ textAlign: "right" }}
             key={`${questionIndex} B`}

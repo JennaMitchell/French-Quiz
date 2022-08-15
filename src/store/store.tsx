@@ -38,6 +38,7 @@ const initialState = {
   phrasesDB: [],
   overAllVocabDB: [],
   conjugationTableDB: {},
+  mobileButtonClicked: false,
 };
 
 // setHomepageSelectedSection(state, action: PayloadAction<string>) {
@@ -80,6 +81,9 @@ const mainStoreSlice = createSlice({
     setConjugationTableDB(state, { payload }) {
       state.conjugationTableDB = payload;
     },
+    setMobileButtonClicked(state, { payload }) {
+      state.mobileButtonClicked = payload;
+    },
   },
 });
 const store = configureStore({
@@ -121,6 +125,7 @@ export interface MainStoreDatabaseStates {
   flashcardsDB: FlashcardDatabaseTypes[];
   firebaseDataLoaded: boolean;
   conjugationTableDB: conjugationDB;
+  mobileButtonClicked: boolean;
 }
 export type RootState = ReturnType<typeof store.getState>;
 // used to set it so our usestate perfectly match what is in the store

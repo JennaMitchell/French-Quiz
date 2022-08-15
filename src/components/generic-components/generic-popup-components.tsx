@@ -178,7 +178,7 @@ const StyledPopupOption = styled("option", {
   fontSize: "22px",
   lineHeight: "22px",
   border: "none",
-  "@media(max-width:580px)": { fontSize: "1x", lineHeight: "18px" },
+  "@media(max-width:580px)": { fontSize: "18x", lineHeight: "18px" },
   "@media(max-width:520px)": { fontSize: "16px", lineHeight: "16px" },
   "@media(max-width:475px)": {
     fontSize: "12px",

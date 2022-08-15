@@ -49,43 +49,6 @@ const MatchingRowContainer = styled("div", {
   position: "relative",
 });
 
-const StyledSelect = styled("select", {
-  name: "StyledSelect",
-  slot: "Wrapper",
-})(({ theme }) => ({
-  width: "max(45px,45px)",
-  height: "max(max-content,max-content)",
-  backgroundColor: "inherit",
-  color: theme.palette.secondary.light,
-  textAlign: "center",
-  fontSize: "20px",
-  border: "1px solid",
-  borderColor: theme.palette.secondary.main,
-  borderRadius: "5px",
-  position: "relative",
-}));
-const StyledOption = styled("option", {
-  name: "StyledOption ",
-  slot: "Wrapper",
-})(({ theme }) => ({
-  width: "max(45px,45px)",
-  textAlign: "center",
-  height: "max(max-content,max-content)",
-  backgroundColor: theme.palette.secondary.dark,
-  color: theme.palette.secondary.light,
-  fontSize: "20px",
-  border: "none",
-  position: "relative",
-  "&:active": {
-    border: "1px solid",
-    borderColor: "secondary.light",
-  },
-  "&:focus": {
-    border: "1px solid",
-    borderColor: "secondary.light",
-    borderRadius: "5px",
-  },
-}));
 const StyledTypography = styled("p", {
   name: "StyledTypography",
   slot: "Wrapper",
@@ -103,10 +66,4 @@ const StyledTypography = styled("p", {
     fontSize: "16px",
   },
 }));
-export {
-  MatchingTopContainer,
-  StyledSelect,
-  StyledOption,
-  MatchingRowContainer,
-  StyledTypography,
-};
+export { MatchingTopContainer, MatchingRowContainer, StyledTypography };

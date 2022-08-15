@@ -188,7 +188,6 @@ const QuizFillInBlankCreator = () => {
           setUserTypedAnswers(copyOfUserTypedAnswers);
           userEnteredDataChecker(copyOfUserTypedAnswers);
         };
-        console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
           <QuestionContainer
@@ -233,7 +232,6 @@ const QuizFillInBlankCreator = () => {
           setUserTypedAnswers(copyOfUserTypedAnswers);
           userEnteredDataChecker(copyOfUserTypedAnswers);
         };
-        console.log(questionIndex + numberOfMultipleChoiceQuestions);
 
         return (
           <QuestionContainer

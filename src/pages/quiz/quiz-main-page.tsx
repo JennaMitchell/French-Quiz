@@ -147,6 +147,7 @@ const QuizMainPage = () => {
       );
     }
     // Final check
+
     if (
       !questionsAnsweredArray.includes(false) &&
       questionsAnsweredArray.length !== 0

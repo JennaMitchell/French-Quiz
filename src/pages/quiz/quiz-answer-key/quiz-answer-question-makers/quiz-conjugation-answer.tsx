@@ -35,9 +35,15 @@ const CorrectAnswerText = styled("p", {
   right: "20px",
   translate: "0% -50%",
   fontSize: "20px",
-
-
   zIndex: "2",
+  "@media(max-width:480px)": {
+    fontSize: "14px",
+    right: "10px",
+    padding: "2.5px",
+  },
+  "@media(max-width:375px)": {
+    fontSize: "12px",
+  },
 }));
 const QuizConjugationAnswered = () => {
   const userQuizQuestionSetup = useAppSelector(
@@ -255,7 +261,10 @@ const QuizConjugationAnswered = () => {
         const titleVerb = userSelectedQuizConjugations[indexOfVerb].french;
 
         finalRenderReadyItems.push(
-          <TopContainer key={`Top Container ${indexOfGrouping}`} id = {`grouping-${(indexOfGrouping + 1) /8}`}>
+          <TopContainer
+            key={`Top Container ${indexOfGrouping}`}
+            id={`grouping-${(indexOfGrouping + 1) / 8}`}
+          >
             <QuestionNumberBox>
               {totalnumberOfVocabQuestions + indexOfGrouping + 2 - 8} -{"  "}
               {totalnumberOfVocabQuestions + indexOfGrouping + 1} of {"  "}
@@ -273,7 +282,7 @@ const QuizConjugationAnswered = () => {
   } else {
     // Random Selection
     finalRenderReadyItems = (
-      <TopContainer key={`Top Container`} id = {"grouping-1"}>
+      <TopContainer key={`Top Container`} id={"grouping-1"}>
         <QuestionNumberBox>
           {totalnumberOfVocabQuestions + 1} -{"  "}
           {totalnumberOfVocabQuestions +

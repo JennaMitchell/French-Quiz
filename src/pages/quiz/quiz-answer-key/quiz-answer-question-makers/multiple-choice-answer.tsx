@@ -25,6 +25,10 @@ const AnswerHelperText = styled("p", {
   position: "absolute",
   top: "-20px",
   right: "20px",
+  "@media(max-width:480px)": {
+    right: "10px",
+    fontSize: "12px",
+  },
 }));
 
 interface Props {
@@ -105,7 +109,7 @@ const AnsweredQuizMultipleChoiceQuestion = ({
   });
 
   return (
-    <QuestionContainer id = {`question-${questionIndex}`}>
+    <QuestionContainer id={`question-${questionIndex}`}>
       <QuestionNumberBox>
         {questionIndex + 1} of {totalNumberOfQuestions}
       </QuestionNumberBox>

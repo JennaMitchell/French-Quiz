@@ -27,6 +27,12 @@ const PercentCorrectContainer = styled("div", {
   marginTop: "10px",
   boxShadow: "0 0 10px black",
   justifySelf: "center",
+  "@media(max-width:480px)": {
+    fontSize: "16px",
+  },
+  "@media(max-width:375px)": {
+    fontSize: "12px",
+  },
 }));
 
 const QuizAnswerKeyMain = () => {

@@ -1,10 +1,11 @@
 import { useAppSelector } from "../../../../store/hooks";
 import { letterAnswerKeyCreator } from "../../../../components/functions/generic-functions";
-
+import {
+  StyledPopupSelect,
+  StyledPopupOption,
+} from "../../../../components/generic-components/generic-popup-components";
 import {
   MatchingTopContainer,
-  StyledSelect,
-  StyledOption,
   MatchingRowContainer,
   StyledTypography,
 } from "../../quiz-question-creators/matching-choice-creator/quiz-matching-creator-styled-components";
@@ -33,6 +34,12 @@ const CorrectAnswer = styled("p", {
   zIndex: "2",
   fontSize: "16px",
   lineHeight: "16px",
+  "@media(max-width:480px)": {
+    fontSize: "16px",
+  },
+  "@media(max-width:375px)": {
+    fontSize: "12px",
+  },
 }));
 
 const QuizMatchingAnswered = () => {
@@ -86,13 +93,13 @@ const QuizMatchingAnswered = () => {
     // select drop down handler
 
     renderReadyStyledOptions[letterIndex] = (
-      <StyledOption key={`${letterIndex} letterIndex`}>
+      <StyledPopupOption key={`${letterIndex} letterIndex`}>
         {answerLettersArray[letterIndex]}
-      </StyledOption>
+      </StyledPopupOption>
     );
   }
   renderReadyStyledOptions.unshift(
-    <StyledOption key={`${-1} letterIndex`}>{""}</StyledOption>
+    <StyledPopupOption key={`${-1} letterIndex`}>{""}</StyledPopupOption>
   );
 
   for (
@@ -108,7 +115,7 @@ const QuizMatchingAnswered = () => {
         {!comparedMatchingArray[questionIndex] && (
           <CorrectAnswer>{matchingAnswerKey[questionIndex]}</CorrectAnswer>
         )}
-        <StyledSelect
+        <StyledPopupSelect
           disabled
           value={
             comparedMatchingArray[questionIndex]
@@ -139,7 +146,7 @@ const QuizMatchingAnswered = () => {
           }}
         >
           {renderReadyStyledOptions}
-        </StyledSelect>
+        </StyledPopupSelect>
         <StyledTypography
           sx={{ textAlign: "right" }}
           key={`${questionIndex} B`}

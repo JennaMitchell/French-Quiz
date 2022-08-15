@@ -2,7 +2,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { styled } from "@mui/material/styles";
 import { quizStoreSliceActions } from "../../../store/quiz-store-slice";
 import CheckIcon from "@mui/icons-material/Check";
-import { scrollToHandler } from "../../../components/functions/generic-functions"
+import { scrollToHandler } from "../../../components/functions/generic-functions";
+import useMediaQuery from "@mui/material/useMediaQuery";
 const QuestionButton = styled("button", {
   name: "QuestionButton",
   slot: "Wrapper",
@@ -88,11 +89,35 @@ const QuestionMenuContainer = styled("div", {
   justifyContent: "center",
   position: "fixed",
   top: "105px",
-
   padding: "20px",
 }));
 
+const FullPageQuestionMenu = styled("div", {
+  name: "FullPageQuestionMenu",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.light,
+  transition: "all 0.5s",
+  width: "max(100vw,100vw)",
+  minHeight: "100vh",
+  height: "100vh",
+  maxHeight: "100vh",
+  zIndex: "10",
+  position: "fixed",
+  top: "0",
+  left: "0",
+  overflow: "hidden",
+  display: "grid",
+  gridTemplateColumns: "300px",
+  gridTemplateRows: "max-content",
+  rowGap: "5px",
+  alignContent: "center",
+  justifyContent: "center",
+}));
+
 const QuizQuestionsDropDown = () => {
+  const fullPageQuestionDropDownActive = useMediaQuery("(max-width:1075px)");
+
   const userSelectedMultipleChoiceQuizAnswers = useAppSelector(
     (state) => state.quizStore.userSelectedMultipleChoiceQuizAnswers
   );
@@ -142,13 +167,15 @@ const QuizQuestionsDropDown = () => {
       multipleChoiceQuestionIndex < numberOfMultipleChoiceQuestions;
       multipleChoiceQuestionIndex++
     ) {
-
-      const clickHandler = ()=>{
-        scrollToHandler(`question-${multipleChoiceQuestionIndex}`)
-      }
+      const clickHandler = () => {
+        scrollToHandler(`question-${multipleChoiceQuestionIndex}`);
+      };
 
       renderReadyMultipleChoiceQuestions.push(
-        <QuestionButton key={multipleChoiceQuestionIndex} onClick = {clickHandler}>
+        <QuestionButton
+          key={multipleChoiceQuestionIndex}
+          onClick={clickHandler}
+        >
           <StyledText>{multipleChoiceQuestionIndex + 1}</StyledText>
           {userSelectedMultipleChoiceQuizAnswers[
             multipleChoiceQuestionIndex
@@ -163,14 +190,17 @@ const QuizQuestionsDropDown = () => {
       fillInBlankIndex < numberOfFillInBlankQuestions;
       fillInBlankIndex++
     ) {
-
-      const clickHandler = ()=>{
-        console.log(`question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`)
-        scrollToHandler(`question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`)
-      }
+      const clickHandler = () => {
+        console.log(
+          `question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`
+        );
+        scrollToHandler(
+          `question-${fillInBlankIndex + numberOfMultipleChoiceQuestions}`
+        );
+      };
 
       renderReadyFillInBlankQuestions.push(
-        <QuestionButton key={fillInBlankIndex} onClick = {clickHandler}>
+        <QuestionButton key={fillInBlankIndex} onClick={clickHandler}>
           <StyledText>
             {fillInBlankIndex + 1 + numberOfQuizConjugationQuestions}
           </StyledText>
@@ -188,13 +218,18 @@ const QuizQuestionsDropDown = () => {
       matchingQuestionIndex < numberOfMatchingQuestions;
       matchingQuestionIndex++
     ) {
-
-      const clickHandler = ()=>{
-        scrollToHandler(`question-${matchingQuestionIndex + numberOfMultipleChoiceQuestions + numberOfFillInBlankQuestions}`)
-      }
+      const clickHandler = () => {
+        scrollToHandler(
+          `question-${
+            matchingQuestionIndex +
+            numberOfMultipleChoiceQuestions +
+            numberOfFillInBlankQuestions
+          }`
+        );
+      };
 
       renderReadyMatchingQuestions.push(
-        <QuestionButton key={matchingQuestionIndex} onClick = {clickHandler}>
+        <QuestionButton key={matchingQuestionIndex} onClick={clickHandler}>
           <StyledText>
             {matchingQuestionIndex +
               1 +
@@ -226,15 +261,13 @@ const QuizQuestionsDropDown = () => {
         if ((indexOfConjugation + 1) % 8 === 0) {
           // 8 is number of prefixes
           if (arrayOfAnsweredQuestions.includes(`false`)) {
-
-            const clickHandler = ()=>{
-              console.log(`grouping-${(indexOfConjugation+1)/8}`)
-              scrollToHandler(`grouping-${(indexOfConjugation+1)/8}`)
-            }
-      
+            const clickHandler = () => {
+              console.log(`grouping-${(indexOfConjugation + 1) / 8}`);
+              scrollToHandler(`grouping-${(indexOfConjugation + 1) / 8}`);
+            };
 
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation} onClick = {clickHandler}>
+              <QuestionButton key={indexOfConjugation} onClick={clickHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
@@ -242,14 +275,13 @@ const QuizQuestionsDropDown = () => {
               </QuestionButton>
             );
           } else {
-            const clickHandler = ()=>{
+            const clickHandler = () => {
+              console.log(`grouping-${(indexOfConjugation + 1) / 8}`);
+              scrollToHandler(`grouping-${(indexOfConjugation + 1) / 8}`);
+            };
 
-              console.log(`grouping-${(indexOfConjugation+1)/8}`)
-              scrollToHandler(`grouping-${(indexOfConjugation+1)/8}`)
-            }
-      
             renderReadyConjugationQuestions.push(
-              <QuestionButton key={indexOfConjugation} onClick = {clickHandler}>
+              <QuestionButton key={indexOfConjugation} onClick={clickHandler}>
                 <StyledText>
                   {numberOfVocabQuestions + indexOfConjugation - 6} -{" "}
                   {numberOfVocabQuestions + indexOfConjugation + 1}
@@ -265,14 +297,12 @@ const QuizQuestionsDropDown = () => {
         (string) => `${string}`
       );
       if (stringifiedAnswerArray.includes("false")) {
+        const clickHandler = () => {
+          scrollToHandler(`grouping-1`);
+        };
 
-      const clickHandler = ()=>{
-        scrollToHandler(`grouping-1`)
-      }
-
-        
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"} onClick = {clickHandler }>
+          <QuestionButton key={"all"} onClick={clickHandler}>
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}
@@ -280,11 +310,11 @@ const QuizQuestionsDropDown = () => {
           </QuestionButton>
         );
       } else {
-        const clickHandler = ()=>{
-          scrollToHandler(`grouping-1`)
-        }
+        const clickHandler = () => {
+          scrollToHandler(`grouping-1`);
+        };
         renderReadyConjugationQuestions.push(
-          <QuestionButton key={"all"} onClick = {clickHandler}>
+          <QuestionButton key={"all"} onClick={clickHandler}>
             <StyledText>
               {numberOfVocabQuestions + 1} -{" "}
               {numberOfVocabQuestions + numberOfQuizConjugationQuestions * 8}
@@ -301,31 +331,62 @@ const QuizQuestionsDropDown = () => {
   };
 
   return (
-    <QuestionMenuContainer>
-      <QuestionButton onClick={hideQuestionHandler}>
-        <StyledText sx={{ gridColumn: "1/span 2", textAlign: "center" }}>
-          Hide Question List
-        </StyledText>
-      </QuestionButton>
-      {renderReadyMultipleChoiceQuestions.length !== 0 && (
-        <QuestionTitle> Multiple Choice</QuestionTitle>
-      )}
-      {renderReadyMultipleChoiceQuestions}
-      {renderReadyFillInBlankQuestions.length !== 0 && (
-        <QuestionTitle>Fill in the Blank</QuestionTitle>
-      )}
-      {renderReadyFillInBlankQuestions}
-      {renderReadyMatchingQuestions.length !== 0 && (
-        <QuestionTitle>Matching</QuestionTitle>
-      )}
+    <>
+      {!fullPageQuestionDropDownActive && (
+        <QuestionMenuContainer>
+          <QuestionButton onClick={hideQuestionHandler}>
+            <StyledText sx={{ gridColumn: "1/span 2", textAlign: "center" }}>
+              Hide Question List
+            </StyledText>
+          </QuestionButton>
+          {renderReadyMultipleChoiceQuestions.length !== 0 && (
+            <QuestionTitle> Multiple Choice</QuestionTitle>
+          )}
+          {renderReadyMultipleChoiceQuestions}
+          {renderReadyFillInBlankQuestions.length !== 0 && (
+            <QuestionTitle>Fill in the Blank</QuestionTitle>
+          )}
+          {renderReadyFillInBlankQuestions}
+          {renderReadyMatchingQuestions.length !== 0 && (
+            <QuestionTitle>Matching</QuestionTitle>
+          )}
 
-      {renderReadyMatchingQuestions}
+          {renderReadyMatchingQuestions}
 
-      {renderReadyConjugationQuestions.length !== 0 && (
-        <QuestionTitle>Conjugation</QuestionTitle>
+          {renderReadyConjugationQuestions.length !== 0 && (
+            <QuestionTitle>Conjugation</QuestionTitle>
+          )}
+          {renderReadyConjugationQuestions}
+        </QuestionMenuContainer>
       )}
-      {renderReadyConjugationQuestions}
-    </QuestionMenuContainer>
+      {fullPageQuestionDropDownActive && (
+        <FullPageQuestionMenu>
+          <QuestionButton onClick={hideQuestionHandler}>
+            <StyledText sx={{ gridColumn: "1/span 2", textAlign: "center" }}>
+              Hide Question List
+            </StyledText>
+          </QuestionButton>
+          {renderReadyMultipleChoiceQuestions.length !== 0 && (
+            <QuestionTitle> Multiple Choice</QuestionTitle>
+          )}
+          {renderReadyMultipleChoiceQuestions}
+          {renderReadyFillInBlankQuestions.length !== 0 && (
+            <QuestionTitle>Fill in the Blank</QuestionTitle>
+          )}
+          {renderReadyFillInBlankQuestions}
+          {renderReadyMatchingQuestions.length !== 0 && (
+            <QuestionTitle>Matching</QuestionTitle>
+          )}
+
+          {renderReadyMatchingQuestions}
+
+          {renderReadyConjugationQuestions.length !== 0 && (
+            <QuestionTitle>Conjugation</QuestionTitle>
+          )}
+          {renderReadyConjugationQuestions}
+        </FullPageQuestionMenu>
+      )}
+    </>
   );
 };
 export default QuizQuestionsDropDown;

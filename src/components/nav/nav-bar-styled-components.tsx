@@ -58,6 +58,7 @@ const StyledToolBar = styled(Toolbar, {
 })({
   display: "grid",
   padding: "5px !important",
+  zIndex: "3",
 
   gridTemplateColumns: "max-content max-content",
   alignItems: "center",
@@ -78,7 +79,7 @@ const MenuButtonsContainer = styled("div", {
   gap: "10px",
   placeItems: "center",
   position: "relative",
-  zIndex: "2",
+  zIndex: "3",
   transition: "all 0.5s",
   "@media(max-width:470px)": {
     gap: "5px",
@@ -151,13 +152,13 @@ const StyledMenuIcon = styled(MenuIcon, {
   color: "inherit",
 }));
 
-const MobileNavMenuDropDown = styled("div", {
-  name: "MobileNavMenuDropDown",
+const HomepageMobileNavMenuDropDown = styled("div", {
+  name: "HomepageMobileNavMenuDropDown",
   slot: "Wrapper",
 })(({ theme }) => ({
   position: "absolute",
-  top: "15px",
-  right: "15px",
+  top: "20px",
+  right: "20px",
   zIndex: 2,
   width: "max(300px,300px)",
   height: "max-content",
@@ -171,11 +172,48 @@ const MobileNavMenuDropDown = styled("div", {
   gap: "10px",
   borderRadius: "10px",
   boxShadow: "-5px 8px 10px black",
+
+  transformOrigin: "95% 30px",
+
   "@media(max-width:670px)": {
     width: "max(200px,200px)",
   },
   "@media(max-width:600px)": {
     padding: "40px 10px 10px 10px",
+    right: "0px",
+    top: "15px",
+  },
+  "@media(max-width:470px)": {
+    width: "max(150px,150px)",
+    transformOrigin: "80% 55px",
+  },
+  "@media(max-width:400px)": {
+    width: "max(125px,125px)",
+    transformOrigin: "85% 30px",
+  },
+}));
+/// Drop Down Menu with animations this takes place when the user isn't on the home page
+const NonHomepageDropDown = styled(HomepageMobileNavMenuDropDown, {
+  name: "NonHomepageDropDown",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  padding: "10px",
+  position: "absolute",
+  top: "-230px",
+  boxShadow: "none",
+  borderLeft: "1px solid black",
+  borderBottom: "1px solid black",
+  borderRight: "1px solid black",
+  borderTopLeftRadius: "0px",
+  borderTopRightRadius: "0px",
+  right: "0px",
+  zIndex: "1",
+  "@media(max-width:670px)": {
+    width: "max(200px,200px)",
+  },
+  "@media(max-width:600px)": {
+    padding: "10px",
     right: "0px",
     top: "15px",
   },
@@ -196,6 +234,7 @@ export {
   StyledActiveNavButton,
   StyledInactiveNavButton,
   MobileMenuButton,
-  MobileNavMenuDropDown,
+  HomepageMobileNavMenuDropDown,
   StyledMenuIcon,
+  NonHomepageDropDown,
 };
