@@ -1,5 +1,5 @@
 import { TopContainer, StyledButton } from "./quiz-main-page-styled-components";
-import NumberOfQuestionsPopup from "./popups/number-of-questions/number-of-questions-popup";
+import NumberOfVocabQuestionsPopup from "./popups/number-of-vocab-questions/number-of-vocab-questions-popup";
 import QuizVocabSelectionPopup from "./popups/vocab-selection/quiz-vocab-selection-popup";
 import NumberOfConjugationQuizQuestionsPopup from "./popups/number-of-conjugation-questions/number-of-conjugation-quiz-questions-popup";
 import QuizConjugationSelectionPopup from "./popups/conjugation-selection/quiz-conjugation-selection-popup";
@@ -250,7 +250,7 @@ const QuizMainPage = () => {
   return (
     <TopContainer>
       {userAnswerRetrieved && <QuizAnswerKeyMain />}
-      {initialPopupActive && <NumberOfQuestionsPopup />}
+      {initialPopupActive && <NumberOfVocabQuestionsPopup />}
       {quizVocabSelectionPopupActive && <QuizVocabSelectionPopup />}
       {userAnswerRetrieved && questionListActive && (
         <QuizQuestionAnsweredDropDown />

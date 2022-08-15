@@ -7,7 +7,7 @@ import {
 } from "../../../../components/generic-components/generic-components";
 import { useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
-import { randomNumberGeneratorWithNumberArrayRestriction } from "../../../../components/functions/generic-functions";
+
 interface UserSelectedData {
   [french: string]: string;
   english: string;
@@ -217,7 +217,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
         );
       }
     }
-  }, [databaseType, dispatch, answerKey.length, answerKey]);
+  }, [databaseType, dispatch, answerKey.length, answerKey, inputArray.length]);
 
   if (
     renderReadyMultipleChoiceQuestions.length % 3 === 1 &&

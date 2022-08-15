@@ -14,7 +14,6 @@ import {
   StyledPopupOption,
   StyledStepTitleText,
   PopupTitle,
-  SelectionContainer,
   StyledDialog,
   StyledDialogContent,
   ActionButtonsContainer,
@@ -23,7 +22,7 @@ import {
 
 import { useEffect } from "react";
 import { quizReset } from "../../../../components/functions/quiz-reset-function";
-const NumberOfQuestionsPopup = () => {
+const NumberOfVocabQuestionsPopup = () => {
   const numberOfQuizQuestionsPopupActive = useAppSelector(
     (state) => state.quizStore.numberOfQuizQuestionsPopupActive
   );
@@ -357,4 +356,4 @@ const NumberOfQuestionsPopup = () => {
     </StyledDialog>
   );
 };
-export default NumberOfQuestionsPopup;
+export default NumberOfVocabQuestionsPopup;

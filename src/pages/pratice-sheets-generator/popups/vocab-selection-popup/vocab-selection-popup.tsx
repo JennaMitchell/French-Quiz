@@ -1,6 +1,5 @@
 import { sheetGeneratorStoreSliceActions } from "../../../../store/sheet-generator-slice";
 import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
-import { Typography } from "@mui/material";
 import {
   ClosingIconContainer,
   ClosingIcon,
