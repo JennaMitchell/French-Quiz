@@ -445,7 +445,7 @@ const StyledDialog = styled(Dialog, {
   slot: "Wrapper",
   name: "StyledDialog",
 })(({ theme }) => ({
-  ".css-1t1j96h-MuiPaper-root-MuiDialog-paper ": {
+  ".MuiDialog-paper ": {
     borderRadius: "20px",
     border: "none",
     margin: "0",
@@ -455,6 +455,7 @@ const StyledDialog = styled(Dialog, {
     minHeight: "max-content",
     height: "max-content",
     maxHeight: "90vh",
+
     "@media(max-width:620px)": {
       width: "max(475px,475px)",
     },
