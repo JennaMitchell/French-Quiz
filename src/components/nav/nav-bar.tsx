@@ -32,7 +32,6 @@ const NavBar: React.FC = () => {
     dispatch(
       mainStoreSliceActions.setMobileButtonClicked(!mobileButtonClicked)
     );
-    console.log(mobileButtonClicked);
   };
 
   const acceptableHomeReturnValues = [
