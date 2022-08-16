@@ -26,6 +26,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
 
   const phrasesDB = useAppSelector((state) => state.mainStore.phrasesDB);
   const [finalKeyPushArray, setFinalKeyPushArray] = useState<string[]>([]);
+  const [codeState, setCodeState] = useState<string | number>("start");
   const overAllVocabDB = useAppSelector(
     (state) => state.mainStore.overAllVocabDB
   );
@@ -191,10 +192,6 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
           break;
       }
 
-      if (index === inputArray.length - 1) {
-        setFinalKeyPushArray(answerKey);
-      }
-
       return (
         <MultipleChoiceQuestion
           key={index}
@@ -207,20 +204,27 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
     }
   );
 
+  if (answerKey.length === inputArray.length - 1 && codeState === "start") {
+    setFinalKeyPushArray(answerKey);
+    setCodeState(0);
+  }
+
   useEffect(() => {
-    if (finalKeyPushArray.length === inputArray.length) {
+    if (finalKeyPushArray.length === inputArray.length && codeState === 0) {
       if (databaseType === "Vocab") {
         dispatch(
           sheetGeneratorStoreSliceActions.setVocabMultipleChoiceAnswerKey(
             finalKeyPushArray
           )
         );
+        setCodeState("end");
       } else if (databaseType === "Phrases") {
         dispatch(
           sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
             finalKeyPushArray
           )
         );
+        setCodeState("end");
       }
     }
   }, [

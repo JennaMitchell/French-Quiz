@@ -89,7 +89,7 @@ const TwoItemRowContainer = styled("div", {
   justifyContent: "center",
   position: "relative",
   gridColumn: "1/span 3",
-  gap: "20px",
+  gap: "40px",
 }));
 
 export {
