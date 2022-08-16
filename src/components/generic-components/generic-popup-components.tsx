@@ -497,7 +497,7 @@ const StyledDialogContent = styled(DialogContent, {
   alignItems: "center",
   justifyItems: "center",
   rowGap: "10px",
-  flexDirection: "column",
+
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "90vh",
