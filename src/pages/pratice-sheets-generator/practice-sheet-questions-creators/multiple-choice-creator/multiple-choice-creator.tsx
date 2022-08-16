@@ -218,7 +218,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
           )
         );
         setCodeState("end");
-      } else if (databaseType === "Phrases") {
+      } else if (databaseType === "Phrases" && codeState === 0) {
         dispatch(
           sheetGeneratorStoreSliceActions.setPhrasesMultipleChoiceAnswerKey(
             finalKeyPushArray
@@ -233,6 +233,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
     finalKeyPushArray,
     finalKeyPushArray.length,
     inputArray.length,
+    codeState,
   ]);
 
   if (
