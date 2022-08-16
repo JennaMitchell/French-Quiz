@@ -290,7 +290,7 @@ const DropDownButton = styled("button", {
 
   justifySelf: "center",
   marginBottom: "10px",
-  marginTop: "20px",
+
   "@media(max-width:620px)": {
     width: "max(410px,410px)",
   },
@@ -315,7 +315,7 @@ const DropDownSelectionMenu = styled("div", {
   gridTemplateRows: "1fr",
   gridTemplateColumns: "100%",
   gap: "10px",
-  marginTop: "15px",
+
   height: "max(max-content,max-content)",
   padding: "5px 10px 5px 10px",
   backgroundColor: theme.palette.secondary.dark,
@@ -457,6 +457,8 @@ const StyledDialog = styled(Dialog, {
     minHeight: "max-content",
     height: "max-content",
     maxHeight: "90vh",
+    display: "grid",
+    flexDirection: "none",
 
     "@media(max-width:620px)": {
       width: "max(475px,475px)",
