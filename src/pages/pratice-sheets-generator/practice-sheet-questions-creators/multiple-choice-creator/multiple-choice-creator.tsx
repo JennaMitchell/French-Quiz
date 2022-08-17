@@ -194,7 +194,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
 
       return (
         <MultipleChoiceQuestion
-          key={index}
+          key={`${databaseType} ${index} X`}
           mixedQuestions={mixedQuestions}
           title={questionTitle}
           questionNumber={index}
@@ -248,7 +248,7 @@ const MultipleChoiceCreator = ({ inputArray, databaseType, testOn }: Props) => {
     renderReadyMultipleChoiceQuestions[
       renderReadyMultipleChoiceQuestions.length - 1
     ] = (
-      <SingleItemRowContainer sx={{ paddingLeft: "80px" }} key="one row">
+      <SingleItemRowContainer sx={{ marginRight: "10px" }} key="one row">
         {lastEntry}
       </SingleItemRowContainer>
     );

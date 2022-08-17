@@ -6,6 +6,7 @@ import {
   ClosingIcon,
   StyledPopupTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledPopupSelect,
   StyledPopupOption,
@@ -130,6 +131,7 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
         </QuestionOptionContainer>
 
         <ActionButtonsContainer>
+          <SkipButton onClick={skipButtonHandler}>Skip</SkipButton>
           {numberOfQuestions !== 0 && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
@@ -137,8 +139,6 @@ const NumberOfConjugationQuizQuestionsPopup = () => {
           {numberOfQuestions === 0 && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-
-          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ActionButtonsContainer>
       </StyledDialogContent>
     </StyledDialog>

@@ -76,15 +76,18 @@ const AnswerBlock = styled("div", {
   gridTemplateColumns: "repeat(2,max-content)",
   alignItems: "center",
   justifyContent: "center",
-  gap: "20px",
+
   "@media(max-width:1280px)": {
     gridColumn: "1 / span 2",
   },
   "@media(max-width:880px)": {
+    width: "max(300px,300px)",
     gridTemplateColumns: "max-content",
     gridColumn: "1 / span 1",
     alignSelf: "center",
     justifySelf: "center",
+    gap: "20px",
+    paddingRight: "0px",
   },
 }));
 
@@ -138,10 +141,11 @@ const ConjugationAnswerContainer = styled("div", {
 })(({ theme }) => ({
   color: theme.palette.secondary.dark,
   display: "grid",
-  gridTemplateColumns: "max-content max-content",
+  gridTemplateColumns: "max-content 160px",
   gridTemplateRows: "max-content",
   justifyContent: "space-between",
-  width: "max(100px,100px)",
+  width: "max(185px,185px)",
+  textAlign: "center",
 }));
 const AnswerKey = () => {
   const vocabMultipleChoiceAnswerKey = useAppSelector(
@@ -219,7 +223,7 @@ const AnswerKey = () => {
       if (lastItemCenteredActive && index === lastItemPosition) {
         return (
           <StyledAnswerTypography
-            key={index}
+            key={`${answer} ${index} lastItem`}
             sx={{
               gridColumn: "1 /span 3",
               justifySelf: "center",
@@ -237,7 +241,7 @@ const AnswerKey = () => {
       } else {
         return (
           <StyledAnswerTypography
-            key={index}
+            key={`${answer} ${index} not last item`}
             sx={{
               gridColumn: "1 /span 3",
 
@@ -336,9 +340,10 @@ const AnswerKey = () => {
         const renderReadyAnswers = answersArray.map(
           (answer: string, index: number) => {
             return (
-              <ConjugationAnswerContainer>
+              <ConjugationAnswerContainer
+                key={`${answer} ${index} Conjugations`}
+              >
                 <StyledAnswerTypography
-                  key={index}
                   sx={{
                     textAlign: "left",
                     padding: "0px",
@@ -349,12 +354,12 @@ const AnswerKey = () => {
                   {index + 1 + parentIndex * 8}.
                 </StyledAnswerTypography>
                 <StyledAnswerTypography
-                  key={index}
                   sx={{
                     textAlign: "left",
                     padding: "0px",
                     gridColumn: "2/span 1 !important",
                     gridRow: "1 / span 1",
+                    wordBreak: "break-all",
                   }}
                 >
                   {answer}
@@ -367,7 +372,7 @@ const AnswerKey = () => {
         if (userSelectedConjugationGrouping === "By Verb") {
           return (
             <AnswerBlock
-              key={parentIndex}
+              key={`By verb ${parentIndex}`}
               sx={{
                 alignItems: "center",
                 justifyItems: "space-between",
@@ -375,7 +380,7 @@ const AnswerKey = () => {
                 "@media(max-width:880px)": {
                   justifyItems: "center !important",
                   gap: "15px",
-                  paddingRight: "40px",
+                  paddingRight: "0px",
                 },
               }}
             >
@@ -383,9 +388,11 @@ const AnswerKey = () => {
                 variant="h4"
                 sx={{
                   textAlign: "center",
+                  paddingRight: "30px",
                   "@media(max-width:880px)": {
                     textAlign: "center",
                     fontSize: "22px",
+                    paddingRight: "0px",
                   },
                 }}
               >
@@ -396,7 +403,7 @@ const AnswerKey = () => {
           );
         } else {
           return (
-            <AnswerBlock key={parentIndex} sx={{ gap: "30px" }}>
+            <AnswerBlock key={`Random ${parentIndex}`} sx={{ gap: "30px" }}>
               {renderReadyAnswers}
             </AnswerBlock>
           );
@@ -423,7 +430,6 @@ const AnswerKey = () => {
   const renderReadyConjugationAnswersBlock = (
     <AnswerBlock
       sx={{
-        paddingLeft: "40px",
         gridColumn: "1 /span 2",
         justifySelf: "center",
         "@media(max-width:1280px)": {
@@ -440,7 +446,7 @@ const AnswerKey = () => {
         sx={{
           textAlign: "center",
           justifySelf: "center",
-          paddingRight: "20px",
+          marginBottom: "10px",
         }}
       >
         Conjugation Answers

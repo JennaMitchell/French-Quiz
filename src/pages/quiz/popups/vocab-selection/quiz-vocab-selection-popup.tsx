@@ -6,6 +6,7 @@ import {
   StyledPopupTypography,
   DropDownTermTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledStepTitleText,
   PopupTitle,
@@ -315,13 +316,13 @@ const QuizVocabSelectionPopup = () => {
         )}
 
         <ActionButtonsContainer>
+          <SkipButton onClick={skipButtonHandler}>Skip</SkipButton>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ActionButtonsContainer>
       </StyledDialogContent>
     </StyledDialog>

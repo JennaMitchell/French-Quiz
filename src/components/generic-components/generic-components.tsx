@@ -72,7 +72,6 @@ const SingleItemRowContainer = styled("div", {
   justifyContent: "center",
   position: "relative",
   gridColumn: "1/span 3",
-  gap: "20px",
 }));
 const TwoItemRowContainer = styled("div", {
   name: "TwoItemRowContainer ",

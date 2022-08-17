@@ -124,6 +124,36 @@ const ActionButton = styled("button", {
   "@media(max-width:350px)": { fontSize: "14px" },
 }));
 
+const SkipButton = styled("button", {
+  name: "SkipButton",
+  slot: "Wrapper",
+})(({ theme }) => ({
+  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "max-content",
+  minHeight: "max-content",
+  height: "max-content",
+  maxHeight: "max-content",
+  padding: "20px 20px",
+  textAlign: "center",
+  borderRadius: "10px",
+  fontSize: "20px",
+  color: theme.palette.secondary.light,
+  backgroundColor: theme.palette.primary.main,
+  transition: "all 1s",
+  border: "none",
+  textDecoration: "none",
+
+  "&:hover": {
+    color: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.secondary.light,
+  },
+
+  "@media(max-width:475px)": { fontSize: "18px", padding: "15px" },
+  "@media(max-width:375px)": { fontSize: "16px" },
+  "@media(max-width:350px)": { fontSize: "14px" },
+}));
+
 const DisabledActionButton = styled("button", {
   name: "DisabledActionButton",
   slot: "Wrapper",
@@ -563,6 +593,7 @@ export {
   StyledPopupTypography,
   DropDownTermTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledPopupSelect,
   StyledPopupOption,

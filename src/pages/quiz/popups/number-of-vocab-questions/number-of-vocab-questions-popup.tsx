@@ -9,6 +9,7 @@ import {
   ClosingIcon,
   StyledPopupTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledPopupSelect,
   StyledPopupOption,
@@ -332,7 +333,7 @@ const NumberOfVocabQuestionsPopup = () => {
           </StyledPopupSelect>
         </QuestionOptionContainer>
         <QuestionOptionContainer>
-          <StyledPopupTypography variant="h6">Test my:</StyledPopupTypography>
+          <StyledPopupTypography variant="h6">Test on:</StyledPopupTypography>
           <StyledPopupSelect
             onChange={testTypeHandler}
             sx={{ width: "max(170px,170px)" }}
@@ -344,13 +345,13 @@ const NumberOfVocabQuestionsPopup = () => {
           </StyledPopupSelect>
         </QuestionOptionContainer>
         <ActionButtonsContainer>
+          <SkipButton onClick={skipButtonHandler}>Skip</SkipButton>
           {submitButtonEnabled && (
             <ActionButton onClick={submitButtonHandler}>Submit</ActionButton>
           )}
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ActionButtonsContainer>
       </StyledDialogContent>
     </StyledDialog>

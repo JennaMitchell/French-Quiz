@@ -134,7 +134,7 @@ const FillInBlankCreator = ({ inputArray, databaseType, testOn }: Props) => {
   const renderReadyData = answerSide.map((item, index) => {
     if (databaseType !== "Phrases") {
       return (
-        <RowContainer key={index}>
+        <RowContainer key={`Fill In Blank ${index} ${databaseType}`}>
           <StyledTypography
             sx={{
               "media(max-width:560px)": {

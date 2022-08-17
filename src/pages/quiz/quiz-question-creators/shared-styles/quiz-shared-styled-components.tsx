@@ -99,7 +99,7 @@ const StyledTextField = styled(TextField, {
       borderColor: theme.palette.secondary.light,
     },
   },
-  "&.MuiTextField-root .css-itfxkg-MuiInputBase-root-MuiOutlinedInput-root": {
+  "&.MuiTextField-root": {
     fontSize: "20px",
     textAlign: "left",
     color: theme.palette.secondary.light,

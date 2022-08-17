@@ -116,9 +116,8 @@ const PhraseQuestionAnswerBlock = styled("div", {
   name: "PhraseQuestionAnswerBlock",
   slot: "Wrapper",
 })(() => ({
-  minWidth: "max-content",
   width: "min(max-content,600px)",
-  maxWidth: "600px",
+
   minHeight: "max-content",
   height: "max-content",
   maxHeight: "max-content",
@@ -166,6 +165,7 @@ const PhraseQuestionAnswer = styled("div", {
   textTransform: "lowercase",
   fontFamily: "Montserrat, sans-serif",
   wordWrap: "break-word",
+
   "@media(max-width:1280px)": {
     width: "min(170px,max-content)",
   },

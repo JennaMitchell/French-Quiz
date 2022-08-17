@@ -7,6 +7,7 @@ import {
   PhraseQuestionAnswer,
   PhraseQuestionAnswerBlock,
 } from "./multiple-choice-question-styled-components";
+import { useMediaQuery } from "@mui/material";
 
 type Props = {
   mixedQuestions: string[];
@@ -20,13 +21,12 @@ const MultipleChoiceQuestion = ({
   questionNumber,
   databaseType,
 }: Props) => {
-  /// Mixing the wrong Answers with the Correct Answers
-  // via random numbers
+  const singleColumnActivate = useMediaQuery("(max-width:880px)");
 
   return (
     <>
       {databaseType !== "Phrases" && (
-        <QuestionContainer>
+        <QuestionContainer key={`${databaseType} ${questionNumber}`}>
           <QuestionTitle>
             {questionNumber + 1}. {title}
           </QuestionTitle>
@@ -40,7 +40,15 @@ const MultipleChoiceQuestion = ({
       )}
 
       {databaseType === "Phrases" && (
-        <PhraseQuestionContainer sx={{ columnGap: "20px" }}>
+        <PhraseQuestionContainer
+          sx={{
+            columnGap: "20px",
+            paddingRight: `${
+              questionNumber + (1 % 2) === 1 && !singleColumnActivate && "80px"
+            }`,
+          }}
+          key={`${databaseType} ${questionNumber}`}
+        >
           <QuestionTitle>
             {questionNumber + 1}. {title}
           </QuestionTitle>

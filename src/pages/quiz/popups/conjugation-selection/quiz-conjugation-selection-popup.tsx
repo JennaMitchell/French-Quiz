@@ -7,6 +7,7 @@ import {
   StyledPopupTypography,
   DropDownTermTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledPopupSelect,
   StyledPopupOption,
@@ -259,13 +260,13 @@ const QuizConjugationSelectionPopup = () => {
         </SelectionContainer>
 
         <ActionButtonsContainer>
+          <SkipButton onClick={skipButtonHandler}>Skip</SkipButton>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ActionButtonsContainer>
       </StyledDialogContent>
     </StyledDialog>

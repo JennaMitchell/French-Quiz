@@ -46,9 +46,7 @@ const TableContainer = styled("div", {
   alignItems: "center",
   fontFamily: "Montserrat, sans-serif",
   marginTop: "10px",
-  ":nth-child(n+5)": {
-    marginTop: "40px",
-  },
+
   "@media(max-width:880px)": {
     gridColumn: "1 /span 1",
     fontSize: "24px",
@@ -146,7 +144,7 @@ const ConjugationTableCreator = ({ inputArray, groupBy }: Props) => {
         // @ts-ignore
         arrayOfAnswers[index] = selectedConjugation[french];
         return (
-          <RowContainer key={index}>
+          <RowContainer key={` Conjugation ${index} ${groupBy}`}>
             <StyledTypography>
               {index + 1 + j * 8}. {capitalizeFirstLetter(french)} {'"'}
               {frenchTitle.toLowerCase()}

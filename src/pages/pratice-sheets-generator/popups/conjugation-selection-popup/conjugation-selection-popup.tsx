@@ -5,6 +5,7 @@ import {
   ClosingIcon,
   StyledPopupTypography,
   ActionButton,
+  SkipButton,
   DisabledActionButton,
   StyledStepTitleText,
   QuestionsRemainingText,
@@ -267,13 +268,13 @@ const ConjugationSelectionPopup = () => {
         </SelectionContainer>
 
         <ActionButtonsContainer>
+          <SkipButton onClick={skipButtonHandler}>Skip</SkipButton>
           {submitButtonEnabled && (
             <ActionButton onClick={submitHandler}>Submit</ActionButton>
           )}
           {!submitButtonEnabled && (
             <DisabledActionButton disabled={true}>Submit</DisabledActionButton>
           )}
-          <ActionButton onClick={skipButtonHandler}>Skip</ActionButton>
         </ActionButtonsContainer>
       </StyledDialogContent>
     </StyledDialog>

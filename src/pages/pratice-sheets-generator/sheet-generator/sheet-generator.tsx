@@ -133,10 +133,30 @@ const SheetGenerator = () => {
               ref={testContainerRef}
               sx={{ justifyContent: "space-evenly" }}
             >
-              <TestSectionTitle variant="h4">
+              <TestSectionTitle
+                variant="h4"
+                sx={{
+                  "@media(max-width:1280px)": {
+                    gridColumn: "1 / span 2",
+                  },
+                  "@media(max-width:880px)": {
+                    gridColumn: "1 / span 1",
+                  },
+                }}
+              >
                 Vocab Multiple Choice Questions
               </TestSectionTitle>
-              <TestSectionDescription variant="h6">
+              <TestSectionDescription
+                variant="h6"
+                sx={{
+                  "@media(max-width:1280px)": {
+                    gridColumn: "1 / span 2",
+                  },
+                  "@media(max-width:880px)": {
+                    gridColumn: "1 / span 1",
+                  },
+                }}
+              >
                 Select the correct {selectedVocabTestType.toLowerCase()}{" "}
                 translation
               </TestSectionDescription>
@@ -162,12 +182,15 @@ const SheetGenerator = () => {
               justifyContent: "center",
             }}
           >
-            <TestSectionTitle variant="h4" sx={{ gridColumn: "1/span 1" }}>
+            <TestSectionTitle
+              variant="h4"
+              sx={{ gridColumn: "1/span 3", textAlign: "center" }}
+            >
               Vocab Matching Questions
             </TestSectionTitle>
             <TestSectionDescription
               variant="h6"
-              sx={{ gridColumn: "1/span 1" }}
+              sx={{ gridColumn: "1/span 3" }}
             >
               Match the correct {selectedVocabTestType.toLowerCase()} term
             </TestSectionDescription>
@@ -272,18 +295,16 @@ const SheetGenerator = () => {
               sx={{
                 marginTop: "10px",
                 justifyContent: "center",
+                columnGap: "10px",
               }}
             >
-              <TestSectionTitle
-                variant="h4"
-                sx={{ gridColumn: "1/span 1", width: "max-content" }}
-              >
+              <TestSectionTitle variant="h4" sx={{ width: "max-content" }}>
                 Phrases Matching Questions
               </TestSectionTitle>
               <TestSectionDescription
                 variant="h6"
                 sx={{
-                  gridColumn: "1/span 1",
+                  gridColumn: "1/span 3",
                   width: "max-content",
                   justifySelf: "center",
                 }}
@@ -312,7 +333,10 @@ const SheetGenerator = () => {
               sx={{
                 marginTop: "10px",
                 gridTemplateColumns: "max-content max-content",
-                rowGap: "10px",
+
+                display: "grid",
+                width: "max(100%,100%)",
+
                 "media(max-width:560)": {
                   width: "max(max-content,max-content)",
                   gridTemplateColumns: "max-content",

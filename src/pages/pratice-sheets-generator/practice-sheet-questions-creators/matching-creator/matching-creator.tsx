@@ -34,7 +34,7 @@ const RowContainer = styled("div", {
   name: "RowContainer",
   slot: "Wrapper",
 })(() => ({
-  width: "max(80%,80%)",
+  width: "max(900px,900px)",
   height: "max-content",
   display: "grid",
   gridTemplateColumns: "1fr max-content 1fr",
@@ -45,7 +45,8 @@ const RowContainer = styled("div", {
   gridColumn: "1/span 3",
 
   "@media(max-width:1280px)": {
-    gridColumn: "1/span 1",
+    width: "max(700px,700px)",
+    gridColumn: "1/span 2",
   },
   "@media(max-width:880px)": {
     gridColumn: "1/span 1",
@@ -170,7 +171,7 @@ const MatchingCreator = ({ inputArray, databaseType, testOn }: Props) => {
     const tempRenderReadyData = [];
     for (let z = 0; z < inputArray.length; z++) {
       tempRenderReadyData.push(
-        <RowContainer key={z}>
+        <RowContainer key={`matching number ${z} ${databaseType}`}>
           <StyledTypography>{answerSide[z].trim()}</StyledTypography>
           <UnderlineContainer />
 
