@@ -21,7 +21,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const NavBar: React.FC = () => {
-  const mobileNavMenuActive = useMediaQuery("(max-width:1300px)");
+  const mobileNavMenuActive = useMediaQuery("(max-width:1500px)");
   const activePage = useAppSelector((state) => state.mainStore.activePage);
   const mobileButtonClicked = useAppSelector(
     (state) => state.mainStore.mobileButtonClicked
@@ -40,6 +40,7 @@ const NavBar: React.FC = () => {
     "Practice Sheet Generator",
     "Quiz",
     "Grammar Test",
+    "Credits",
   ];
 
   let localStorageActivePage: string = localStorage.getItem("activePage") ?? "";
@@ -69,10 +70,7 @@ const NavBar: React.FC = () => {
       dispatch(mainStoreSliceActions.setMobileButtonClicked(false));
     }
   };
-  // console.log(activePage);
-  // console.log(localStorageActivePage);
-  // console.log(acceptableHomeReturnValues.includes(localStorageActivePage));
-  // console.log("Practice Sheet Generator" === localStorageActivePage);
+
   useBeforeunload(() => {
     localStorage.setItem("refreshed", "true");
 
@@ -113,6 +111,11 @@ const NavBar: React.FC = () => {
   };
   let scenariosTestPointer: () => void;
   scenariosTestPointer = scenariosTestHandler;
+  const creditsTestHandler = (): void => {
+    navButtonHandler("Credits");
+  };
+  let creditsTestPointer: () => void;
+  creditsTestPointer = creditsTestHandler;
 
   const navLinkDatabase: NavLinkDatabase[] = [
     { title: "Home", link: "/home", function: homePointer },
@@ -131,6 +134,11 @@ const NavBar: React.FC = () => {
       title: "Scenarios",
       link: "/scenarios",
       function: scenariosTestPointer,
+    },
+    {
+      title: "Credits",
+      link: "/credits",
+      function: creditsTestPointer,
     },
   ];
   const renderReadyNavButtons = navLinkDatabase.map(
@@ -227,7 +235,7 @@ const NavBar: React.FC = () => {
       {mobileNavMenuActive && activePage !== "Home" && (
         <NonHomepageDropDown
           sx={{
-            top: `${mobileButtonClicked ? "100px" : "-230px"}`,
+            top: `${mobileButtonClicked ? "100px" : "-300px"}`,
             transition: `${
               mobileButtonClicked ? "all 0.5s ease-out" : "all 0.5s ease-in"
             }`,

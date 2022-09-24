@@ -9,6 +9,7 @@ import LocalDataBaseSetup from "./firebase/local-database-setup";
 import PracticeSheetsGenerator from "./pages/pratice-sheets-generator/practice-sheets-generator";
 import QuizMainPage from "./pages/quiz/quiz-main-page";
 import ScenariosMainPage from "./pages/scenarios/scenarios-main";
+import Credits from "./pages/credits/credits";
 
 import { useAppSelector } from "./store/hooks";
 export const theme = createTheme({
@@ -94,6 +95,16 @@ function App() {
               <>
                 <NavBar />
                 <ScenariosMainPage />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/credits"
+            element={
+              <>
+                <NavBar />
+                <Credits />
                 <Footer />
               </>
             }
